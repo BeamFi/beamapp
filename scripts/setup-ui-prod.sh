@@ -10,6 +10,3 @@ cp canister_ids_prod.json canister_ids.json
 
 echo Update NextJS .env.production
 cp .env-prod.ic .env.production
-
-echo Setup alternative origins
-cp ./scripts/config/ii-alternative-origins-prod.json ./public/.well-known/ii-alternative-origins
