@@ -4,13 +4,17 @@ import {
   Slider,
   SliderFilledTrack,
   SliderMark,
-  SliderTrack
+  SliderTrack,
+  Text
 } from "@chakra-ui/react"
 
 import { truncFloatDecimals } from "../../../../utils/number"
 
-export const TokenProgressBar = ({ value, tooltipDesc, ...others }) => {
+export const TokenProgressBar = ({ value, numTokensOwned, ...others }) => {
   const truncValue = truncFloatDecimals(value, 2)
+  const truncNumTokensOwned = truncFloatDecimals(numTokensOwned, 6)
+  const isCompleted = Number(truncValue) >= 100
+  const markDesc = isCompleted ? "Completed" : `${truncValue}% Beamed`
 
   return (
     <Slider
@@ -26,16 +30,24 @@ export const TokenProgressBar = ({ value, tooltipDesc, ...others }) => {
       <SliderMark
         value="50"
         textAlign="center"
-        fontSize="12px"
+        fontSize="16px"
         color="black_3"
-        mt="16px"
-        ml="-50px"
-        w="100px"
+        mt="18px"
+        ml="-100px"
       >
-        {truncValue}% {tooltipDesc}
+        {markDesc}&nbsp;
+        <Text as="span" fontSize="14px">
+          ({truncNumTokensOwned} ICP)
+        </Text>
       </SliderMark>
-      <SliderTrack bg="black_gray" h="15px" borderRadius="15px">
-        <SliderFilledTrack bg="gradient.purple.8" borderRadius="15px" />
+      <SliderTrack
+        bg="black_gray"
+        h="15px"
+        borderRadius="16px"
+        borderWidth="1px"
+        borderColor="dark_black"
+      >
+        <SliderFilledTrack bg="white" borderRadius="16px" />
       </SliderTrack>
     </Slider>
   )
