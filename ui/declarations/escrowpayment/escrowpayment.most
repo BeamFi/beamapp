@@ -1,0 +1,63 @@
+// Version: 1.0.0
+type AccountIdentifier = Blob;
+type AccountIdentifier__2 = AccountIdentifier;
+type AssocList<K, V> = List<(K, V)>;
+type AssocList__1<K, V> = AssocList<K, V>;
+type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
+type EscrowContract =
+  {
+    buyerAccountIdentifier : ?AccountIdentifier__2;
+    buyerClaimable : TokenAmount__1;
+    buyerClaimed : TokenAmount__1;
+    buyerPrincipal : Principal;
+    createdAt : Time__1;
+    creatorAccountIdentifier : ?AccountIdentifier__2;
+    creatorClaimable : TokenAmount__1;
+    creatorClaimed : TokenAmount__1;
+    creatorPrincipal : Principal;
+    escrowAmount : TokenAmount__1;
+    id : EscrowId;
+    initialDeposit : TokenAmount__1;
+    jobFlowId : JobFlowId__1;
+    paymentType : EscrowPaymentType;
+    tokenType : TokenType;
+    updatedAt : Time__1
+  };
+type EscrowContract__2 = EscrowContract;
+type EscrowId = Nat32;
+type EscrowId__3 = EscrowId;
+type EscrowPaymentType = {#beam; #lumpSum};
+type Hash = Nat32;
+type JobFlowId = Nat32;
+type JobFlowId__1 = JobFlowId;
+type JobFlowId__3 = JobFlowId;
+type Key<K> = {hash : Hash; key : K};
+type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
+type List<T> = ?(T, List<T>);
+type Time = Int;
+type Time__1 = Time;
+type TokenAmount__1 = Nat64;
+type TokenType = {#icp};
+type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
+actor {
+  stable var beamEscrowPPStore :
+    {
+      #branch : Branch<Principal, [EscrowId]>;
+      #empty;
+      #leaf : Leaf<Principal, [EscrowId]>
+    };
+  stable var escrowJobFlowStore :
+    {
+      #branch : Branch<JobFlowId__3, EscrowId__3>;
+      #empty;
+      #leaf : Leaf<JobFlowId__3, EscrowId__3>
+    };
+  stable var escrowStore :
+    {
+      #branch : Branch<EscrowId__3, EscrowContract__2>;
+      #empty;
+      #leaf : Leaf<EscrowId__3, EscrowContract__2>
+    };
+  stable var nextEscrowId : Nat32;
+  stable var version : Nat32
+};

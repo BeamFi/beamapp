@@ -1,0 +1,12 @@
+[
+  {
+    "match": ".*",
+    "cache": {
+      "max_age": 20
+    },
+    "headers": {
+      "X-Content-Type-Options": "nosniff"
+    },
+    "ignore": false
+  }
+]

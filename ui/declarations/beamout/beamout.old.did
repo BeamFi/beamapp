@@ -1,0 +1,17 @@
+type TokenType = variant {icp;};
+type TokenAmount = nat64;
+type Result = 
+ variant {
+   err: ErrorCode;
+   ok: BeamOutId;
+ };
+type ErrorCode = 
+ variant {
+   duplicated_id: text;
+   invalid_id: text;
+   invalid_recipient: text;
+ };
+type BeamOutId = nat32;
+service : {
+  createBeamOut: (TokenAmount, TokenType, principal, nat32) -> (Result);
+}

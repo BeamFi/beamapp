@@ -1,0 +1,123 @@
+import moment from "moment"
+import { EscrowPaymentConfig } from "../../config"
+import { ratePerHr } from "../../utils/date"
+import { e8sToHuman } from "../../utils/e8s"
+import { convertCandidDateToJSDate, unwrapVariant } from "../TypeConversion"
+
+export class EscrowContractClass {
+  constructor(candidModel) {
+    this.candidModel = candidModel
+  }
+
+  id = () => {
+    return this.candidModel.id
+  }
+
+  createdAtHuman = () => {
+    const createdAt = convertCandidDateToJSDate(this.candidModel.createdAt)
+    return moment(createdAt).format("Do MMM YYYY HH:mm:ss")
+  }
+
+  paymentType = () => {
+    const paymentTypeVariant = this.candidModel.paymentType
+    return unwrapVariant(paymentTypeVariant)
+  }
+
+  colorOfPaymentType = () => {
+    const paymentType = this.paymentType()
+    const { LumpSum, Beam } = EscrowPaymentConfig.PaymentType
+
+    switch (paymentType) {
+      case LumpSum:
+        return "yellow"
+      case Beam:
+        return "green"
+    }
+  }
+
+  isBeamPayment = () => {
+    return this.paymentType() == EscrowPaymentConfig.PaymentType.Beam
+  }
+
+  isLumpSumPayment = () => {
+    return this.paymentType() == EscrowPaymentConfig.PaymentType.LumpSum
+  }
+
+  tokenType = () => {
+    return unwrapVariant(this.candidModel.tokenType)
+  }
+
+  initialDeposit = () => {
+    const allocationE6S = this.candidModel.initialDeposit
+    return e8sToHuman(allocationE6S)
+  }
+
+  escrowAmount = () => {
+    const allocationE6S = this.candidModel.escrowAmount
+    return e8sToHuman(allocationE6S)
+  }
+
+  creatorClaimable = () => {
+    const allocationE6S = this.candidModel.creatorClaimable
+    return e8sToHuman(allocationE6S)
+  }
+
+  creatorClaimed = () => {
+    const allocationE6S = this.candidModel.creatorClaimed
+    return e8sToHuman(allocationE6S)
+  }
+
+  buyerClaimable = () => {
+    const allocationE6S = this.candidModel.buyerClaimable
+    return e8sToHuman(allocationE6S)
+  }
+
+  buyerClaimed = () => {
+    const allocationE6S = this.candidModel.buyerClaimed
+    return e8sToHuman(allocationE6S)
+  }
+
+  totalOwnedByCanister = () => {
+    return this.escrowAmount() + this.creatorClaimable() + this.buyerClaimable()
+  }
+
+  buyerPrincipalId = () => {
+    return this.candidModel.buyerPrincipal.toString()
+  }
+
+  creatorPrincipalId = () => {
+    return this.candidModel.creatorPrincipal.toString()
+  }
+
+  creatorOwnedPercentage = () => {
+    const numCreatorOwnedTokens =
+      this.candidModel.creatorClaimed + this.candidModel.creatorClaimable
+    const totalTokens = this.candidModel.initialDeposit
+
+    const creatorOwnedPercent =
+      totalTokens === 0 ? 0 : numCreatorOwnedTokens / totalTokens
+
+    return creatorOwnedPercent
+  }
+
+  otherPartyPrincipalId = myPrincipalId => {
+    const buyerPrincipalId = this.candidModel.buyerPrincipalId
+    const creatorPrincipalId = this.candidModel.creatorPrincipalId
+
+    if (myPrincipalId == buyerPrincipalId) {
+      return creatorPrincipalId
+    }
+
+    return buyerPrincipalId
+  }
+
+  isInBeam = myPrincipalId => {
+    const creatorPrincipalId = this.candidModel.creatorPrincipalId
+    return myPrincipalId == creatorPrincipalId
+  }
+
+  beamRatePerHr = (startDateInMillSecs, dueDateInMilliSecs) => {
+    const totalTokens = this.initialDeposit()
+    return ratePerHr(startDateInMillSecs, dueDateInMilliSecs, totalTokens)
+  }
+}

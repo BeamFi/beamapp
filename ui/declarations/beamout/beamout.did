@@ -1,0 +1,38 @@
+type TokenType__1 = variant {icp;};
+type TokenType = variant {icp;};
+type TokenAmount__1 = nat64;
+type TokenAmount = nat64;
+type Time = int;
+type Result_1 = 
+ variant {
+   err: ErrorCode;
+   ok: BeamOutId;
+ };
+type Result = 
+ variant {
+   err: ErrorCode;
+   ok: BeamOutModel;
+ };
+type ErrorCode = 
+ variant {
+   duplicated_id: text;
+   invalid_id: text;
+   invalid_recipient: text;
+ };
+type BeamOutModel = 
+ record {
+   amount: TokenAmount;
+   createdAt: Time;
+   durationNumDays: nat32;
+   id: BeamOutId__1;
+   recipient: principal;
+   tokenType: TokenType;
+   updatedAt: Time;
+ };
+type BeamOutId__1 = nat32;
+type BeamOutId = nat32;
+service : {
+  createBeamOut: (TokenAmount__1, TokenType__1, principal, nat32) ->
+   (Result_1);
+  loadBeamOutById: (BeamOutId) -> (Result) query;
+}
