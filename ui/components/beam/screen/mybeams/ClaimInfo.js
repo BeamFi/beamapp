@@ -17,7 +17,7 @@ export const ClaimInfo = ({ beamEscrowContract, myPrincipalId, ...rest }) => {
 
   const filledGradient = () => {
     const halfWayPercent = (1 - claimedPercent) * 100.0
-    return `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF ${halfWayPercent}%, #B67BE4 ${halfWayPercent}%, #B67BE4 100%)`
+    return `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF ${halfWayPercent}%, #D8F2FF ${halfWayPercent}%, #D8F2FF 100%)`
   }
 
   const isRecipient = escrowObject.isBeamRecipient(myPrincipalId)
@@ -55,7 +55,7 @@ export const ClaimInfo = ({ beamEscrowContract, myPrincipalId, ...rest }) => {
               Amount Claimed
             </Text>
             <Text
-              fontSize={{ base: "22px", md: "34px" }}
+              fontSize={{ base: "22px", md: "24px" }}
               fontWeight="medium"
               pt="12px"
             >
@@ -78,7 +78,7 @@ export const ClaimInfo = ({ beamEscrowContract, myPrincipalId, ...rest }) => {
             Available to Claim
           </Text>
           <Text
-            fontSize={{ base: "18px", md: "27px" }}
+            fontSize={{ base: "18px", md: "24px" }}
             fontWeight="medium"
             color="white"
           >

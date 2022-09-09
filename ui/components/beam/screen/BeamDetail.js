@@ -70,10 +70,7 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
     navigate("/mybeams")
   }
 
-  const escrowObject =
-    beamEscrowContract != null
-      ? new EscrowContractClass(beamEscrowContract)
-      : null
+  const escrowObject = escrow != null ? new EscrowContractClass(escrow) : null
   const isBeamRecipient = escrowObject?.isBeamRecipient(myPrincipalId)
 
   return (
@@ -101,18 +98,18 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
         <Spacer />
       </HStack>
 
-      <HStack w="100%">
-        {isBeamRecipient && (
-          <BeamInDetailTextIcon w="295px" h="34px" ml="50px" mt="10px" />
-        )}
-        {!isBeamRecipient && (
-          <BeamOutDetailTextIcon w="332px" h="36px" ml="50px" mt="10px" />
-        )}
-        <Spacer />
-      </HStack>
       {isLoading && <StandardSpinner />}
       {escrow != null && (
         <>
+          <HStack w="100%">
+            {isBeamRecipient && (
+              <BeamInDetailTextIcon w="295px" h="34px" ml="50px" mt="10px" />
+            )}
+            {!isBeamRecipient && (
+              <BeamOutDetailTextIcon w="332px" h="36px" ml="50px" mt="10px" />
+            )}
+            <Spacer />
+          </HStack>
           <BeamCard
             beamEscrowContract={escrow}
             beamReadModel={beam}

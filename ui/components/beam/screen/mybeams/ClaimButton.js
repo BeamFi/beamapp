@@ -46,7 +46,8 @@ export const ClaimButton = ({
       }
     }
 
-    const plugAccountId = window.ic?.plug?.accountId
+    const plugAccountId =
+      window.ic?.plug?.sessionManager?.sessionData?.accountId
     if (plugAccountId == null) {
       showToast(
         toast,
@@ -60,7 +61,6 @@ export const ClaimButton = ({
 
     try {
       const accountIdBlob = accountIdentifierHexToBlob(plugAccountId)
-
       const escrowService = await makeEscrowPaymentActor(
         null,
         AuthProvider.Plug

@@ -30,6 +30,6 @@ export const principalToAccountIdentifier = (
   return toHexString(bytes)
 }
 
-export const accountIdentifierHexToBlob = (hex: string): Uint8Array => {
-  return Uint8Array.from(Buffer.from(hex, "hex"))
+export const accountIdentifierHexToBlob = (hex: string): Array<Number> => {
+  return [...Uint8Array.from(Buffer.from(hex, "hex"))]
 }

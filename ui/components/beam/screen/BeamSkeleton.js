@@ -2,7 +2,7 @@ import React from "react"
 
 import { Outlet } from "react-router-dom"
 
-import { Box, Flex } from "@chakra-ui/react"
+import { Box, Flex, Hide } from "@chakra-ui/react"
 
 import { BeamFooter } from "../BeamFooter"
 import { BeamTopRightButtons } from "../BeamTopRightButtons"
@@ -33,7 +33,9 @@ export default function BeamSkeleton({ bgColor, logout, hashtags, ...rest }) {
 
         <Outlet />
       </Flex>
-      <BeamFooter hashtags={hashtags} />
+      <Hide below="md">
+        <BeamFooter hashtags={hashtags} />
+      </Hide>
     </Box>
   )
 }
