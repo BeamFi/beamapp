@@ -86,6 +86,7 @@ export const ClaimInfo = ({ beamEscrowContract, myPrincipalId, ...rest }) => {
           </Text>
           {isRecipient && (
             <ClaimButton
+              escrowObject={escrowObject}
               numClaimableTokens={numCreatorClaimableTokens}
               isDisabled={numCreatorClaimableTokens == 0}
             />

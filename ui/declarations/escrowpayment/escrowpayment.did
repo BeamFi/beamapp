@@ -137,7 +137,7 @@ type Allocation = nat64;
 type AccountIdentifier__1 = blob;
 type AccountIdentifier = blob;
 service : {
-  buyerClaim: (JobFlowId, TokenType__1, AccountIdentifier__1) -> (Result);
+  buyerClaim: (EscrowId, TokenType__1, AccountIdentifier__1) -> (Result);
   canisterAccount: () -> (AccountIdentifier__1) query;
   canisterBalance: (TokenType__1) -> (Tokens);
   canisterVersion: () -> (nat32) query;
@@ -145,7 +145,7 @@ service : {
    principal) -> (Result_4);
   createEscrow: (JobFlowId, TokenAmount__1, EscrowPaymentType__1, BlockIndex,
    Time__1, principal, principal) -> (Result_4);
-  creatorClaim: (JobFlowId, TokenType__1, AccountIdentifier__1) -> (Result);
+  creatorClaim: (EscrowId, TokenType__1, AccountIdentifier__1) -> (Result);
   getActorBalance: () -> (nat) query;
   getCanisterMemoryInfo: () -> (CanisterMemoryInfo) query;
   getManager: () -> (principal) query;

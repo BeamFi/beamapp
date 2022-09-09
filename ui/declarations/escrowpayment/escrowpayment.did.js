@@ -1,5 +1,5 @@
 export const idlFactory = ({ IDL }) => {
-  const JobFlowId = IDL.Nat32;
+  const EscrowId = IDL.Nat32;
   const TokenType__1 = IDL.Variant({ 'icp' : IDL.Null });
   const AccountIdentifier__1 = IDL.Vec(IDL.Nat8);
   const ErrorCode = IDL.Variant({
@@ -18,7 +18,6 @@ export const idlFactory = ({ IDL }) => {
   const TokenAmount__1 = IDL.Nat64;
   const BlockIndex = IDL.Nat64;
   const Time__1 = IDL.Int;
-  const EscrowId = IDL.Nat32;
   const ErrorCode__1 = IDL.Variant({
     'signup_noteligible' : IDL.Text,
     'portfolio_notfound' : IDL.Text,
@@ -52,6 +51,7 @@ export const idlFactory = ({ IDL }) => {
     'job_notfound' : IDL.Text,
   });
   const Result_4 = IDL.Variant({ 'ok' : EscrowId, 'err' : ErrorCode__1 });
+  const JobFlowId = IDL.Nat32;
   const EscrowPaymentType__1 = IDL.Variant({
     'beam' : IDL.Null,
     'lumpSum' : IDL.Null,
@@ -115,7 +115,7 @@ export const idlFactory = ({ IDL }) => {
   const Allocation = IDL.Nat64;
   return IDL.Service({
     'buyerClaim' : IDL.Func(
-        [JobFlowId, TokenType__1, AccountIdentifier__1],
+        [EscrowId, TokenType__1, AccountIdentifier__1],
         [Result],
         [],
       ),
@@ -141,7 +141,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'creatorClaim' : IDL.Func(
-        [JobFlowId, TokenType__1, AccountIdentifier__1],
+        [EscrowId, TokenType__1, AccountIdentifier__1],
         [Result],
         [],
       ),

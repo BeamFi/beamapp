@@ -19,7 +19,7 @@ export const userProtectWithPublic = Component => props => {
 const authProtect = Component => props => {
   const [identity, setIdentity] = useState(null)
   const [isLoading, setLoading] = useState(true)
-  const [updateCount, setUpdateCount] = useState(1)
+  const updateCount = 1
 
   useEffect(() => {
     async function checkAuth() {
@@ -45,23 +45,15 @@ const authProtect = Component => props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateCount])
 
-  const triggerAuthUpdate = () => {
-    setUpdateCount(updateCount + 1)
-  }
-
   const updateIdentity = async identity => {
     setIdentity(identity)
   }
 
   return identity != null ? (
-    <Component
-      identity={identity}
-      triggerAuthUpdate={triggerAuthUpdate}
-      {...props}
-    />
+    <Component identity={identity} {...props} />
   ) : isLoading ? (
     <FullPageSpinner />
   ) : (
-    <Component {...props} triggerAuthUpdate={triggerAuthUpdate} />
+    <Component {...props} />
   )
 }

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react"
 
 import { BeamVStack } from "../common/BeamVStack"
-import { BackArrowIcon, BeamInDetailTextIcon } from "../../../icon"
+import {
+  BackArrowIcon,
+  BeamInDetailTextIcon,
+  BeamOutDetailTextIcon
+} from "../../../icon"
 
 import log from "../../../utils/log"
 import { BeamCard } from "./mybeams/BeamCard"
@@ -12,10 +16,9 @@ import { ClaimInfo } from "./mybeams/ClaimInfo"
 import { verifyBeamPlugConnection } from "../../auth/provider/plug"
 import { StandardSpinner } from "../../StandardSpinner"
 import { AuthProvider } from "../../../config"
-import {
-  makeBeamActor,
-  makeEscrowPaymentActor
-} from "../../../service/actor/actor-locator"
+import { makeBeamActor } from "../../../service/actor/actor-locator"
+import { EscrowContractClass } from "../../../model/class/EscrowContractClass"
+import { useEscrow } from "../useEscrow"
 
 export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
   const { escrowId } = useParams()
@@ -24,44 +27,32 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
   const [escrow, setEscrow] = useState(beamEscrowContract)
   const [beam, setBeam] = useState(beamReadModel)
 
-  const principalId = window?.ic?.plug?.sessionManager?.sessionData?.principalId
+  const myPrincipalId =
+    window?.ic?.plug?.sessionManager?.sessionData?.principalId
 
   const navigate = useNavigate()
 
+  const { escrowContract } = useEscrow(Number(escrowId))
+
   useEffect(() => {
-    if (
-      escrowId != null &&
-      (beamEscrowContract == null || beamReadModel == null)
-    ) {
-      loadEscrow(escrowId)
+    setEscrow(escrowContract)
+  }, [escrowContract])
+
+  useEffect(() => {
+    if (escrowId != null && beamReadModel == null) {
+      loadBeam(escrowId)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [escrowId])
 
-  const loadEscrow = async id => {
+  const loadBeam = async id => {
     try {
       setLoading(true)
       await verifyBeamPlugConnection()
 
-      const escrowService = await makeEscrowPaymentActor(
-        null,
-        AuthProvider.Plug
-      )
-
-      const idNum = Number(id)
-      const result = await escrowService.queryMyBeamEscrow(idNum)
-
-      if (result.ok) {
-        setEscrow(result.ok)
-      } else if (result.err) {
-        throw new Error(result.err)
-      }
-
-      // Early stop of loading spinner so user can see the main info asap
-      setLoading(false)
-
       const beamService = await makeBeamActor(null, AuthProvider.Plug)
+      const idNum = Number(id)
       const escrowIds = [idNum]
       const myBeamReadModels = await beamService.queryBeamByEscrowIds(escrowIds)
 
@@ -78,6 +69,12 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
   const gotToMyBeams = () => {
     navigate("/mybeams")
   }
+
+  const escrowObject =
+    beamEscrowContract != null
+      ? new EscrowContractClass(beamEscrowContract)
+      : null
+  const isBeamRecipient = escrowObject?.isBeamRecipient(myPrincipalId)
 
   return (
     <BeamVStack
@@ -105,7 +102,12 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
       </HStack>
 
       <HStack w="100%">
-        <BeamInDetailTextIcon w="295px" h="34px" ml="50px" mt="10px" />
+        {isBeamRecipient && (
+          <BeamInDetailTextIcon w="295px" h="34px" ml="50px" mt="10px" />
+        )}
+        {!isBeamRecipient && (
+          <BeamOutDetailTextIcon w="332px" h="36px" ml="50px" mt="10px" />
+        )}
         <Spacer />
       </HStack>
       {isLoading && <StandardSpinner />}
@@ -114,12 +116,12 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
           <BeamCard
             beamEscrowContract={escrow}
             beamReadModel={beam}
-            myPrincipalId={principalId}
+            myPrincipalId={myPrincipalId}
             isOpenDetailEnabled={false}
           />
           <ClaimInfo
             beamEscrowContract={escrow}
-            myPrincipalId={principalId}
+            myPrincipalId={myPrincipalId}
             w="92%"
           />
         </>

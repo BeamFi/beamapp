@@ -18,7 +18,11 @@ import { AuthProvider } from "../../../../config"
 import { showToast } from "../../../../utils/toast"
 import log from "../../../../utils/log"
 
-export const ClaimButton = ({ numClaimableTokens, isDisabled }) => {
+export const ClaimButton = ({
+  escrowObject,
+  numClaimableTokens,
+  isDisabled
+}) => {
   const [isLoading, setLoading] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -56,7 +60,6 @@ export const ClaimButton = ({ numClaimableTokens, isDisabled }) => {
 
     try {
       const accountIdBlob = accountIdentifierHexToBlob(plugAccountId)
-      const jobFlowId = "To be filled"
 
       const escrowService = await makeEscrowPaymentActor(
         null,
@@ -64,7 +67,7 @@ export const ClaimButton = ({ numClaimableTokens, isDisabled }) => {
       )
 
       const result = await escrowService.creatorClaim(
-        jobFlowId,
+        escrowObject.id(),
         convertToVariant("icp"),
         accountIdBlob
       )

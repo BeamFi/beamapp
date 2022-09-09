@@ -33,3 +33,7 @@ export const AuthConfig = {
   MaxSessionDurationNanoSecs: BigInt(7) * OneDayInNano,
   CheckInterval: 60 * 1000
 }
+
+export const SWRKey = {
+  Escrow: "escrow/"
+}

@@ -111,7 +111,7 @@ export type TokenType__1 = { 'icp' : null };
 export interface Tokens { 'e8s' : bigint }
 export interface _SERVICE {
   'buyerClaim' : ActorMethod<
-    [JobFlowId, TokenType__1, AccountIdentifier__1],
+    [EscrowId, TokenType__1, AccountIdentifier__1],
     Result,
   >,
   'canisterAccount' : ActorMethod<[], AccountIdentifier__1>,
@@ -134,7 +134,7 @@ export interface _SERVICE {
     Result_4,
   >,
   'creatorClaim' : ActorMethod<
-    [JobFlowId, TokenType__1, AccountIdentifier__1],
+    [EscrowId, TokenType__1, AccountIdentifier__1],
     Result,
   >,
   'getActorBalance' : ActorMethod<[], bigint>,
