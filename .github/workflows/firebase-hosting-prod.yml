@@ -6,10 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: ./scripts/setup-ui-dev.sh && npm ci && npm run build
+      - run: ./scripts/setup-ui-prod.sh && npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_CONTENTFLYDEV }}"
-          projectId: contentflydev
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_CONTENTFLYPROD }}"
+          projectId: contentflyprod
           channelId: live
