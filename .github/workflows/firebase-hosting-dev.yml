@@ -1,4 +1,4 @@
-name: Deploy BeamFi app to Firebase Hosting in dev
+name: Dev BeamFi app
 on:
   workflow_dispatch:
 push:

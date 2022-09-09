@@ -1,4 +1,4 @@
-name: Deploy BeamFi app to Firebase Hosting in prod
+name: Prod BeamFi app
 on:
   workflow_dispatch:
 jobs:
