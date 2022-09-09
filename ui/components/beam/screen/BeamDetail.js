@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react"
 
 import { BeamVStack } from "../common/BeamVStack"
-import { BeamInDetailTextIcon } from "../../../icon"
+import { BackArrowIcon, BeamInDetailTextIcon } from "../../../icon"
 
 import log from "../../../utils/log"
 import { BeamCard } from "./mybeams/BeamCard"
 import { BeamActionButton } from "../common/BeamActionButton"
-import { ChevronLeftIcon } from "@chakra-ui/icons"
 import { useNavigate, useParams } from "react-router-dom"
 import { HStack, Spacer } from "@chakra-ui/react"
 import { ClaimInfo } from "./mybeams/ClaimInfo"
@@ -81,17 +80,24 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
   }
 
   return (
-    <BeamVStack spacing="26px" mt="80px" px="45px" py="38px">
+    <BeamVStack
+      spacing="26px"
+      mt="80px"
+      px={{ base: "2px", md: "45px" }}
+      py="38px"
+    >
       <HStack w="100%">
         <BeamActionButton
-          leftIcon={<ChevronLeftIcon fontSize="28px" />}
+          leftIcon={<BackArrowIcon color="white" w="10px" h="18px" mr="4px" />}
           w={{ base: "120px", md: "122px" }}
           h={{ base: "51px", md: "52px" }}
           onClick={gotToMyBeams}
           border="0.951219px solid #393440"
           borderRadius="12.6829px"
-          fontSize="23px"
+          fontSize="18px"
+          fontWeight="normal"
           color="black_5"
+          ml="20px"
         >
           Back
         </BeamActionButton>
@@ -99,7 +105,7 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
       </HStack>
 
       <HStack w="100%">
-        <BeamInDetailTextIcon w="295px" h="34px" ml="20px" mt="10px" />
+        <BeamInDetailTextIcon w="295px" h="34px" ml="50px" mt="10px" />
         <Spacer />
       </HStack>
       {isLoading && <StandardSpinner />}
@@ -111,7 +117,11 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
             myPrincipalId={principalId}
             isOpenDetailEnabled={false}
           />
-          <ClaimInfo beamEscrowContract={escrow} myPrincipalId={principalId} />
+          <ClaimInfo
+            beamEscrowContract={escrow}
+            myPrincipalId={principalId}
+            w="92%"
+          />
         </>
       )}
     </BeamVStack>

@@ -19,7 +19,6 @@ export const TokenProgressBar = ({ value, numTokensOwned, ...others }) => {
   return (
     <Slider
       size="lg"
-      w={{ base: "70px", md: "190px" }}
       min={0}
       max={100}
       value={truncValue}
@@ -28,12 +27,12 @@ export const TokenProgressBar = ({ value, numTokensOwned, ...others }) => {
       cursor="auto"
     >
       <SliderMark
-        value="50"
-        textAlign="center"
+        value={0}
         fontSize="16px"
         color="black_3"
         mt="18px"
-        ml="-100px"
+        textAlign="center"
+        w="100%"
       >
         {markDesc}&nbsp;
         <Text as="span" fontSize="14px">

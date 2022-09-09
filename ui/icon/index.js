@@ -836,6 +836,17 @@ export const WalletIcon = props => (
   </Icon>
 )
 
+export const BackArrowIcon = props => (
+  <Icon viewBox="0 0 10 18" fill="currentColor" {...props}>
+    <path
+      d="M8.97597 1.39062L2.26303 8.10356C1.76773 8.59886 1.76773 9.4019 2.26303 9.8972L8.97597 16.6101"
+      stroke="#393440"
+      strokeWidth="1.90244"
+      strokeLinecap="round"
+    />
+  </Icon>
+)
+
 export const BeamInTextIcon = props => (
   <Icon viewBox="0 0 59 35" fill="currentColor" {...props}>
     <path

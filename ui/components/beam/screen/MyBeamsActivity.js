@@ -90,7 +90,12 @@ export const MyBeamsActivity = ({
           />
         ))}
       </BeamVStack>
-      <BeamMainActionButtons py="20px" pos="fixed" bottom="200px" />
+      <BeamMainActionButtons
+        py="20px"
+        pos="fixed"
+        bottom="200px"
+        isShrink={true}
+      />
     </>
   )
 }

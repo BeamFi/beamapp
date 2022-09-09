@@ -71,7 +71,11 @@ export const BeamCard = ({
           boxShadow="0px 2.375px 4.75px rgba(0, 0, 0, 0.5)"
           size="1rem"
         />
-        <PrincipalInfo fontSize="20px" color="dark_black" pl="8px">
+        <PrincipalInfo
+          fontSize={{ base: "16px", md: "20px" }}
+          color="dark_black"
+          pl="8px"
+        >
           {otherPartyPrincipalId}
         </PrincipalInfo>
         <Spacer />

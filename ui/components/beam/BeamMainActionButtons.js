@@ -1,19 +1,33 @@
 import React from "react"
 
-import { HStack } from "@chakra-ui/react"
+import { HStack, Text } from "@chakra-ui/react"
 import { BeamActionButton } from "./common/BeamActionButton"
 import { BeamOutIcon, GetPaidIcon } from "../../icon"
 import { useNavigate } from "react-router-dom"
 
-const ActionButton = ({ children, ...others }) => {
+const ActionButton = ({ isShrink, children, ...others }) => {
   return (
-    <BeamActionButton w={{ base: "153px", md: "173px" }} h="52px" {...others}>
+    <BeamActionButton
+      w={isShrink ? "52px" : { base: "153px", md: "173px" }}
+      h="52px"
+      transition="all 0.5s"
+      _hover={{
+        w: { base: "153px", md: "173px" },
+        p: {
+          visibility: "visible"
+        },
+        svg: {
+          marginLeft: "0px"
+        }
+      }}
+      {...others}
+    >
       {children}
     </BeamActionButton>
   )
 }
 
-export const BeamMainActionButtons = ({ ...rest }) => {
+export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
   const navigate = useNavigate()
 
   const navigateToBeamOut = () => {
@@ -25,18 +39,34 @@ export const BeamMainActionButtons = ({ ...rest }) => {
   }
 
   return (
-    <HStack spacing="37px" justify="center" {...rest}>
+    <HStack spacing="60px" justify="center" {...rest}>
       <ActionButton
-        leftIcon={<GetPaidIcon w="23px" h="23px" color="black_5" />}
+        leftIcon={
+          <GetPaidIcon
+            w="23px"
+            h="23px"
+            color="black_5"
+            ml={isShrink ? "76px" : "0px"}
+          />
+        }
         onClick={navigateToGetPaid}
+        isShrink={isShrink}
       >
-        Get Paid
+        <Text visibility={isShrink ? "hidden" : "visible"}>Get Paid</Text>
       </ActionButton>
       <ActionButton
-        leftIcon={<BeamOutIcon w="19px" h="19px" color="black_5" />}
+        leftIcon={
+          <BeamOutIcon
+            w="19px"
+            h="19px"
+            color="black_5"
+            ml={isShrink ? "88px" : "0px"}
+          />
+        }
         onClick={navigateToBeamOut}
+        isShrink={isShrink}
       >
-        Beam Out
+        <Text visibility={isShrink ? "hidden" : "visible"}>Beam Out</Text>
       </ActionButton>
     </HStack>
   )

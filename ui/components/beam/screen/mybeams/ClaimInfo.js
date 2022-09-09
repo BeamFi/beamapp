@@ -6,7 +6,7 @@ import { ClaimButton } from "./ClaimButton"
 import { truncFloatDecimals } from "../../../../utils/number"
 import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
 
-export const ClaimInfo = ({ beamEscrowContract, myPrincipalId }) => {
+export const ClaimInfo = ({ beamEscrowContract, myPrincipalId, ...rest }) => {
   const escrowObject = new EscrowContractClass(beamEscrowContract)
 
   const numCreatorClaimedTokens = escrowObject.creatorClaimed()
@@ -24,11 +24,11 @@ export const ClaimInfo = ({ beamEscrowContract, myPrincipalId }) => {
 
   return (
     <Box
-      w="450px"
       h="230px"
       borderRadius="25px"
       bgColor="black_2"
       boxShadow="2xl"
+      {...rest}
     >
       <HStack h="full">
         <Box
@@ -46,24 +46,29 @@ export const ClaimInfo = ({ beamEscrowContract, myPrincipalId }) => {
             spacing="0px"
           >
             <Text
-              fontSize="27px"
+              fontSize={{ base: "18px", md: "27px" }}
               fontWeight="normal"
               align="center"
               lineHeight="24px"
+              px="6px"
             >
               Amount Claimed
             </Text>
-            <Text fontSize="34px" fontWeight="medium" pt="12px">
+            <Text
+              fontSize={{ base: "22px", md: "34px" }}
+              fontWeight="medium"
+              pt="12px"
+            >
               {truncFloatDecimals(numCreatorClaimedTokens, 6)} ICP
             </Text>
-            <Text fontSize="20px" fontWeight="light">
+            <Text fontSize={{ base: "16px", md: "20px" }} fontWeight="light">
               /{truncFloatDecimals(totalTokens, 6)} ICP Total
             </Text>
           </VStack>
         </Box>
-        <VStack m="0px" align="center">
+        <VStack m="0px" align="center" maxW="50%" w="50%">
           <Text
-            fontSize="20px"
+            fontSize={{ base: "18px", md: "20px" }}
             fontWeight="normal"
             color="white"
             align="center"
@@ -72,7 +77,11 @@ export const ClaimInfo = ({ beamEscrowContract, myPrincipalId }) => {
           >
             Available to Claim
           </Text>
-          <Text fontSize="27px" fontWeight="medium" color="white">
+          <Text
+            fontSize={{ base: "18px", md: "27px" }}
+            fontWeight="medium"
+            color="white"
+          >
             {truncFloatDecimals(numCreatorClaimableTokens, 6)} ICP
           </Text>
           {isRecipient && (

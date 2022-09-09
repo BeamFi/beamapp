@@ -97,9 +97,10 @@ export const ClaimButton = ({ numClaimableTokens, isDisabled }) => {
     <>
       <BeamActionButton
         h="67px"
-        w="175px"
+        px="18px"
+        w="unset"
         fontWeight="semibold"
-        fontSize="20px"
+        fontSize={{ base: "16px", md: "20px" }}
         onClick={onOpen}
         isLoading={isLoading}
         isDisabled={isDisabled}
