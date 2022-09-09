@@ -21,7 +21,7 @@ export const BeamHome = ({ setBgColor, setHashtags }) => {
       spacing={{ base: "10px", md: "12px" }}
       align="center"
       w="100%"
-      h="100%"
+      h="100vh"
       color="dark_black"
       fontSize="16px"
       pb="260px"

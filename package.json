@@ -1,8 +1,8 @@
 {
-  "name": "contentflyic",
-  "version": "0.4.0",
+  "name": "beamapp",
+  "version": "0.1.0",
   "author": "Henry Chan",
-  "description": "Content Fly Main Dapp",
+  "description": "Beam Dapp",
   "private": true,
   "keywords": [
     "nextjs",

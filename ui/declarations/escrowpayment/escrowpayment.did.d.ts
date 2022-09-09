@@ -96,9 +96,11 @@ export type Result = { 'ok' : string } |
   { 'err' : ErrorCode };
 export type Result_1 = { 'ok' : string } |
   { 'err' : ErrorCode__1 };
-export type Result_2 = { 'ok' : EscrowContract } |
+export type Result_2 = { 'ok' : BeamEscrowContract } |
   { 'err' : ErrorCode };
-export type Result_3 = { 'ok' : EscrowId } |
+export type Result_3 = { 'ok' : EscrowContract } |
+  { 'err' : ErrorCode };
+export type Result_4 = { 'ok' : EscrowId } |
   { 'err' : ErrorCode__1 };
 export type Time = bigint;
 export type Time__1 = bigint;
@@ -109,7 +111,7 @@ export type TokenType__1 = { 'icp' : null };
 export interface Tokens { 'e8s' : bigint }
 export interface _SERVICE {
   'buyerClaim' : ActorMethod<
-    [JobFlowId, TokenType__1, AccountIdentifier__1],
+    [EscrowId, TokenType__1, AccountIdentifier__1],
     Result,
   >,
   'canisterAccount' : ActorMethod<[], AccountIdentifier__1>,
@@ -117,7 +119,7 @@ export interface _SERVICE {
   'canisterVersion' : ActorMethod<[], number>,
   'createBeamEscrow' : ActorMethod<
     [TokenAmount__1, BlockIndex, Time__1, Principal, Principal],
-    Result_3,
+    Result_4,
   >,
   'createEscrow' : ActorMethod<
     [
@@ -129,10 +131,10 @@ export interface _SERVICE {
       Principal,
       Principal,
     ],
-    Result_3,
+    Result_4,
   >,
   'creatorClaim' : ActorMethod<
-    [JobFlowId, TokenType__1, AccountIdentifier__1],
+    [EscrowId, TokenType__1, AccountIdentifier__1],
     Result,
   >,
   'getActorBalance' : ActorMethod<[], bigint>,
@@ -140,7 +142,8 @@ export interface _SERVICE {
   'getManager' : ActorMethod<[], Principal>,
   'healthCheck' : ActorMethod<[], boolean>,
   'loadAllEscrow' : ActorMethod<[], Array<EscrowContract>>,
-  'loadEscrow' : ActorMethod<[JobFlowId], Result_2>,
+  'loadEscrow' : ActorMethod<[JobFlowId], Result_3>,
+  'queryMyBeamEscrow' : ActorMethod<[EscrowId], Result_2>,
   'queryMyBeams' : ActorMethod<[], Array<BeamEscrowContract>>,
   'releasePaymentToCreator' : ActorMethod<[JobFlowId], Result>,
   'returnExtraICP' : ActorMethod<[], Result_1>,

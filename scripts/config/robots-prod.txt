@@ -1,2 +1,2 @@
 User-agent: *
-Disallow: /cfadmin
+Disallow: /beamadmin

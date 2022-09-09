@@ -7,8 +7,8 @@ export const StandardSpinner = () => {
     <Spinner
       thickness="4px"
       speed="0.65s"
-      emptyColor="purple_light"
-      color="purple"
+      emptyColor="beam_green"
+      color="beam_pink"
       size="xl"
     />
   )

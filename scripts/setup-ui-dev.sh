@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo Building Frontend UI for Development
+echo Building Beam Frontend UI for Development
 
 echo Setting up robots.txt
 cp ./scripts/config/robots-dev.txt ./public/robots.txt

@@ -1,5 +1,7 @@
 import React from "react"
+
 import Router from "next/router"
+import Head from "next/head"
 
 // Progress bar
 import NProgress from "nprogress"
@@ -26,10 +28,20 @@ export default function MyApp({ Component, pageProps }) {
   Router.onRouteChangeError = () => NProgress.done()
 
   return (
-    <ChakraProvider resetCSS theme={theme}>
-      <ColorModeProvider>
-        <Component {...pageProps} />
-      </ColorModeProvider>
-    </ChakraProvider>
+    <>
+      <Head>
+        <meta
+          key="viewport"
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
+      </Head>
+
+      <ChakraProvider resetCSS theme={theme}>
+        <ColorModeProvider>
+          <Component {...pageProps} />
+        </ColorModeProvider>
+      </ChakraProvider>
+    </>
   )
 }

@@ -1,4 +1,10 @@
 import {
+  createActor as createBeamActor,
+  canisterId as beamCanisterId,
+  idlFactory as beamIdlFactory
+} from "../../declarations/beam"
+
+import {
   createActor as createBeamOutActor,
   canisterId as beamOutCanisterId,
   idlFactory as beamOutIdlFactory
@@ -23,20 +29,9 @@ import log from "../../utils/log"
 // Cache
 let actorCache = {}
 const ActorCacheKey = {
-  UserProfile: "userprofile",
-  Portfolio: "portfolio",
-  Job: "job",
-  JobDAO: "jobdao",
-  JobDispute: "jobdispute",
-  JobSubmission: "jobsubmission",
+  Beam: "beam",
   BeamOut: "beamout",
-  Chat: "chat",
-  NFTFileManager: "nftfilemanager",
-  Notification: "notification",
-  EscrowPayment: "escrowpayment",
-  Reserve: "reserve",
-  Image: "image",
-  File: "file"
+  EscrowPayment: "escrowpayment"
 }
 
 export const clearCache = () => {
@@ -109,6 +104,17 @@ export const makeLogout = authProvider => {
       return makePlugLogout()
     }
   }
+}
+
+export const makeBeamActor = async (identity, authProvider) => {
+  return await makeActor(
+    beamCanisterId,
+    beamIdlFactory,
+    createBeamActor,
+    identity,
+    authProvider,
+    ActorCacheKey.Beam
+  )
 }
 
 export const makeBeamOutActor = async (identity, authProvider) => {

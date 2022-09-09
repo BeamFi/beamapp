@@ -1,0 +1,17 @@
+name: Deploy BeamFi app to Firebase Hosting in dev
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build_and_preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./scripts/setup-ui-prod.sh && npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_CONTENTFLYDEV }}"
+          projectId: contentflyprod
+          channelId: live

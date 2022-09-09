@@ -1,0 +1,62 @@
+type Time__1 = int;
+type Time = int;
+type Result_1 = 
+ variant {
+   err: ErrorCode;
+   ok: BeamId__1;
+ };
+type Result = 
+ variant {
+   err: ErrorCode;
+   ok: BeamStatus;
+ };
+type Period = nat32;
+type EscrowId__1 = nat32;
+type EscrowId = nat32;
+type ErrorCode = 
+ variant {
+   beam_notfound: text;
+   invalid_beam: text;
+ };
+type CanisterMemoryInfo = 
+ record {
+   rts_heap_size: nat;
+   rts_max_live_size: nat;
+   rts_memory_size: nat;
+   rts_reclaimed: nat;
+   rts_total_allocation: nat;
+   rts_version: text;
+ };
+type BeamStatus__1 = 
+ variant {
+   active;
+   completed;
+   paused;
+ };
+type BeamStatus = 
+ variant {
+   active;
+   completed;
+   paused;
+ };
+type BeamReadModel = 
+ record {
+   createdAt: Time;
+   escrowId: EscrowId__1;
+   id: BeamId;
+   scheduledEndDate: Time;
+   startDate: Time;
+   status: BeamStatus__1;
+ };
+type BeamId__1 = nat32;
+type BeamId = nat32;
+service : {
+  canisterVersion: () -> (nat32) query;
+  createBeam: (EscrowId, Time__1, Period) -> (Result_1);
+  getActorBalance: () -> (nat) query;
+  getCanisterMemoryInfo: () -> (CanisterMemoryInfo) query;
+  getManager: () -> (principal) query;
+  healthCheck: () -> (bool) query;
+  queryBeamByEscrowIds: (vec EscrowId) -> (vec BeamReadModel) query;
+  stopBeam: (EscrowId) -> (Result);
+}

@@ -15,7 +15,7 @@ export class EscrowContractClass {
 
   createdAtHuman = () => {
     const createdAt = convertCandidDateToJSDate(this.candidModel.createdAt)
-    return moment(createdAt).format("Do MMM YYYY HH:mm:ss")
+    return moment.utc(createdAt).local().format("Do MMM YYYY HH:mm:ss")
   }
 
   paymentType = () => {
@@ -89,20 +89,21 @@ export class EscrowContractClass {
     return this.candidModel.creatorPrincipal.toString()
   }
 
-  creatorOwnedPercentage = () => {
-    const numCreatorOwnedTokens =
-      this.candidModel.creatorClaimed + this.candidModel.creatorClaimable
-    const totalTokens = this.candidModel.initialDeposit
+  creatorTotalOwned = () => {
+    return this.creatorClaimed() + this.creatorClaimable()
+  }
 
+  creatorOwnedPercentage = () => {
+    const totalTokens = this.initialDeposit()
     const creatorOwnedPercent =
-      totalTokens === 0 ? 0 : numCreatorOwnedTokens / totalTokens
+      totalTokens === 0 ? 0 : this.creatorTotalOwned() / totalTokens
 
     return creatorOwnedPercent
   }
 
   otherPartyPrincipalId = myPrincipalId => {
-    const buyerPrincipalId = this.candidModel.buyerPrincipalId
-    const creatorPrincipalId = this.candidModel.creatorPrincipalId
+    const buyerPrincipalId = this.buyerPrincipalId()
+    const creatorPrincipalId = this.creatorPrincipalId()
 
     if (myPrincipalId == buyerPrincipalId) {
       return creatorPrincipalId
@@ -111,8 +112,8 @@ export class EscrowContractClass {
     return buyerPrincipalId
   }
 
-  isInBeam = myPrincipalId => {
-    const creatorPrincipalId = this.candidModel.creatorPrincipalId
+  isBeamRecipient = myPrincipalId => {
+    const creatorPrincipalId = this.creatorPrincipalId()
     return myPrincipalId == creatorPrincipalId
   }
 

@@ -1,5 +1,13 @@
 # Beam App
 
+## Quick Start
+
+### Deploy to Firebase Hosting
+
+```
+firebase deploy --only hosting
+```
+
 ## Author
 
 Henry Chan, henry@beamfi.app
