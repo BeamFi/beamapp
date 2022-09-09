@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react"
 
 // eslint-disable-next-line @next/next/no-document-import-in-page
-import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
-import { ColorModeScript } from '@chakra-ui/react';
+import NextDocument, { Html, Head, Main, NextScript } from "next/document"
+import { ColorModeScript } from "@chakra-ui/react"
 
-import theme from '../ui/styles/theme';
+import theme from "../ui/styles/theme"
 
 export default class Document extends NextDocument {
   render() {
     return (
-      <Html style={{ height: '-webkit-fill-available' }}>
+      <Html style={{ height: "-webkit-fill-available" }}>
         <Head>
           <meta httpEquiv="expires" content="-1" />
           <meta httpEquiv="cache-control" content="no-cache, no-store" />
@@ -68,9 +68,19 @@ export default class Document extends NextDocument {
             content="https://contentfly.app/assets/images/beamlogo-og.png"
             key="ogimage"
           />
+          <meta
+            key="viewport"
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+          />
         </Head>
         <body
-          style={{ minHeight: '-webkit-fill-available', minHeight: '100vh' }}
+          style={{ minHeight: "-webkit-fill-available", minHeight: "100vh" }}
         >
           {/* Make Color mode to persists when you refresh the page. */}
           <ColorModeScript
@@ -81,6 +91,6 @@ export default class Document extends NextDocument {
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }

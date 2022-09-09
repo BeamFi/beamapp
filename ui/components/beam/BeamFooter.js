@@ -17,7 +17,7 @@ import { FaDiscord, FaMediumM, FaTwitter } from "react-icons/fa"
 import { ShareURLModal } from "../socialmedia/ShareURLModal"
 import { BeamGradientActionButton } from "./common/BeamGradientActionButton"
 
-export const BeamFooter = ({ hashtags }) => {
+export const BeamFooter = ({ hashtags, ...rest }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const shareURL = window.location.href
   const shareName = `Beam - Trustless Streaming Payment`
@@ -28,7 +28,7 @@ export const BeamFooter = ({ hashtags }) => {
   }
 
   return (
-    <Box pos="fixed" bottom="0px" py="20px" w="full">
+    <Box pos="absolute" bottom="0px" py="20px" w="full" {...rest}>
       <Center>
         <VStack spacing="32px">
           <HStack color="black_gray_3" spacing="22px">

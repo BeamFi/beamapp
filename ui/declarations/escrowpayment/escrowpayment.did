@@ -5,15 +5,20 @@ type TokenAmount__1 = nat64;
 type TokenAmount = nat64;
 type Time__1 = int;
 type Time = int;
-type Result_3 = 
+type Result_4 = 
  variant {
    err: ErrorCode__1;
    ok: EscrowId;
  };
-type Result_2 = 
+type Result_3 = 
  variant {
    err: ErrorCode;
    ok: EscrowContract;
+ };
+type Result_2 = 
+ variant {
+   err: ErrorCode;
+   ok: BeamEscrowContract;
  };
 type Result_1 = 
  variant {
@@ -137,16 +142,17 @@ service : {
   canisterBalance: (TokenType__1) -> (Tokens);
   canisterVersion: () -> (nat32) query;
   createBeamEscrow: (TokenAmount__1, BlockIndex, Time__1, principal,
-   principal) -> (Result_3);
+   principal) -> (Result_4);
   createEscrow: (JobFlowId, TokenAmount__1, EscrowPaymentType__1, BlockIndex,
-   Time__1, principal, principal) -> (Result_3);
+   Time__1, principal, principal) -> (Result_4);
   creatorClaim: (JobFlowId, TokenType__1, AccountIdentifier__1) -> (Result);
   getActorBalance: () -> (nat) query;
   getCanisterMemoryInfo: () -> (CanisterMemoryInfo) query;
   getManager: () -> (principal) query;
   healthCheck: () -> (bool) query;
   loadAllEscrow: () -> (vec EscrowContract) query;
-  loadEscrow: (JobFlowId) -> (Result_2) query;
+  loadEscrow: (JobFlowId) -> (Result_3) query;
+  queryMyBeamEscrow: (EscrowId) -> (Result_2) query;
   queryMyBeams: () -> (vec BeamEscrowContract) query;
   releasePaymentToCreator: (JobFlowId) -> (Result);
   returnExtraICP: () -> (Result_1);

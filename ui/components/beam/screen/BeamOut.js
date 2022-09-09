@@ -286,146 +286,150 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
   }
 
   return (
-    <Stack
-      spacing={{ base: "20px", md: "120px" }}
-      w="100%"
-      color="dark_black"
-      fontSize="16px"
-      pt={{ base: "90px", md: "140px" }}
-      direction={{ base: "column", md: "row" }}
-      justifyContent="center"
-      px={{ base: "14px", md: "38px" }}
-    >
-      <Head>
-        <title>Beam Out - Beam</title>
-      </Head>
-      <HeadlineStack />
-      <BeamVStack>
-        {isLoading && <StandardSpinner />}
-        <Formik
-          initialValues={{
-            amount: amount,
-            recipient: recipient,
-            isConfirmed: false
-          }}
-          validationSchema={BeamCreateLinkSchema}
-          onSubmit={submit}
-          enableReinitialize
-        >
-          {({ values, isSubmitting, setFieldValue }) => (
-            <Form style={{ width: "100%" }}>
-              <VStack
-                bgColor="white"
-                borderRadius="14px"
-                maxW="700px"
-                spacing={{ base: "24px", md: "32px" }}
-                py="24px"
-              >
-                <Field name="amount">
-                  {({ field, form }) => (
-                    <FormNumberInput
-                      id="amount"
-                      field={field}
-                      min={BeamCreateLinkConfig.BudgetMinNumTokens}
-                      max={BeamCreateLinkConfig.BudgetMaxNumTokens}
-                      inputFontSize={{ base: "sm", md: "md" }}
-                      w={{ base: "95%", md: "80%" }}
-                      isInvalid={form.errors.amount && form.touched.amount}
-                      errorMesg={form.errors.amount}
-                      setFieldValue={setFieldValue}
-                      token="ICP"
-                      TokenIcon={ICLogo}
-                      themeColor="black_5"
-                      trackColor="black_gray"
-                    >
-                      <BeamHeading>ICP Amount:</BeamHeading>
-                    </FormNumberInput>
-                  )}
-                </Field>
-
-                <Field name="recipient">
-                  {({ field, form }) => (
-                    <FormInput
-                      id="recipient"
-                      field={field}
-                      inputFontSize={{ base: "sm", md: "md" }}
-                      themeColor="black_5"
-                      placeholder="Your Principal ID"
-                      w={{ base: "95%", md: "80%" }}
-                      isInvalid={
-                        form.errors.recipient && form.touched.recipient
-                      }
-                      errorMesg={form.errors.recipient}
-                    >
-                      <BeamHeading>Your Plug Wallet:</BeamHeading>
-                    </FormInput>
-                  )}
-                </Field>
-
+    <Box h="100vh">
+      <Stack
+        spacing={{ base: "20px", md: "120px" }}
+        w="100%"
+        color="dark_black"
+        fontSize="16px"
+        pt={{ base: "90px", md: "140px" }}
+        direction={{ base: "column", md: "row" }}
+        justifyContent="center"
+        px={{ base: "14px", md: "38px" }}
+      >
+        <Head>
+          <title>Beam Out - Beam</title>
+        </Head>
+        <HeadlineStack />
+        <BeamVStack>
+          {isLoading && <StandardSpinner />}
+          <Formik
+            initialValues={{
+              amount: amount,
+              recipient: recipient,
+              isConfirmed: false
+            }}
+            validationSchema={BeamCreateLinkSchema}
+            onSubmit={submit}
+            enableReinitialize
+          >
+            {({ values, isSubmitting, setFieldValue }) => (
+              <Form style={{ width: "100%" }}>
                 <VStack
-                  align="start"
-                  w={{ base: "95%", md: "80%" }}
-                  spacing="12px"
+                  bgColor="white"
+                  borderRadius="14px"
+                  maxW="700px"
+                  spacing={{ base: "24px", md: "32px" }}
+                  py="24px"
                 >
-                  <BeamHeading textAlign="left">Duration:</BeamHeading>
+                  <Field name="amount">
+                    {({ field, form }) => (
+                      <FormNumberInput
+                        id="amount"
+                        field={field}
+                        min={BeamCreateLinkConfig.BudgetMinNumTokens}
+                        max={BeamCreateLinkConfig.BudgetMaxNumTokens}
+                        inputFontSize={{ base: "sm", md: "md" }}
+                        w={{ base: "95%", md: "80%" }}
+                        isInvalid={form.errors.amount && form.touched.amount}
+                        errorMesg={form.errors.amount}
+                        setFieldValue={setFieldValue}
+                        token="ICP"
+                        TokenIcon={ICLogo}
+                        themeColor="black_5"
+                        trackColor="black_gray"
+                      >
+                        <BeamHeading>ICP Amount:</BeamHeading>
+                      </FormNumberInput>
+                    )}
+                  </Field>
 
-                  <HStack w="100%">
-                    <Text
-                      color="black_5"
-                      fontSize={{ base: "16px", md: "18px" }}
-                    >
-                      {numDays} Days
-                    </Text>
-                    <Spacer />
-                    {showEndDate && (
+                  <Field name="recipient">
+                    {({ field, form }) => (
+                      <FormInput
+                        id="recipient"
+                        field={field}
+                        inputFontSize={{ base: "sm", md: "md" }}
+                        themeColor="black_5"
+                        placeholder="Your Principal ID"
+                        w={{ base: "95%", md: "80%" }}
+                        isInvalid={
+                          form.errors.recipient && form.touched.recipient
+                        }
+                        errorMesg={form.errors.recipient}
+                      >
+                        <BeamHeading>Your Plug Wallet:</BeamHeading>
+                      </FormInput>
+                    )}
+                  </Field>
+
+                  <VStack
+                    align="start"
+                    w={{ base: "95%", md: "80%" }}
+                    spacing="12px"
+                  >
+                    <BeamHeading textAlign="left">Duration:</BeamHeading>
+
+                    <HStack w="100%">
                       <Text
                         color="black_5"
-                        fontSize={{ base: "14px", md: "16px" }}
-                        fontWeight="light"
+                        fontSize={{ base: "16px", md: "18px" }}
                       >
-                        (Ending: {endDateDesc()})
+                        {numDays} Days
                       </Text>
-                    )}
-                  </HStack>
+                      <Spacer />
+                      {showEndDate && (
+                        <Text
+                          color="black_5"
+                          fontSize={{ base: "14px", md: "16px" }}
+                          fontWeight="light"
+                        >
+                          (Ending: {endDateDesc()})
+                        </Text>
+                      )}
+                    </HStack>
 
-                  <Slider
-                    defaultValue={numDays}
-                    onChange={setNumDays}
-                    min={1}
-                    max={90}
-                    step={1}
-                  >
-                    <SliderTrack bg="black_gray">
-                      <Box position="relative" right={10} />
-                      <SliderFilledTrack bg="black_5" />
-                    </SliderTrack>
-                    <SliderThumb boxSize={6} />
-                  </Slider>
+                    <Slider
+                      defaultValue={numDays}
+                      onChange={setNumDays}
+                      min={1}
+                      max={90}
+                      step={1}
+                    >
+                      <SliderTrack bg="black_gray">
+                        <Box position="relative" right={10} />
+                        <SliderFilledTrack bg="black_5" />
+                      </SliderTrack>
+                      <SliderThumb boxSize={6} />
+                    </Slider>
+                  </VStack>
+
+                  <Box w="100%" textAlign="center">
+                    <BeamActionButton
+                      leftIcon={
+                        <RocketIcon w="23px" h="23px" color="black_5" />
+                      }
+                      isLoading={isSubmitting}
+                      w={{ base: "95%", md: "80%" }}
+                      h="62px"
+                      fontWeight="semibold"
+                      fontSize="21px"
+                      type="submit"
+                      bg="beam_pink"
+                    >
+                      Create Beam
+                    </BeamActionButton>
+                    <Text color="gray_light2" pt="20px">
+                      Recipient will receive {beamRate(values.amount)} ICP/hour
+                      for {numDays} days ({values.amount} ICP total)
+                    </Text>
+                  </Box>
                 </VStack>
-
-                <Box w="100%" textAlign="center">
-                  <BeamActionButton
-                    leftIcon={<RocketIcon w="23px" h="23px" color="black_5" />}
-                    isLoading={isSubmitting}
-                    w={{ base: "95%", md: "80%" }}
-                    h="62px"
-                    fontWeight="semibold"
-                    fontSize="21px"
-                    type="submit"
-                    bg="beam_pink"
-                  >
-                    Create Beam
-                  </BeamActionButton>
-                  <Text color="gray_light2" pt="20px">
-                    Recipient will receive {beamRate(values.amount)} ICP/hour
-                    for {numDays} days ({values.amount} ICP total)
-                  </Text>
-                </Box>
-              </VStack>
-            </Form>
-          )}
-        </Formik>
-      </BeamVStack>
-    </Stack>
+              </Form>
+            )}
+          </Formik>
+        </BeamVStack>
+      </Stack>
+    </Box>
   )
 }

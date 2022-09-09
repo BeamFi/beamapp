@@ -16,6 +16,9 @@ export const BeamApp = props => {
   const [bgColor, setBgColor] = useState("beam_blue")
   const [hashtags, setHashtags] = useState([])
 
+  const [beamEscrowContract, setBeamEscrowContract] = useState(null)
+  const [beamReadModel, setBeamReadModel] = useState(null)
+
   const routeUpdateProps = { setBgColor, setHashtags }
   const routeProps = { bgColor, hashtags }
 
@@ -43,10 +46,23 @@ export const BeamApp = props => {
             path="/mybeams"
             element={<MyBeamsLayout {...routeUpdateProps} />}
           >
-            <Route index element={<MyBeamsActivity {...routeUpdateProps} />} />
             <Route
-              path=":beamOutId"
-              element={<BeamDetail {...routeUpdateProps} />}
+              index
+              element={
+                <MyBeamsActivity
+                  setBeamEscrowContract={setBeamEscrowContract}
+                  setBeamReadModel={setBeamReadModel}
+                />
+              }
+            />
+            <Route
+              path=":escrowId"
+              element={
+                <BeamDetail
+                  beamEscrowContract={beamEscrowContract}
+                  beamReadModel={beamReadModel}
+                />
+              }
             />
           </Route>
           <Route

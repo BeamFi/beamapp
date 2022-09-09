@@ -17,7 +17,10 @@ import { BeamCard } from "./mybeams/BeamCard"
 import { BeamMainActionButtons } from "../BeamMainActionButtons"
 import { StandardSpinner } from "../../StandardSpinner"
 
-export const MyBeamsActivity = ({ setBgColor, setHashtags }) => {
+export const MyBeamsActivity = ({
+  setBeamReadModel,
+  setBeamEscrowContract
+}) => {
   const initLoading = 1
   const [escrows, setEscrows] = useState([])
   const [beamMap, setBeamMap] = useState({})
@@ -26,9 +29,6 @@ export const MyBeamsActivity = ({ setBgColor, setHashtags }) => {
   const [isLoading, setLoading] = useState(true)
 
   useEffect(() => {
-    setBgColor("beam_blue")
-    setHashtags([])
-
     loadMyBeams()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,7 +39,8 @@ export const MyBeamsActivity = ({ setBgColor, setHashtags }) => {
       setLoading(true)
       await verifyBeamPlugConnection()
 
-      const principalId = window.ic?.plug?.principalId
+      const principalId =
+        window?.ic?.plug?.sessionManager?.sessionData?.principalId
       setMyPrincipalId(principalId)
 
       const escrowService = await makeEscrowPaymentActor(
@@ -84,10 +85,12 @@ export const MyBeamsActivity = ({ setBgColor, setHashtags }) => {
             beamEscrowContract={escrow}
             myPrincipalId={myPrincipalId}
             beamReadModel={beamMap[escrow.id]}
+            setBeamReadModel={setBeamReadModel}
+            setBeamEscrowContract={setBeamEscrowContract}
           />
         ))}
       </BeamVStack>
-      <BeamMainActionButtons py="20px" />
+      <BeamMainActionButtons py="20px" pos="fixed" bottom="200px" />
     </>
   )
 }

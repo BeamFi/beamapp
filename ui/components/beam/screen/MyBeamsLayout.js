@@ -20,11 +20,10 @@ export const MyBeamsLayout = ({ setBgColor, setHashtags }) => {
       spacing={{ base: "10px", md: "12px" }}
       align="center"
       w="100%"
-      h="100%"
+      minH="100vh"
       color="dark_black"
       fontSize="16px"
-      pb="260px"
-      justifyContent="center"
+      pb="100px"
     >
       <Head>
         <title>My Beams - Beam</title>

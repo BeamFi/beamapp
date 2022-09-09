@@ -1,26 +1,35 @@
 import React from "react"
 
 import { Avatar, HStack, Spacer, Text, VStack } from "@chakra-ui/react"
+import { TokenProgressBar } from "./TokenProgressBar"
 
 import { ICPIcon } from "../../../../icon"
 
 import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
-import { TokenProgressBar } from "./TokenProgressBar"
+
 import { PrincipalInfo } from "../../../wallet/PrincipalInfo"
 import { convertCandidDateToJSDate } from "../../../../model/TypeConversion"
 import { truncFloatDecimals } from "../../../../utils/number"
 
+import { useNavigate } from "react-router-dom"
+
 export const BeamCard = ({
   beamEscrowContract,
+  beamReadModel,
   myPrincipalId,
-  beamReadModel
+  isOpenDetailEnabled = true,
+  setBeamEscrowContract,
+  setBeamReadModel
 }) => {
   const escrowObject = new EscrowContractClass(beamEscrowContract)
   const otherPartyPrincipalId =
     escrowObject.otherPartyPrincipalId(myPrincipalId)
-  const bgColor = escrowObject.isInBeam(myPrincipalId)
+
+  const bgColor = escrowObject.isBeamRecipient(myPrincipalId)
     ? "beam_green"
     : "beam_pink"
+
+  const navigate = useNavigate()
 
   const beamRate = () => {
     if (beamReadModel == null) return "??"
@@ -34,8 +43,27 @@ export const BeamCard = ({
     return truncFloatDecimals(rate, 6)
   }
 
+  const gotoDetail = () => {
+    if (!isAllDataReady) return
+
+    if (setBeamEscrowContract) setBeamEscrowContract(beamEscrowContract)
+    if (setBeamReadModel) setBeamReadModel(beamReadModel)
+
+    navigate(`/mybeams/${beamEscrowContract.id}`)
+  }
+
+  const isAllDataReady =
+    isOpenDetailEnabled && beamEscrowContract != null && beamReadModel != null
+
   return (
-    <VStack borderRadius="30px" bgColor={bgColor} w="95%" h="140px">
+    <VStack
+      borderRadius="30px"
+      bgColor={bgColor}
+      w="95%"
+      h="140px"
+      cursor={isAllDataReady ? "pointer" : "auto"}
+      onClick={gotoDetail}
+    >
       <HStack w="100%" py="20px" px="27px">
         <Avatar
           bg="white"

@@ -112,7 +112,7 @@ export class EscrowContractClass {
     return buyerPrincipalId
   }
 
-  isInBeam = myPrincipalId => {
+  isBeamRecipient = myPrincipalId => {
     const creatorPrincipalId = this.creatorPrincipalId()
     return myPrincipalId == creatorPrincipalId
   }
