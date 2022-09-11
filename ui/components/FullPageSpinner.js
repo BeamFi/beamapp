@@ -25,7 +25,9 @@ export const FullPageSpinner = () => {
         {!showReload && <StandardSpinner />}
         {showReload && (
           <>
-            <Heading color="black_2">A new version is found!</Heading>
+            <Heading color="black_2">
+              Please make sure your Plug Wallet is unlocked.
+            </Heading>
             <Button
               variant="link"
               fontSize="26px"
