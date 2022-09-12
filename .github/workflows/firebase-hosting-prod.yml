@@ -1,8 +1,9 @@
 name: Prod BeamFi app
 on:
   workflow_dispatch:
-push:
-  branches: [main]
+  push:
+    branches: [main]
+
 jobs:
   build_and_preview:
     runs-on: ubuntu-latest
