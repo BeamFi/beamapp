@@ -9,4 +9,4 @@ echo Update canister_ids.json
 cp canister_ids_dev.json canister_ids.json
 
 echo Update NextJS .env.production
-cp .env-dev.ic .env.production
+cp .env.ic .env.production
