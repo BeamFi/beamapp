@@ -58,7 +58,7 @@ import { StandardSpinner } from "../../StandardSpinner"
 
 import { connectPlugForToken, isPlugConnected } from "../../auth/provider/plug"
 import { principalToAccountIdentifier } from "../../../utils/account-identifier"
-import { AuthProvider, EscrowPaymentConfig } from "../../../config"
+import { AuthProvider } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr } from "../../../utils/date"
 
@@ -97,6 +97,9 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
   const [numDays, setNumDays] = useState(defaultNumDays)
   const [amount, setAmount] = useState(defaultAmount)
   const [recipient, setRecipient] = useState("")
+
+  const myPrincipalId =
+    window?.ic?.plug?.sessionManager?.sessionData?.principalId
 
   const [isLoading, setLoading] = useState(false)
 
@@ -226,7 +229,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         AuthProvider.Plug
       )
 
-      const buyerPrincipal = Principal.fromText(window.ic.plug.principalId)
+      const buyerPrincipal = Principal.fromText(myPrincipalId)
       const creatorPrincipal = Principal.fromText(recipient)
       const dueDate = moment()
       dueDate.add(numDays, "days")
