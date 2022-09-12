@@ -89,7 +89,7 @@ export const BeamSelectWalletModal = ({ isOpen, onClose, selectAuth }) => {
           <ModalBody align="center">
             <Link
               isExternal
-              href="wallet.html"
+              href="https://plugwallet.ooo"
               color="blue_2"
               fontSize="16px"
               fontWeight="light"

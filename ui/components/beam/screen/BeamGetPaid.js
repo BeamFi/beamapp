@@ -53,8 +53,8 @@ const HeadlineStack = () => {
       spacing="20px"
     >
       <LetsGetYourPaidIcon
-        w={{ base: "220px", md: "300px", lg: "400px", xl: "513px" }}
-        h={{ base: "70px", md: "96px", lg: "128px", xl: "165px" }}
+        w={{ base: "220px", md: "300px", lg: "380px", xl: "513px" }}
+        h={{ base: "70px", md: "96px", lg: "122px", xl: "165px" }}
       />
       <OrderedList
         spacing={{ base: "10px", md: "16px" }}
@@ -342,7 +342,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                           ? "Link Copied"
                           : "Create Unique Beam Link"
                       }
-                      textSize="20px"
+                      textSize={{ base: "15px", md: "20px" }}
                       textWeight="semibold"
                       leftIcon={
                         beamOutId != null ? (
@@ -352,10 +352,8 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         )
                       }
                       isLoading={isSubmitting}
-                      w={{ base: "95%", md: "80%" }}
+                      w={{ base: "95%", md: "85%" }}
                       h="62px"
-                      fontWeight="semibold"
-                      fontSize="22px"
                       border="1px solid #000000"
                       type="submit"
                     />
