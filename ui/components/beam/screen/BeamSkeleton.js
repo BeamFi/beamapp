@@ -10,10 +10,7 @@ import { BeamTopLeftButtons } from "../BeamTopLeftButtons"
 
 export default function BeamSkeleton({ bgColor, logout, hashtags, ...rest }) {
   const outBoxStyle = {
-    minHeight: "100vh",
-    minHeight: "-moz-available",
-    minHeight: "-webkit-fill-available",
-    minHeight: "fill-available"
+    minHeight: "900px"
   }
 
   return (

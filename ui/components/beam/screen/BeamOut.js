@@ -4,6 +4,7 @@ import Head from "next/head"
 
 import {
   Box,
+  Button,
   HStack,
   ListItem,
   OrderedList,
@@ -14,6 +15,7 @@ import {
   Spacer,
   Stack,
   Text,
+  useDisclosure,
   useToast,
   VStack
 } from "@chakra-ui/react"
@@ -62,6 +64,7 @@ import { principalToAccountIdentifier } from "../../../utils/account-identifier"
 import { AuthProvider } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr } from "../../../utils/date"
+import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
 
 const HeadlineStack = () => {
   return (
@@ -98,6 +101,12 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
   const [numDays, setNumDays] = useState(defaultNumDays)
   const [amount, setAmount] = useState(defaultAmount)
   const [recipient, setRecipient] = useState("")
+
+  const {
+    isOpen: isSelectAuthOpen,
+    onOpen: onSelectAuthOpen,
+    onClose: onSelectAuthClose
+  } = useDisclosure()
 
   const myPrincipalId =
     window?.ic?.plug?.sessionManager?.sessionData?.principalId
@@ -168,8 +177,14 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
     return true
   }
 
+  const cancelLogin = () => {
+    setLoading(false)
+  }
+
   const submit = async (values, actions) => {
     const { amount, recipient } = values
+
+    onSelectAuthClose()
 
     try {
       const isValid = await validateAndConfirm(values)
@@ -179,7 +194,22 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
 
       actions.setSubmitting(true)
 
-      // Use Plug directly
+      // Check if Plug is available, else show popup mesg
+      let isConnected = await isPlugConnected()
+      if (!isConnected || window.ic?.plug?.accountId == null) {
+        isConnected = await connectPlugForToken({
+          showToast,
+          toast,
+          title: "Create Beam"
+        })
+
+        if (!isConnected) {
+          actions.setSubmitting(false)
+          return
+        }
+      }
+
+      // Health check
       const escrowService = await makeEscrowPaymentActor(
         null,
         AuthProvider.Plug
@@ -202,21 +232,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         return
       }
 
-      // Check if Plug is available, else show popup mesg
-      let isConnected = await isPlugConnected()
-      if (!isConnected || window.ic?.plug?.accountId == null) {
-        isConnected = await connectPlugForToken({
-          showToast,
-          toast,
-          title: "Create Beam"
-        })
-
-        if (!isConnected) {
-          actions.setSubmitting(false)
-          return
-        }
-      }
-
+      // Request transfer
       showToast(
         toast,
         "Create Beam",
@@ -333,7 +349,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
             onSubmit={submit}
             enableReinitialize
           >
-            {({ values, isSubmitting, setFieldValue }) => (
+            {({ values, isSubmitting, handleSubmit, setFieldValue }) => (
               <Form style={{ width: "100%" }}>
                 <VStack
                   bgColor="white"
@@ -434,11 +450,29 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
                       h="62px"
                       fontWeight="semibold"
                       fontSize="21px"
-                      type="submit"
+                      // type="submit"
                       bg="beam_pink"
+                      onClick={onSelectAuthOpen}
                     >
                       Create Beam
                     </BeamActionButton>
+                    <BeamSelectWalletModal
+                      isOpen={isSelectAuthOpen}
+                      onClose={onSelectAuthClose}
+                      selectAuth={handleSubmit}
+                    />
+                    {isLoading && (
+                      <Button
+                        w="110px"
+                        h="38px"
+                        color="blue_1"
+                        variant="link"
+                        textAlign="center"
+                        onClick={cancelLogin}
+                      >
+                        Cancel
+                      </Button>
+                    )}
                     <Text color="gray_light2" pt="20px">
                       Recipient will receive {beamRate(values.amount)} ICP/hour
                       for {numDays} days ({values.amount} ICP total)
