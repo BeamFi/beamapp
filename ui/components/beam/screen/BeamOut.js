@@ -42,6 +42,7 @@ import {
 
 import { Principal } from "@dfinity/principal"
 import {
+  makeBeamActor,
   makeBeamOutActor,
   makeEscrowPaymentActor
 } from "../../../service/actor/actor-locator"
@@ -178,6 +179,29 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
 
       actions.setSubmitting(true)
 
+      // Use Plug directly
+      const escrowService = await makeEscrowPaymentActor(
+        null,
+        AuthProvider.Plug
+      )
+      const beamService = await makeBeamActor(null, AuthProvider.Plug)
+
+      const promiseAllFunc = []
+      promiseAllFunc.push(escrowService.healthCheck())
+      promiseAllFunc.push(beamService.healthCheck())
+
+      const [isEscrowRunning, isBeamRunning] = await Promise.all(promiseAllFunc)
+
+      if (!isBeamRunning || !isEscrowRunning) {
+        showToast(
+          toast,
+          "Create Beam",
+          "Our backend smart contract is currently down. Please try again later.",
+          "warning"
+        )
+        return
+      }
+
       // Check if Plug is available, else show popup mesg
       let isConnected = await isPlugConnected()
       if (!isConnected || window.ic?.plug?.accountId == null) {
@@ -221,12 +245,6 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         "Create Beam",
         `2/3 - We are creating your Beam now. This step can take up to 30 secs. 🧑‍💻`,
         "info"
-      )
-
-      // Use Plug directly
-      const escrowService = await makeEscrowPaymentActor(
-        null,
-        AuthProvider.Plug
       )
 
       const buyerPrincipal = Principal.fromText(myPrincipalId)
