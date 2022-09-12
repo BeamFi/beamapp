@@ -184,8 +184,6 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
   const submit = async (values, actions) => {
     const { amount, recipient } = values
 
-    onSelectAuthClose()
-
     try {
       const isValid = await validateAndConfirm(values)
       if (!isValid) {
@@ -459,7 +457,10 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
                     <BeamSelectWalletModal
                       isOpen={isSelectAuthOpen}
                       onClose={onSelectAuthClose}
-                      selectAuth={handleSubmit}
+                      selectAuth={() => {
+                        onSelectAuthClose()
+                        handleSubmit()
+                      }}
                     />
                     {isLoading && (
                       <Button
