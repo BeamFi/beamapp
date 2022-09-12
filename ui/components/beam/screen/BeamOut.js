@@ -58,7 +58,7 @@ import { StandardSpinner } from "../../StandardSpinner"
 
 import { connectPlugForToken, isPlugConnected } from "../../auth/provider/plug"
 import { principalToAccountIdentifier } from "../../../utils/account-identifier"
-import { AuthProvider, EscrowPaymentConfig } from "../../../config"
+import { AuthProvider } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr } from "../../../utils/date"
 
@@ -97,6 +97,9 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
   const [numDays, setNumDays] = useState(defaultNumDays)
   const [amount, setAmount] = useState(defaultAmount)
   const [recipient, setRecipient] = useState("")
+
+  const myPrincipalId =
+    window?.ic?.plug?.sessionManager?.sessionData?.principalId
 
   const [isLoading, setLoading] = useState(false)
 
@@ -206,7 +209,6 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         to: escrowPaymentCanisterAccountId,
         amount: escrowAmount,
         opts: {
-          fee: Number(EscrowPaymentConfig.ICP.fee),
           memo: Number(BeamCreateConfig.JobFlowId)
         }
       }
@@ -227,7 +229,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         AuthProvider.Plug
       )
 
-      const buyerPrincipal = Principal.fromText(window.ic.plug.principalId)
+      const buyerPrincipal = Principal.fromText(myPrincipalId)
       const creatorPrincipal = Principal.fromText(recipient)
       const dueDate = moment()
       dueDate.add(numDays, "days")
@@ -245,7 +247,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         showMediumToast(
           toast,
           "Create Beam",
-          "3/3 - We have successfully created your new beam. The deposited payment is now being streamed to the recipient.",
+          "3/3 - We have successfully created your new beam. The deposited payment is now being streamed to the recipient. Visit My Beams to see in action!",
           "success"
         )
 
@@ -351,14 +353,14 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
                         field={field}
                         inputFontSize={{ base: "sm", md: "md" }}
                         themeColor="black_5"
-                        placeholder="Your Principal ID"
+                        placeholder="Wallet Principal ID"
                         w={{ base: "95%", md: "80%" }}
                         isInvalid={
                           form.errors.recipient && form.touched.recipient
                         }
                         errorMesg={form.errors.recipient}
                       >
-                        <BeamHeading>Your Plug Wallet:</BeamHeading>
+                        <BeamHeading>Recipient Plug Wallet:</BeamHeading>
                       </FormInput>
                     )}
                   </Field>
