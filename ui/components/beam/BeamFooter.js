@@ -19,7 +19,7 @@ import { BeamGradientActionButton } from "./common/BeamGradientActionButton"
 
 export const BeamFooter = ({ hashtags, ...rest }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const shareURL = window.location.href
+  const shareURL = window.location.origin
   const shareName = `Beam - Trustless Streaming Payment`
   const shareBody = `Beam is a new Streaming Payment protocol with trustless escrow payment enabling creators to receive a continuous stream of payment each minute in real time.`
 

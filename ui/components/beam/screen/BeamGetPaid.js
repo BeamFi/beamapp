@@ -273,7 +273,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         field={field}
                         inputFontSize={{ base: "sm", md: "md" }}
                         themeColor="black_5"
-                        placeholder="Your Principal ID"
+                        placeholder="Wallet Principal ID"
                         w={{ base: "95%", md: "80%" }}
                         isInvalid={
                           form.errors.recipient && form.touched.recipient
