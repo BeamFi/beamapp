@@ -8,9 +8,9 @@ import { BeamHome } from "../ui/components/beam/screen/BeamHome"
 import { BeamOut } from "../ui/components/beam/screen/BeamOut"
 import { BeamConnetWallet } from "../ui/components/beam/screen/BeamConnectWallet"
 import { MyBeamsLayout } from "../ui/components/beam/screen/MyBeamsLayout"
-import { userProtectWithPublic } from "../ui/components/auth/plugProtect"
 import { MyBeamsActivity } from "../ui/components/beam/screen/MyBeamsActivity"
 import { BeamDetail } from "../ui/components/beam/screen/BeamDetail"
+import { clientProxy } from "../ui/components/auth/clientProxy"
 
 export const BeamApp = props => {
   const [bgColor, setBgColor] = useState("beam_blue")
@@ -79,4 +79,4 @@ export const BeamApp = props => {
   )
 }
 
-export default userProtectWithPublic(BeamApp)
+export default clientProxy(BeamApp)

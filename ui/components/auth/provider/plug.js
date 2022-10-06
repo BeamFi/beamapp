@@ -4,7 +4,11 @@ import log from "../../../utils/log"
 
 const host = process.env.NEXT_PUBLIC_IC_HOST
 
-export function createPlugLogin(handleAuthenticated, authProvider, whiteList) {
+export const createPlugLogin = (
+  handleAuthenticated,
+  authProvider,
+  whiteList
+) => {
   return async () => {
     try {
       const isConnected = await connectPlug(whiteList)
@@ -33,17 +37,21 @@ export function createPlugLogin(handleAuthenticated, authProvider, whiteList) {
   }
 }
 
-export async function isPlugConnected() {
+export const isPlugConnected = async () => {
   return await window.ic?.plug?.isConnected()
 }
 
-export async function isAgentCreated() {
+export const isAgentCreated = async () => {
   return (
     (await window.ic?.plug?.isConnected()) && window.ic?.plug?.agent != null
   )
 }
 
-export async function checkPlugUserAuth(options, whiteList) {
+export const hasSession = async () => {
+  return window.ic?.plug?.sessionManager?.sessionData != null
+}
+
+export const checkPlugUserAuth = async (options, whiteList) => {
   const isConnected = await window.ic?.plug?.isConnected()
 
   if (!isConnected) {

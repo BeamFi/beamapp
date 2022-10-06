@@ -59,7 +59,7 @@ import log from "../../../utils/log"
 import { useParams } from "react-router-dom"
 import { StandardSpinner } from "../../StandardSpinner"
 
-import { connectPlugForToken, isPlugConnected } from "../../auth/provider/plug"
+import { connectPlugForToken, hasSession } from "../../auth/provider/plug"
 import { principalToAccountIdentifier } from "../../../utils/account-identifier"
 import { AuthProvider } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
@@ -107,9 +107,6 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
     onOpen: onSelectAuthOpen,
     onClose: onSelectAuthClose
   } = useDisclosure()
-
-  const myPrincipalId =
-    window?.ic?.plug?.sessionManager?.sessionData?.principalId
 
   const [isLoading, setLoading] = useState(false)
 
@@ -193,7 +190,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
       actions.setSubmitting(true)
 
       // Check if Plug is available, else show popup mesg
-      let isConnected = await isPlugConnected()
+      let isConnected = await hasSession()
       if (!isConnected || window.ic?.plug?.accountId == null) {
         isConnected = await connectPlugForToken({
           showToast,
@@ -238,6 +235,17 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         "info"
       )
 
+      // Prepare / validate post requestTransfer canister request parameters
+      // to catch any potential error before making token transfer
+      const myPrincipalId =
+        window?.ic?.plug?.sessionManager?.sessionData?.principalId
+      const buyerPrincipal = Principal.fromText(myPrincipalId)
+      const creatorPrincipal = Principal.fromText(recipient)
+      const dueDate = moment()
+      dueDate.add(numDays, "days")
+      const dueDateUTC = moment(dueDate).utc().toDate()
+
+      // Create request transfer params
       const escrowPaymentCanisterAccountId = principalToAccountIdentifier(
         Principal.fromText(escrowPaymentCanisterId)
       )
@@ -251,6 +259,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         }
       }
 
+      // Request transfer from Plug
       result = await window.ic.plug.requestTransfer(params)
       const blockIndex = result.height
 
@@ -260,12 +269,6 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         `2/3 - We are creating your Beam now. This step can take up to 30 secs. 🧑‍💻`,
         "info"
       )
-
-      const buyerPrincipal = Principal.fromText(myPrincipalId)
-      const creatorPrincipal = Principal.fromText(recipient)
-      const dueDate = moment()
-      dueDate.add(numDays, "days")
-      const dueDateUTC = moment(dueDate).utc().toDate()
 
       const result = await escrowService.createBeamEscrow(
         escrowAmount,
