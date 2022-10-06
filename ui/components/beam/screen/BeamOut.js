@@ -238,6 +238,15 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         "info"
       )
 
+      // Prepare / validate post requestTransfer canister request parameters
+      // to catch any potential error before making token transfer
+      const buyerPrincipal = Principal.fromText(myPrincipalId)
+      const creatorPrincipal = Principal.fromText(recipient)
+      const dueDate = moment()
+      dueDate.add(numDays, "days")
+      const dueDateUTC = moment(dueDate).utc().toDate()
+
+      // Create request transfer params
       const escrowPaymentCanisterAccountId = principalToAccountIdentifier(
         Principal.fromText(escrowPaymentCanisterId)
       )
@@ -251,6 +260,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         }
       }
 
+      // Request transfer from Plug
       result = await window.ic.plug.requestTransfer(params)
       const blockIndex = result.height
 
@@ -260,12 +270,6 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         `2/3 - We are creating your Beam now. This step can take up to 30 secs. 🧑‍💻`,
         "info"
       )
-
-      const buyerPrincipal = Principal.fromText(myPrincipalId)
-      const creatorPrincipal = Principal.fromText(recipient)
-      const dueDate = moment()
-      dueDate.add(numDays, "days")
-      const dueDateUTC = moment(dueDate).utc().toDate()
 
       const result = await escrowService.createBeamEscrow(
         escrowAmount,
