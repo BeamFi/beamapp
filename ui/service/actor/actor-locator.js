@@ -51,14 +51,16 @@ const makeActor = async (
 
   switch (authProvider) {
     case InternetIdentity: {
-      principalId = identity?.getPrincipal().toString()
+      principalId = identity?.getPrincipal()?.toString()
       break
     }
     case Plug: {
       const agent = window?.ic?.plug?.agent
-      if (agent) {
+      if (agent != null) {
         const principal = await agent.getPrincipal()
-        principalId = principal.toString()
+        if (principal != null) {
+          principalId = principal.toString()
+        }
       }
       break
     }
