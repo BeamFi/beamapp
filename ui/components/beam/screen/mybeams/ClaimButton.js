@@ -9,10 +9,7 @@ import { convertToVariant } from "../../../../model/TypeConversion"
 import { makeEscrowPaymentActor } from "../../../../service/actor/actor-locator"
 import { accountIdentifierHexToBlob } from "../../../../utils/account-identifier"
 
-import {
-  connectPlugForToken,
-  isPlugConnected
-} from "../../../auth/provider/plug"
+import { connectPlugForToken, hasSession } from "../../../auth/provider/plug"
 import { AuthProvider } from "../../../../config"
 
 import { showToast } from "../../../../utils/toast"
@@ -32,7 +29,7 @@ export const ClaimButton = ({
     setLoading(true)
 
     // Check if Plug is available, else show popup mesg
-    let isConnected = await isPlugConnected()
+    let isConnected = await hasSession()
     if (!isConnected || window.ic?.plug?.accountId == null) {
       isConnected = await connectPlugForToken({
         showToast,
