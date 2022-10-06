@@ -116,11 +116,7 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
             myPrincipalId={myPrincipalId}
             isOpenDetailEnabled={false}
           />
-          <ClaimInfo
-            beamEscrowContract={escrow}
-            myPrincipalId={myPrincipalId}
-            w="92%"
-          />
+          {isBeamRecipient && <ClaimInfo beamEscrowContract={escrow} w="92%" />}
         </>
       )}
     </BeamVStack>

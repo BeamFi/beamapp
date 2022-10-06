@@ -4,6 +4,7 @@ const DFXWebPackConfig = require("./dfx.webpack.config")
 DFXWebPackConfig.initCanisterIds()
 
 module.exports = removeImports({
+  productionBrowserSourceMaps: true,
   webpack: (
     config,
     // eslint-disable-next-line no-unused-vars

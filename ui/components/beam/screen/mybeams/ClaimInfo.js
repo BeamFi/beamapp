@@ -6,7 +6,7 @@ import { ClaimButton } from "./ClaimButton"
 import { truncFloatDecimals } from "../../../../utils/number"
 import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
 
-export const ClaimInfo = ({ beamEscrowContract, myPrincipalId, ...rest }) => {
+export const ClaimInfo = ({ beamEscrowContract, ...rest }) => {
   const escrowObject = new EscrowContractClass(beamEscrowContract)
 
   const numCreatorClaimedTokens = escrowObject.creatorClaimed()
@@ -19,8 +19,6 @@ export const ClaimInfo = ({ beamEscrowContract, myPrincipalId, ...rest }) => {
     const halfWayPercent = (1 - claimedPercent) * 100.0
     return `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF ${halfWayPercent}%, #D8F2FF ${halfWayPercent}%, #D8F2FF 100%)`
   }
-
-  const isRecipient = escrowObject.isBeamRecipient(myPrincipalId)
 
   return (
     <Box
@@ -84,13 +82,11 @@ export const ClaimInfo = ({ beamEscrowContract, myPrincipalId, ...rest }) => {
           >
             {truncFloatDecimals(numCreatorClaimableTokens, 6)} ICP
           </Text>
-          {isRecipient && (
-            <ClaimButton
-              escrowObject={escrowObject}
-              numClaimableTokens={numCreatorClaimableTokens}
-              isDisabled={numCreatorClaimableTokens == 0}
-            />
-          )}
+          <ClaimButton
+            escrowObject={escrowObject}
+            numClaimableTokens={numCreatorClaimableTokens}
+            isDisabled={numCreatorClaimableTokens == 0}
+          />
         </VStack>
       </HStack>
     </Box>
