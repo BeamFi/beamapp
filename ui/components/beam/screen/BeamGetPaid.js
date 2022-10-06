@@ -191,6 +191,8 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
           "success"
         )
       } catch (error) {
+        log.error(error)
+
         showTopToast(
           toast,
           "Create Beam Link",

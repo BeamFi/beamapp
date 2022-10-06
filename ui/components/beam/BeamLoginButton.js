@@ -4,13 +4,14 @@ import React from "react"
 import { WalletIcon } from "../../icon/index"
 import { BeamActionButton } from "./common/BeamActionButton"
 import { useNavigate } from "react-router-dom"
+import { hasSession } from "../auth/provider/plug"
 
 export const BeamLoginButton = ({}) => {
   const navigate = useNavigate()
 
   const gotToMyBeams = async () => {
-    const isConnected = await window.ic?.plug?.isConnected()
-    if (isConnected) {
+    const sessionExisted = await hasSession()
+    if (sessionExisted) {
       navigate("/mybeams")
     } else {
       navigate("/connect")
