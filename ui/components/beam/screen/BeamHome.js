@@ -28,7 +28,7 @@ export const BeamHome = ({ setBgColor, setHashtags }) => {
       justifyContent="center"
     >
       <Head>
-        <title>Trustless Payment Streaming fully on-chain - Beam</title>
+        <title>Beam</title>
       </Head>
       <StreamICPWIthBeamIcon
         w={{ base: "280px", md: "385px" }}
