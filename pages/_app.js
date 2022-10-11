@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 
 import Router from "next/router"
 import Head from "next/head"
@@ -26,6 +26,17 @@ export default function MyApp({ Component, pageProps }) {
   Router.onRouteChangeComplete = () => NProgress.done()
 
   Router.onRouteChangeError = () => NProgress.done()
+
+  const initLoading = 1
+
+  useEffect(() => {
+    async function loadSplitbee() {
+      const splitbee = (await import("@splitbee/web")).default
+      splitbee.init({})
+    }
+
+    loadSplitbee()
+  }, [initLoading])
 
   return (
     <>
