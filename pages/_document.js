@@ -47,20 +47,16 @@ export default class Document extends NextDocument {
             content="@ContentFlyApp"
             key="twittercreator"
           />
-          <meta property="og:url" content="http://dev.beamfi.app" key="ogurl" />
-          <meta
-            property="og:title"
-            content="Beam Payment Protocol by Content Fly"
-            key="ogtitle"
-          />
+          <meta property="og:url" content="http://beamfi.app" key="ogurl" />
+          <meta property="og:title" content="Beam" key="ogtitle" />
           <meta
             property="og:description"
-            content="A new Streaming Payment protocol with trustless escrow payment enables creators to receive a continuous stream of payment each minute in real time once a job starts instead of lump-sum payment."
+            content="Send or Receive a constant stream of ICP. We should all be paid in real-time, not at the end of the month. Make that happen now."
             key="ogdesc"
           />
           <meta
             name="description"
-            content="A new Streaming Payment protocol with trustless escrow payment enables creators to receive a continuous stream of payment each minute in real time once a job starts instead of lump-sum payment."
+            content="Send or Receive a constant stream of ICP. We should all be paid in real-time, not at the end of the month. Make that happen now."
             key="desc"
           />
           <meta
