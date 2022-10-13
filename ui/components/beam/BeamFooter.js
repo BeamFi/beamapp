@@ -16,6 +16,8 @@ import { LinkIcon } from "@chakra-ui/icons"
 import { FaDiscord, FaMediumM, FaTwitter } from "react-icons/fa"
 import { ShareURLModal } from "../socialmedia/ShareURLModal"
 import { BeamGradientActionButton } from "./common/BeamGradientActionButton"
+import ExternalLink from "../ExternalLink"
+import { useMatch } from "react-router-dom"
 
 export const BeamFooter = ({ hashtags, ...rest }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -24,13 +26,24 @@ export const BeamFooter = ({ hashtags, ...rest }) => {
   const shareBody = `Beam is a new Streaming Payment protocol with trustless escrow payment enabling creators to receive a continuous stream of payment each minute in real time.`
 
   const gotoICSmartContract = () => {
-    window.open("https://smartcontracts.org", "_blank")
+    window.open("https://internetcomputer.org", "_blank")
   }
+
+  const matchHome = useMatch("/")
 
   return (
     <Box pos="absolute" bottom="0px" py="20px" w="full" {...rest}>
       <Center>
-        <VStack spacing="32px">
+        <VStack spacing={matchHome ? "16px" : "32px"}>
+          {matchHome && (
+            <ExternalLink
+              href="https://main.contentfly.app"
+              textDecoration="none"
+            >
+              Need content created? Try our Content Fly
+            </ExternalLink>
+          )}
+
           <HStack color="black_gray_3" spacing="22px">
             {hashtags?.map((value, index) => (
               <Text fontSize="16px" key={index}>
@@ -49,7 +62,7 @@ export const BeamFooter = ({ hashtags, ...rest }) => {
             />
             <BeamLogo w="127px" h="51px" />
 
-            <Link href="https://twitter.com/ContentFlyApp" isExternal>
+            <Link href="https://twitter.com/BeamFiApp" isExternal>
               <FaTwitter size="28px" color="gray" />
             </Link>
             <Link href="https://medium.com/contentfly-app-blog" isExternal>
