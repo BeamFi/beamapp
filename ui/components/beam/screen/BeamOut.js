@@ -56,7 +56,7 @@ import {
 import { canisterId as escrowPaymentCanisterId } from "../../../declarations/escrowpayment"
 
 import log from "../../../utils/log"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { StandardSpinner } from "../../StandardSpinner"
 
 import { connectPlugForToken, hasSession } from "../../auth/provider/plug"
@@ -111,6 +111,8 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
   const [isLoading, setLoading] = useState(false)
 
   const toast = useToast()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     setBgColor("beam_blue")
@@ -282,9 +284,11 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         showMediumToast(
           toast,
           "Create Beam",
-          "3/3 - We have successfully created your new beam. The deposited payment is now being streamed to the recipient. Visit My Beams to see in action!",
+          "3/3 - We have successfully created your new beam. The deposited payment is now being streamed to the recipient.",
           "success"
         )
+
+        navigate("/mybeams")
 
         return
       }
