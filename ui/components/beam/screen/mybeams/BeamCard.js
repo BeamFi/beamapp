@@ -19,7 +19,8 @@ export const BeamCard = ({
   myPrincipalId,
   isOpenDetailEnabled = true,
   setBeamEscrowContract,
-  setBeamReadModel
+  setBeamReadModel,
+  ...rest
 }) => {
   const escrowObject = new EscrowContractClass(beamEscrowContract)
   const otherPartyPrincipalId =
@@ -63,6 +64,7 @@ export const BeamCard = ({
       h="140px"
       cursor={isAllDataReady ? "pointer" : "auto"}
       onClick={gotoDetail}
+      {...rest}
     >
       <HStack w="100%" py="20px" px="27px">
         <Avatar

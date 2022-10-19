@@ -87,6 +87,12 @@ export const MyBeamsActivity = ({
             beamReadModel={beamMap[escrow.id]}
             setBeamReadModel={setBeamReadModel}
             setBeamEscrowContract={setBeamEscrowContract}
+            transition="width 0.5s, height 0.5s, box-shadow 0.5s"
+            _hover={{
+              boxShadow: "xl",
+              width: "96%",
+              height: "142px"
+            }}
           />
         ))}
       </BeamVStack>
