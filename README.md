@@ -9,7 +9,7 @@ Switch to dev Git branch if you haven't.
 - Install NodeJS 16.13 or if you have NVM:
 
 ```
-NVM use
+nvm use
 ```
 
 - VSCode
@@ -19,8 +19,15 @@ NVM use
 The default configuration is set to use BeamFi dev canisters for ease of frontend development so that it doesn't require local IC replicas.
 
 ```
+> npm install
 > npm run dev
 ```
+
+### Create Beam and Plug Wallet
+
+You will need Plug Wallet chrome extension https://plugwallet.ooo/ to create Beam in "Beam Out" and some ICP tokens.
+You can get ICP tokens from exchanges like Binance AU or speak to Henry (henry@beamfi.app) to get some ICP for your testing.
+(Note they are real ICP with value so your testing is as close to real world as possible).
 
 ## Git Branches
 
