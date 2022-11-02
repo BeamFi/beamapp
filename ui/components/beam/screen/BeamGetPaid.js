@@ -157,9 +157,6 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
       if (result.ok) {
         const id = result.ok
         setBeamOutId(id)
-
-        const link = beamOutLink(id)
-        await copyLinkToClipboard(link)
       } else if (result.err) {
         log.error(result.err)
         throw new Error(result.err)
@@ -341,7 +338,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                     <BeamGradientActionButton
                       title={
                         beamOutId != null
-                          ? "Link Copied"
+                          ? "Copy Link"
                           : "Create Unique Beam Link"
                       }
                       textSize={{ base: "15px", md: "20px" }}
