@@ -41,7 +41,7 @@ export const TokenProgressBar = ({
       isReadOnly={true}
       cursor="auto"
     >
-      <SliderMark flex={1} value={0} mt="18px">
+      <SliderMark flex={1} value={0} mt="16px">
         <Text flex={1} as="span" fontSize="11px">
           {startTimestamp ? moment(startTimestamp).format("Do MMM YY") : null}
         </Text>
@@ -57,7 +57,7 @@ export const TokenProgressBar = ({
         {markDesc}&nbsp;
         {!isLargerThan768 ? <br /> : null}({truncNumTokensOwned} ICP)
       </SliderMark>
-      <SliderMark flex={1} value={100} ml="-65px" mt="18px">
+      <SliderMark flex={1} value={100} ml="-65px" mt="16px">
         <Text flex={1} as="span" fontSize="11px">
           {dueTimestamp ? moment(dueTimestamp).format("Do MMM YY") : null}
         </Text>
