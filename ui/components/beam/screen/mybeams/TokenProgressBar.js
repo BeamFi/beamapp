@@ -1,20 +1,35 @@
 import React from "react"
-
 import {
   Slider,
   SliderFilledTrack,
   SliderMark,
   SliderTrack,
-  Text
+  Text,
+  useMediaQuery
 } from "@chakra-ui/react"
 
 import { truncFloatDecimals } from "../../../../utils/number"
+import moment from "moment"
+import { convertCandidDateToUnixTimestampMs } from "../../../../model/TypeConversion"
 
-export const TokenProgressBar = ({ value, numTokensOwned, ...others }) => {
+export const TokenProgressBar = ({
+  value,
+  numTokensOwned,
+  startDate,
+  endDate,
+  ...others
+}) => {
   const truncValue = truncFloatDecimals(value, 2)
   const truncNumTokensOwned = truncFloatDecimals(numTokensOwned, 6)
   const isCompleted = Number(truncValue) >= 100
   const markDesc = isCompleted ? "Completed" : `${truncValue}% Beamed`
+  const startTimestamp = startDate
+    ? convertCandidDateToUnixTimestampMs(startDate)
+    : null
+  const dueTimestamp = endDate
+    ? convertCandidDateToUnixTimestampMs(endDate)
+    : null
+  const [isLargerThan768] = useMediaQuery("(min-width: 768px)")
 
   return (
     <Slider
@@ -26,17 +41,25 @@ export const TokenProgressBar = ({ value, numTokensOwned, ...others }) => {
       isReadOnly={true}
       cursor="auto"
     >
+      <SliderMark flex={1} value={0} mt="18px">
+        <Text flex={1} as="span" fontSize="11px">
+          {startTimestamp ? moment(startTimestamp).format("Do MMM YY") : null}
+        </Text>
+      </SliderMark>
       <SliderMark
-        value={0}
-        fontSize="16px"
+        flex={1}
+        value={isLargerThan768 ? 30 : 35}
+        fontSize="12px"
         color="black_3"
-        mt="18px"
-        textAlign="center"
-        w="100%"
+        mt="20px"
+        textAlign={"center"}
       >
         {markDesc}&nbsp;
-        <Text as="span" fontSize="14px">
-          ({truncNumTokensOwned} ICP)
+        {!isLargerThan768 ? <br /> : null}({truncNumTokensOwned} ICP)
+      </SliderMark>
+      <SliderMark flex={1} value={100} ml="-65px" mt="18px">
+        <Text flex={1} as="span" fontSize="11px">
+          {dueTimestamp ? moment(dueTimestamp).format("Do MMM YY") : null}
         </Text>
       </SliderMark>
       <SliderTrack
