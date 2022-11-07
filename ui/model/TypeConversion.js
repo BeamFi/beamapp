@@ -16,6 +16,10 @@ export const convertCandidDateToJSDate = candidDate => {
   return utcDate.local().toDate()
 }
 
+export const convertCandidDateToUnixTimestampMs = candidDate => {
+  return Number(candidDate / 1000000n);
+}
+
 const { InternetIdentity, Plug } = AuthProvider
 
 export const convertAuthProviderToCandid = authProvider => {

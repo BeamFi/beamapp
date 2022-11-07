@@ -1,6 +1,13 @@
-import React from "react"
+import React, { useState } from "react"
 
-import { Avatar, HStack, Spacer, Text, VStack } from "@chakra-ui/react"
+import {
+  Avatar,
+  HStack,
+  Spacer,
+  Text,
+  useMediaQuery,
+  VStack
+} from "@chakra-ui/react"
 import { TokenProgressBar } from "./TokenProgressBar"
 
 import { ICPIcon } from "../../../../icon"
@@ -8,10 +15,14 @@ import { ICPIcon } from "../../../../icon"
 import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
 
 import { PrincipalInfo } from "../../../wallet/PrincipalInfo"
-import { convertCandidDateToJSDate } from "../../../../model/TypeConversion"
+import {
+  convertCandidDateToJSDate,
+  convertCandidDateToUnixTimestampMs
+} from "../../../../model/TypeConversion"
 import { truncFloatDecimals } from "../../../../utils/number"
 
 import { useNavigate } from "react-router-dom"
+import { useInterval } from "../../useInterval"
 
 export const BeamCard = ({
   beamEscrowContract,
@@ -20,9 +31,14 @@ export const BeamCard = ({
   isOpenDetailEnabled = true,
   setBeamEscrowContract,
   setBeamReadModel,
+  progressRefreshRate, // in ms
   ...rest
 }) => {
   const escrowObject = new EscrowContractClass(beamEscrowContract)
+  const [progressPercentage, setProgressPercentage] = useState(
+    escrowObject.creatorOwnedPercentage() * 100
+  )
+  const [isLargerThan768] = useMediaQuery("(min-width: 768px)")
   const otherPartyPrincipalId =
     escrowObject.otherPartyPrincipalId(myPrincipalId)
 
@@ -34,7 +50,6 @@ export const BeamCard = ({
 
   const beamRate = () => {
     if (beamReadModel == null) return "??"
-
     const startDate = convertCandidDateToJSDate(beamReadModel.createdAt)
     const dueDate = convertCandidDateToJSDate(beamReadModel.scheduledEndDate)
     const rate = escrowObject.beamRatePerHr(
@@ -56,12 +71,29 @@ export const BeamCard = ({
   const isAllDataReady =
     isOpenDetailEnabled && beamEscrowContract != null && beamReadModel != null
 
+  useInterval(() => {
+    if (beamReadModel) {
+      const startTimestamp = convertCandidDateToUnixTimestampMs(
+        beamReadModel.createdAt
+      )
+      const dueTimestamp = convertCandidDateToUnixTimestampMs(
+        beamReadModel.scheduledEndDate
+      )
+      const totalDurationMs = dueTimestamp - startTimestamp
+      const now = Date.now()
+      const compareDate = now < dueTimestamp ? now : dueTimestamp
+      const elapsedTime = compareDate - startTimestamp // time that has elapsed so far
+
+      setProgressPercentage((elapsedTime / totalDurationMs) * 100)
+    }
+  }, progressRefreshRate)
+
   return (
     <VStack
       borderRadius="30px"
       bgColor={bgColor}
       w="95%"
-      h="140px"
+      h={isLargerThan768 ? "140px" : "160px"}
       cursor={isAllDataReady ? "pointer" : "auto"}
       onClick={gotoDetail}
       {...rest}
@@ -89,9 +121,13 @@ export const BeamCard = ({
         </Text>
       </HStack>
       <TokenProgressBar
-        value={escrowObject.creatorOwnedPercentage() * 100}
-        numTokensOwned={escrowObject.creatorTotalOwned()}
+        value={progressPercentage}
+        numTokensOwned={
+          escrowObject.initialDeposit() * (progressPercentage / 100)
+        }
         w="90%"
+        startDate={beamReadModel?.createdAt}
+        endDate={beamReadModel?.scheduledEndDate}
       />
     </VStack>
   )

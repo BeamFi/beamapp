@@ -85,6 +85,7 @@ export const MyBeamsActivity = ({
             beamEscrowContract={escrow}
             myPrincipalId={myPrincipalId}
             beamReadModel={beamMap[escrow.id]}
+            progressRefreshRate={1000}
             setBeamReadModel={setBeamReadModel}
             setBeamEscrowContract={setBeamEscrowContract}
             transition="width 0.5s, height 0.5s, box-shadow 0.5s"
