@@ -113,6 +113,7 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
           <BeamCard
             beamEscrowContract={escrow}
             beamReadModel={beam}
+            progressRefreshRate={100}
             myPrincipalId={myPrincipalId}
             isOpenDetailEnabled={false}
           />

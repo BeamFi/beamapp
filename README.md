@@ -14,6 +14,8 @@ nvm use
 
 - VSCode
 
+Install Extensions: ESLint, Prettier
+
 ### Run frontend with BeamFi dev canisters
 
 The default configuration is set to use BeamFi dev canisters for ease of frontend development so that it doesn't require local IC replicas.
