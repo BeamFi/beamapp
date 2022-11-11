@@ -40,7 +40,7 @@ main - this is where the productuction stable code is, it require manual trigger
 
 ## Pull Request & Review
 
-- When working on a new feature, create a new feature branch and work on there.
+- When working on a new feature, create a new feature branch based on main branch and work on there.
 - When it is ready for testing or review, submit a Pull Request to dev branch.
 - The main contributor will review and give feedback.
 - When the review is complete, the PR will be merged to dev for testers to try it in frontend
