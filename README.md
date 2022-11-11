@@ -31,10 +31,20 @@ You will need Plug Wallet chrome extension https://plugwallet.ooo/ to create Bea
 You can get ICP tokens from exchanges like Binance AU or speak to Henry (henry@beamfi.app) to get some ICP for your testing.
 (Note they are real ICP with value so your testing is as close to real world as possible).
 
+# Dev Process
+
 ## Git Branches
 
-dev - all development code start here, any push to dev will trigger deployment to https://dev.beamfi.app  
-main - when your code has been tested, create a pull request in Github then admin will merge it to main and run the prod Github prod workflow manually
+dev - all development code will first merge to dev first, any push to dev will trigger deployment to https://dev.beamfi.app  
+main - this is where the productuction stable code is, it require manual trigger in Github Action to deploy to https://beamfi.app
+
+## Pull Request & Review
+
+- When working on a new feature, create a new feature branch based on main branch and work on there.
+- When it is ready for testing or review, submit a Pull Request to dev branch.
+- The main contributor will review and give feedback.
+- When the review is complete, the PR will be merged to dev for testers to try it in frontend
+- When it passed the manual human tests, new changes will be merged to main branch and manager can trigger Github Action to deploy to production.
 
 ## Folder Structures
 
