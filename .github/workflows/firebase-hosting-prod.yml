@@ -12,5 +12,5 @@ jobs:
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_BEAMFIPROD }}"
-          projectId: beamlegacy-37d81
+          projectId: beamfiprod
           channelId: live
