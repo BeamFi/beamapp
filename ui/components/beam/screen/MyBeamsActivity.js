@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-import { HStack } from "@chakra-ui/react"
+import { HStack, Link } from "@chakra-ui/react"
 
 import { verifyBeamPlugConnection } from "../../auth/provider/plug"
 import {
@@ -16,6 +16,7 @@ import { BeamInTextIcon, BeamOutTextIcon } from "../../../icon"
 import { BeamCard } from "./mybeams/BeamCard"
 import { BeamMainActionButtons } from "../BeamMainActionButtons"
 import { StandardSpinner } from "../../StandardSpinner"
+import { ExternalLinkIcon } from "@chakra-ui/icons"
 
 export const MyBeamsActivity = ({
   setBeamReadModel,
@@ -74,6 +75,16 @@ export const MyBeamsActivity = ({
   return (
     <>
       <BeamVStack spacing="15px" mt="80px">
+        <Link
+          isExternal
+          href="https://legacy.beamfi.app"
+          color="blue_2"
+          fontSize="16px"
+          fontWeight="light"
+        >
+          Can&apos;t find your beams? Open Legacy version
+          <ExternalLinkIcon ml="6px" mb="2px" />
+        </Link>
         <HStack spacing="32px" w="100%" px="40px" py="10px">
           <BeamInTextIcon w="58px" h="35px" />
           <BeamOutTextIcon w="96px" h="35px" />
