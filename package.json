@@ -13,7 +13,7 @@
     "react"
   ],
   "scripts": {
-    "dev": "DEBUG=contentfly:* next dev",
+    "dev": "DEBUG=beamfi:* next dev",
     "build": "next build && next export",
     "start": "next start",
     "lint": "next lint",
