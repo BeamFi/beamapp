@@ -1,4 +1,4 @@
-name: Prod BeamFi app
+name: Legacy BeamFi app
 on:
   workflow_dispatch:
 
@@ -11,6 +11,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_BEAMFIPROD }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_BEAMLEGACY_37D81 }}"
           projectId: beamlegacy-37d81
           channelId: live
