@@ -8,7 +8,7 @@ const COLOURS = {
 }
 
 class Log {
-  BASE = "contentfly"
+  BASE = "beamfi"
 
   generateMessage(level, message, source) {
     // Set the prefix which will cause debug to enable the message

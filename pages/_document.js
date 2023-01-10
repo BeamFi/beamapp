@@ -37,14 +37,10 @@ export default class Document extends NextDocument {
           />
           <link rel="manifest" href="/site.webmanifest" key="manifest" />
           <meta name="twitter:card" content="Beam" key="twittercard" />
-          <meta
-            name="twitter:site"
-            content="@ContentFlyApp"
-            key="twittersite"
-          />
+          <meta name="twitter:site" content="@BeamFiApp" key="twittersite" />
           <meta
             name="twitter:creator"
-            content="@ContentFlyApp"
+            content="@BeamFiApp"
             key="twittercreator"
           />
           <meta property="og:url" content="http://beamfi.app" key="ogurl" />

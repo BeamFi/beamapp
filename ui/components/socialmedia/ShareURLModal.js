@@ -112,11 +112,7 @@ export const ShareURLModal = ({
               </FacebookMessengerShareButton>
             </WrapItem>
             <WrapItem>
-              <FacebookShareButton
-                url={url}
-                quote={title}
-                hashtag={"#contentflyapp"}
-              >
+              <FacebookShareButton url={url} quote={title} hashtag={"#beamfi"}>
                 <FacebookIcon size={SocialButtonSize} round />
               </FacebookShareButton>
             </WrapItem>

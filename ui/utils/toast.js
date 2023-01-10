@@ -43,7 +43,7 @@ export const showStandardErrorMesg = toast => {
   showToast(
     toast,
     "🤖 We have a problem.",
-    "Something is not working. 😭 Please try again later or contact us support@contentfly.app for help. 👨‍💻",
+    "Something is not working. 😭 Please try again later or contact us support@beamfi.app for help. 👨‍💻",
     "error"
   )
 }
