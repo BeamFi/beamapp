@@ -121,4 +121,4 @@ Pleaes feel free to raise issue or submit a pull request.
 
 ## License
 
-See the [LICENSE](LICENSE) file for license rights and limitations (MIT).
+See the [License](License) file for license rights and limitations (MIT).
