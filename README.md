@@ -121,4 +121,4 @@ Pleaes feel free to raise issue or submit a pull request.
 
 ## License
 
-© Copyright 2022 Control Alt Develop Pty Ltd, all rights reserved.
+See the [License](License) file for license rights and limitations (MIT).
