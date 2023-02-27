@@ -12,7 +12,7 @@ import log from "../../utils/log"
 export const useEscrow = (escrowId, refreshSecs = 5) => {
   const [isFetching, setFetching] = useState(false)
 
-  const fetcher = async (key, escrowId) => {
+  const fetcher = async ([key, escrowId]) => {
     if (key == null || escrowId == null) {
       return null
     }

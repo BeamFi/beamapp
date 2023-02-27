@@ -262,7 +262,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
       }
 
       // Request transfer from Plug
-      result = await window.ic.plug.requestTransfer(params)
+      let result = await window.ic.plug.requestTransfer(params)
       const blockIndex = result.height
 
       showMediumToast(
@@ -272,7 +272,7 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
         "info"
       )
 
-      const result = await escrowService.createBeamEscrow(
+      result = await escrowService.createBeamEscrow(
         escrowAmount,
         blockIndex,
         convertDateToCandid(dueDateUTC),
