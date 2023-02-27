@@ -7,12 +7,11 @@ import Head from "next/head"
 import NProgress from "nprogress"
 
 // Fonts
-import { Poppins } from "next/font/google"
-
-const poppins = Poppins({
-  weight: ["300", "400", "500", "600", "700"],
-  subsets: ["latin"]
-})
+import "@fontsource/poppins/300.css"
+import "@fontsource/poppins/400.css"
+import "@fontsource/poppins/500.css"
+import "@fontsource/poppins/600.css"
+import "@fontsource/poppins/700.css"
 
 import "nprogress/nprogress.css"
 
@@ -48,13 +47,6 @@ export default function MyApp({ Component, pageProps }) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
-        <style jsx global>
-          {`
-            html {
-              font-family: ${poppins.style.fontFamily};
-            }
-          `}
-        </style>
       </Head>
 
       <ChakraProvider resetCSS theme={theme}>
