@@ -42,19 +42,19 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <style jsx global>
-        {`
-          html {
-            font-family: ${poppins.style.fontFamily};
-          }
-        `}
-      </style>
       <Head>
         <meta
           key="viewport"
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
+        <style jsx global>
+          {`
+            html {
+              font-family: ${poppins.style.fontFamily};
+            }
+          `}
+        </style>
       </Head>
 
       <ChakraProvider resetCSS theme={theme}>
