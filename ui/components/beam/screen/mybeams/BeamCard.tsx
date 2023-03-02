@@ -24,6 +24,18 @@ import { truncFloatDecimals } from "../../../../utils/number"
 import { useNavigate } from "react-router-dom"
 import { useInterval } from "../../useInterval"
 
+type Props = {
+  beamEscrowContract: any
+  beamReadModel: any
+  myPrincipalId: string
+  isOpenDetailEnabled?: boolean
+  setBeamEscrowContract?: Function
+  setBeamReadModel?: any
+  progressRefreshRate: number
+  transition?: string
+  _hover?: any
+}
+
 export const BeamCard = ({
   beamEscrowContract,
   beamReadModel,
@@ -33,7 +45,7 @@ export const BeamCard = ({
   setBeamReadModel,
   progressRefreshRate, // in ms
   ...rest
-}) => {
+}: Props) => {
   const escrowObject = new EscrowContractClass(beamEscrowContract)
   const [progressPercentage, setProgressPercentage] = useState(
     escrowObject.creatorOwnedPercentage() * 100

@@ -26,7 +26,11 @@ export const InstallPlugDialog = ({ isOpen, onClose }) => {
   }
 
   return (
-    <AlertDialog isOpen={isOpen} onClose={onClose}>
+    <AlertDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      leastDestructiveRef={onClose}
+    >
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">

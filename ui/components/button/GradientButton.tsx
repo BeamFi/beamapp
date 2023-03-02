@@ -2,7 +2,7 @@ import React from "react"
 
 import { Button } from "@chakra-ui/react"
 
-export const GradientButton = React.forwardRef((props, ref) => {
+export const GradientButton = React.forwardRef((props: any, ref: any) => {
   return (
     <Button
       h="3rem"

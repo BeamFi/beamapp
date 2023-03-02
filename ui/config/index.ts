@@ -1,6 +1,8 @@
-export const AuthProvider = {
-  InternetIdentity: "internetIdentity",
-  Plug: "plug"
+export enum AuthProvider {
+  // eslint-disable-next-line no-unused-vars
+  InternetIdentity = "internetIdentity",
+  // eslint-disable-next-line no-unused-vars
+  Plug = "plug"
 }
 
 export const OneSecInNano = BigInt(1000000000)

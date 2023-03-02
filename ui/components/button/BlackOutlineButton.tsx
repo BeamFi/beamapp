@@ -2,12 +2,18 @@ import React from "react"
 
 import { Button } from "@chakra-ui/react"
 
+type Props = {
+  onClick: any
+  isLoading?: boolean
+  children: any
+}
+
 export const BlackOutlineButton = ({
   onClick,
   isLoading,
   children,
   ...rest
-}) => {
+}: Props) => {
   return (
     <Button
       onClick={onClick}

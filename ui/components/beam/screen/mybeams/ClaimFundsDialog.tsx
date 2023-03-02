@@ -41,12 +41,13 @@ export const ClaimFundsDialog = ({
   return (
     <AlertDialog
       isOpen={isOpen}
+      onClose={onClose}
       leastDestructiveRef={cancelRef}
       size="lg"
       closeOnEsc={false}
     >
       <AlertDialogOverlay>
-        <AlertDialogContent align="center">
+        <AlertDialogContent>
           <AlertDialogHeader
             fontSize="lg"
             fontWeight="semibold"
@@ -71,7 +72,7 @@ export const ClaimFundsDialog = ({
                 to claim funds.
               </Text>
 
-              <Stat align="center" pt="6px">
+              <Stat pt="6px">
                 <StatLabel
                   py="6px"
                   color="black_2"

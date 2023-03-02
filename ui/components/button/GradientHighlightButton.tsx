@@ -2,7 +2,7 @@ import React, { forwardRef } from "react"
 
 import { Button } from "@chakra-ui/react"
 
-export const GradientHighlightButton = forwardRef((props, ref) => {
+export const GradientHighlightButton = forwardRef((props: any, ref: any) => {
   const { onClick, children, ...others } = props
 
   return (

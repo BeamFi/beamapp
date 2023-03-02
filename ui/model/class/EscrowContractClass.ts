@@ -4,7 +4,11 @@ import { ratePerHr } from "../../utils/date"
 import { e8sToHuman } from "../../utils/e8s"
 import { convertCandidDateToJSDate, unwrapVariant } from "../TypeConversion"
 
+import { type EscrowContract } from "../../declarations/escrowpayment/escrowpayment.did"
+
 export class EscrowContractClass {
+  candidModel: EscrowContract
+
   constructor(candidModel) {
     this.candidModel = candidModel
   }

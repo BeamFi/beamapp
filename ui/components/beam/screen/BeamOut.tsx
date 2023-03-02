@@ -91,7 +91,12 @@ const HeadlineStack = () => {
   )
 }
 
-export const BeamOut = ({ setBgColor, setHashtags }) => {
+type BeamOutInProps = {
+  setBgColor?: Function
+  setHashtags?: Function
+}
+
+export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
   const { beamOutId } = useParams()
 
   const initLoading = 1
@@ -455,7 +460,6 @@ export const BeamOut = ({ setBgColor, setHashtags }) => {
                       h="62px"
                       fontWeight="semibold"
                       fontSize="21px"
-                      // type="submit"
                       bg="beam_pink"
                       onClick={onSelectAuthOpen}
                     >

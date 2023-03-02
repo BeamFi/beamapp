@@ -10,7 +10,7 @@ const COLOURS = {
 class Log {
   BASE = "beamfi"
 
-  generateMessage(level, message, source) {
+  generateMessage(level, message, source?) {
     // Set the prefix which will cause debug to enable the message
     const namespace = `${this.BASE}:${level}`
     const createDebug = debug(namespace)
@@ -25,19 +25,19 @@ class Log {
     }
   }
 
-  debug(message, source) {
+  debug(message, source?) {
     return this.generateMessage("debug", message, source)
   }
 
-  info(message, source) {
+  info(message, source?) {
     return this.generateMessage("info", message, source)
   }
 
-  warn(message, source) {
+  warn(message, source?) {
     return this.generateMessage("warn", message, source)
   }
 
-  error(message, source) {
+  error(message, source?) {
     return this.generateMessage("error", message, source)
   }
 

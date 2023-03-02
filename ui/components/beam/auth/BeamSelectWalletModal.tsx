@@ -57,7 +57,7 @@ export const BeamSelectWalletModal = ({ isOpen, onClose, selectAuth }) => {
         <ModalContent>
           <ModalHeader>Choose</ModalHeader>
           <ModalCloseButton />
-          <ModalBody align="center">
+          <ModalBody>
             <BlackOutlineButton onClick={() => onClickSelectAuth(Plug)}>
               <PlugConnectIcon h="40px" mr="18px" />
               Plug Wallet
@@ -86,7 +86,7 @@ export const BeamSelectWalletModal = ({ isOpen, onClose, selectAuth }) => {
         <ModalContent>
           <ModalHeader>Plug Wallet is not found</ModalHeader>
           <ModalCloseButton />
-          <ModalBody align="center">
+          <ModalBody>
             <Link
               isExternal
               href="https://plugwallet.ooo"

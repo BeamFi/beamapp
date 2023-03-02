@@ -13,7 +13,7 @@ import {
 
 import { isEnterKey } from "../../utils/keyboard"
 
-export const FormInput = forwardRef((props, ref) => {
+export const FormInput = forwardRef((props: any, ref: any) => {
   const {
     id,
     type,

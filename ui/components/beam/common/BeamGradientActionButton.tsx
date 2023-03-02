@@ -2,6 +2,23 @@ import React from "react"
 
 import { Button, Text } from "@chakra-ui/react"
 
+type Props = {
+  children?: any
+  title: string
+  leftIcon?: any
+  textSize?: string | any
+  textWeight?: string
+  mb?: string
+  ml?: string
+  w?: any
+  h?: any
+  type?: any
+  border?: any
+  onClick?: any
+  isLoading?: boolean
+  borderRadius?: string
+}
+
 export const BeamGradientActionButton = ({
   title,
   leftIcon,
@@ -9,7 +26,7 @@ export const BeamGradientActionButton = ({
   textSize = "15px",
   textWeight = "medium",
   ...rest
-}) => {
+}: Props) => {
   return (
     <Button
       leftIcon={leftIcon}

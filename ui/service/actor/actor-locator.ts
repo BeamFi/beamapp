@@ -24,6 +24,8 @@ export { SessionExpiredError } from "./provider/makeIIActor"
 import { AuthProvider } from "../../config"
 const { InternetIdentity, Plug } = AuthProvider
 
+import { type Identity } from "@dfinity/agent"
+
 import log from "../../utils/log"
 
 // Cache
@@ -108,7 +110,10 @@ export const makeLogout = authProvider => {
   }
 }
 
-export const makeBeamActor = async (identity, authProvider) => {
+export const makeBeamActor = async (
+  identity?: Identity,
+  authProvider?: AuthProvider
+) => {
   return await makeActor(
     beamCanisterId,
     beamIdlFactory,
@@ -119,7 +124,10 @@ export const makeBeamActor = async (identity, authProvider) => {
   )
 }
 
-export const makeBeamOutActor = async (identity, authProvider) => {
+export const makeBeamOutActor = async (
+  identity?: Identity,
+  authProvider?: AuthProvider
+) => {
   return await makeActor(
     beamOutCanisterId,
     beamOutIdlFactory,
@@ -130,7 +138,10 @@ export const makeBeamOutActor = async (identity, authProvider) => {
   )
 }
 
-export const makeEscrowPaymentActor = async (identity, authProvider) => {
+export const makeEscrowPaymentActor = async (
+  identity?: Identity,
+  authProvider?: AuthProvider
+) => {
   return await makeActor(
     escrowPaymentCanisterId,
     escrowPaymentIdlFactory,

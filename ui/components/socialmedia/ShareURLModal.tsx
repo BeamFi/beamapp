@@ -18,9 +18,7 @@ import {
   LinkedinShareButton,
   LinkedinIcon,
   WeiboShareButton,
-  WeiboIcon,
-  FacebookMessengerShareButton,
-  FacebookMessengerIcon
+  WeiboIcon
 } from "next-share"
 
 import { FaRegCopy } from "react-icons/fa"
@@ -107,22 +105,12 @@ export const ShareURLModal = ({
               </WeiboShareButton>
             </WrapItem>
             <WrapItem>
-              <FacebookMessengerShareButton url={url}>
-                <FacebookMessengerIcon size={SocialButtonSize} round />
-              </FacebookMessengerShareButton>
-            </WrapItem>
-            <WrapItem>
               <FacebookShareButton url={url} quote={title} hashtag={"#beamfi"}>
                 <FacebookIcon size={SocialButtonSize} round />
               </FacebookShareButton>
             </WrapItem>
             <WrapItem>
-              <LineShareButton
-                url={url}
-                title={title}
-                summary={body}
-                source="Content Fly App"
-              >
+              <LineShareButton url={url} title={title}>
                 <LineIcon size={SocialButtonSize} round />
               </LineShareButton>
             </WrapItem>

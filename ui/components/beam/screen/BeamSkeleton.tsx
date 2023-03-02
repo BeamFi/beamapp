@@ -8,7 +8,7 @@ import { BeamFooter } from "../BeamFooter"
 import { BeamTopRightButtons } from "../BeamTopRightButtons"
 import { BeamTopLeftButtons } from "../BeamTopLeftButtons"
 
-export default function BeamSkeleton({ bgColor, logout, hashtags, ...rest }) {
+export default function BeamSkeleton({ bgColor, hashtags, ...rest }) {
   const outBoxStyle = {
     minHeight: "900px"
   }
@@ -25,7 +25,7 @@ export default function BeamSkeleton({ bgColor, logout, hashtags, ...rest }) {
           <BeamTopLeftButtons />
         </Box>
         <Box pos="absolute" right="0px" top="10px">
-          <BeamTopRightButtons logout={logout} />
+          <BeamTopRightButtons />
         </Box>
 
         <Outlet />

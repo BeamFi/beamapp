@@ -1,3 +1,4 @@
+import { HttpAgentOptions } from "@dfinity/agent"
 import { AuthClient } from "@dfinity/auth-client"
 
 export class SessionExpiredError extends Error {
@@ -23,7 +24,7 @@ const lazyCreateAuthClient = async () => {
 }
 
 export const makeIIActor = async (canisterId, createActor, identity) => {
-  const agentOptions = {
+  const agentOptions: HttpAgentOptions = {
     host: process.env.NEXT_PUBLIC_IC_HOST
   }
 

@@ -77,6 +77,7 @@ export const BeamFooter = ({ hashtags, ...rest }) => {
                 variant="unstyled"
                 onClick={gotoICSmartContract}
                 pb="50px"
+                aria-label="Powered by IC"
               />
             </Hide>
           </HStack>

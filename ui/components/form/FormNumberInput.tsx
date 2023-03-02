@@ -17,7 +17,7 @@ import {
 import { FormControl, FormLabel, InputGroup } from "@chakra-ui/react"
 import { StandardTooltip } from "../StandardTooltip"
 
-export const FormNumberInput = forwardRef((props, ref) => {
+export const FormNumberInput = forwardRef((props: any, ref: any) => {
   const {
     id,
     field,

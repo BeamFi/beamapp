@@ -6,7 +6,8 @@ import { BeamActionButton } from "./common/BeamActionButton"
 import { useNavigate } from "react-router-dom"
 import { hasSession } from "../auth/provider/plug"
 
-export const BeamLoginButton = ({}) => {
+// eslint-disable-next-line no-unused-vars
+export const BeamLoginButton = (_props: any) => {
   const navigate = useNavigate()
 
   const gotToMyBeams = async () => {

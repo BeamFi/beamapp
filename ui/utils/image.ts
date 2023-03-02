@@ -7,12 +7,12 @@ export function arrayBufferToImgSrc(arrayBuffer, imgType = "jpeg") {
   return picSrc
 }
 
-async function readFileToArrayBuffer(file) {
+async function readFileToArrayBuffer(file): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
 
     reader.onload = () => {
-      resolve(reader.result)
+      resolve(reader.result as ArrayBuffer)
     }
 
     reader.onerror = reject
@@ -21,7 +21,7 @@ async function readFileToArrayBuffer(file) {
 }
 
 export async function fileToCanisterBinaryStoreFormat(file) {
-  const arrayBuffer = await readFileToArrayBuffer(file)
+  const arrayBuffer: ArrayBuffer = await readFileToArrayBuffer(file)
   return Array.from(new Uint8Array(arrayBuffer))
 }
 

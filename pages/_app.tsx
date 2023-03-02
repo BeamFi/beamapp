@@ -1,6 +1,8 @@
 import React, { useEffect } from "react"
 
-import Router from "next/router"
+import type { AppProps } from "next/app"
+
+import { useRouter } from "next/router"
 import Head from "next/head"
 
 // Progress bar
@@ -16,17 +18,13 @@ import "@fontsource/poppins/700.css"
 import "nprogress/nprogress.css"
 
 // Chakra
-import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react"
+import { ChakraProvider } from "@chakra-ui/react"
 
 // Theme
 import theme from "../ui/styles/theme"
 
-export default function MyApp({ Component, pageProps }) {
-  Router.onRouteChangeStart = () => NProgress.start()
-
-  Router.onRouteChangeComplete = () => NProgress.done()
-
-  Router.onRouteChangeError = () => NProgress.done()
+export default function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter()
 
   const initLoading = 1
 
@@ -37,6 +35,12 @@ export default function MyApp({ Component, pageProps }) {
     }
 
     loadSplitbee()
+
+    router.events.on("routeChangeStart", () => NProgress.start())
+    router.events.on("routeChangeComplete", () => NProgress.done())
+    router.events.on("routeChangeError", () => NProgress.done())
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initLoading])
 
   return (
@@ -50,9 +54,7 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
 
       <ChakraProvider resetCSS theme={theme}>
-        <ColorModeProvider>
-          <Component {...pageProps} />
-        </ColorModeProvider>
+        <Component {...pageProps} />
       </ChakraProvider>
     </>
   )

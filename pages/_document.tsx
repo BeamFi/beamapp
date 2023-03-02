@@ -66,9 +66,7 @@ export default class Document extends NextDocument {
             content="black-translucent"
           />
         </Head>
-        <body
-          style={{ minHeight: "-webkit-fill-available", minHeight: "100vh" }}
-        >
+        <body style={{ minHeight: "100vh" }}>
           {/* Make Color mode to persists when you refresh the page. */}
           <ColorModeScript
             initialColorMode={theme.config.initialColorMode}

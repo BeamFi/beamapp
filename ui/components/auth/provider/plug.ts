@@ -117,10 +117,10 @@ export const connectPlugForToken = async ({ showToast, toast, title }) => {
   }
 }
 
-export const connectPlug = async whiteList => {
+export const connectPlug = async (whitelist?: [string]) => {
   try {
     return await window.ic?.plug?.requestConnect({
-      whitelist: whiteList,
+      whitelist,
       host
     })
   } catch (error) {
@@ -129,11 +129,11 @@ export const connectPlug = async whiteList => {
   }
 }
 
-const createAgent = async whiteList => {
-  await window.ic?.plug?.createAgent({ whiteList, host })
+const createAgent = async (whiteList?: string[]): Promise<boolean> => {
+  return await window.ic?.plug?.createAgent({ whiteList, host })
 }
 
-export const verifyBeamPlugConnection = async () => {
+export const verifyBeamPlugConnection = async (): Promise<void> => {
   const connected = await window.ic?.plug?.isConnected()
   const whitelist = PlugConfig.whitelist
 
