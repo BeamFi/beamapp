@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import BeamSkeleton from "../ui/components/beam/screen/BeamSkeleton"
 import { BeamGetPaid } from "../ui/components/beam/screen/BeamGetPaid"
+import { BeamNewMeeting } from "../ui/components/beam/screen/BeamNewMeeting"
 import { BeamHome } from "../ui/components/beam/screen/BeamHome"
 import { BeamOut } from "../ui/components/beam/screen/BeamOut"
 import { BeamConnetWallet } from "../ui/components/beam/screen/BeamConnectWallet"
@@ -37,6 +38,10 @@ export const BeamApp = props => {
           <Route
             path="/getpaid"
             element={<BeamGetPaid {...routeUpdateProps} />}
+          />
+          <Route
+            path="/newmeeting"
+            element={<BeamNewMeeting {...routeUpdateProps} />}
           />
           <Route
             path="/connect"
