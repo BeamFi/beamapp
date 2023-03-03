@@ -1,8 +1,7 @@
 # BeamFi App
 
 See [BeamFi Pitch Deck](https://pitch.com/public/24972b6a-11d1-4690-8215-a2b44767d68a) for its vision.  
-See [BeamFi Payment Protocol](https://devpost.com/software/beam-payment-protocol-by-content-fly) in Supernova Hackathorn 2022. Top 7 submissions in DeFi. 
-
+See [BeamFi Payment Protocol](https://devpost.com/software/beam-payment-protocol-by-content-fly) in Supernova Hackathorn 2022. Top 7 submissions in DeFi.
 
 ## Quick Start
 
@@ -87,7 +86,7 @@ When you have BeamFi canister setup in local IC replicas, you can connect to it 
 
 - From BeamFi backend Git project, copy canisters_id.json to .dfx/local/canisters_id.json
 - copy env.iclocal to env.development and env.production (note env.production is only required if you run next export)
-- run next server
+- run NextJS server
 
 ```
 > cp env.iclocal env.development
@@ -101,7 +100,7 @@ You don't want to do this most of the time but in case you need to debug product
 Copy canisters_id_prod.json to canisters_id.json and start nextjs server
 
 ```
-> cp canisters_id
+> cp canisters_id_prod.json canisters_ids.json
 > cp env.ic env.development
 > npm run dev
 ```

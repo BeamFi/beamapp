@@ -40,3 +40,6 @@ Test*.wasm
 
 # Firebase
 .firebase
+
+# TypeScript
+next-env.d.ts
