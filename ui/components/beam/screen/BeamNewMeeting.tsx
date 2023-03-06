@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 
 import {
   Box,
+  Heading,
   HStack,
   Link,
   ListItem,
@@ -17,7 +18,7 @@ import {
   useToast,
   VStack
 } from "@chakra-ui/react"
-
+import Balancer from "react-wrap-balancer"
 import moment from "moment"
 
 import { CheckIcon, ExternalLinkIcon, LinkIcon } from "@chakra-ui/icons"
@@ -45,7 +46,7 @@ import { BeamHeading } from "../common/BeamHeading"
 import Head from "next/head"
 import { BeamVStack } from "../common/BeamVStack"
 
-const MyHeading = ({ children, ...rest }) => {
+const FormTitle = ({ children, ...rest }) => {
   return (
     <BeamHeading fontSize={{ base: "14px", md: "20px" }} {...rest}>
       {children}
@@ -53,14 +54,29 @@ const MyHeading = ({ children, ...rest }) => {
   )
 }
 
+const GradientHeading = ({ children, ...rest }) => {
+  return (
+    <Heading bg="gradient.purple.2" bgClip="text" size="xl" {...rest}>
+      <Balancer>{children}</Balancer>
+    </Heading>
+  )
+}
+
 const HeadlineStack = () => {
   return (
     <VStack
-      pt="60px"
+      pt={{ base: "10px", md: "60px" }}
       align={{ base: "center", md: "flex-start" }}
       spacing="10px"
       maxW={{ base: "100%", md: "40%" }}
     >
+      <GradientHeading
+        px={{ base: "0px", md: "30px" }}
+        py={{ base: "8px", md: "16px" }}
+        w={{ base: "unset", md: "100%" }}
+      >
+        Power Zoom Meeting with streaming payment
+      </GradientHeading>
       <OrderedList
         spacing={{ base: "10px", md: "16px" }}
         fontSize={{ base: "14px", md: "18px" }}
@@ -270,7 +286,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         themeColor="black_5"
                         trackColor="black_gray"
                       >
-                        <MyHeading>ICP Amount:</MyHeading>
+                        <FormTitle>ICP Amount:</FormTitle>
                       </FormNumberInput>
                     )}
                   </Field>
@@ -289,7 +305,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.recipient}
                       >
-                        <MyHeading>Your Plug Wallet:</MyHeading>
+                        <FormTitle>Your Plug Wallet:</FormTitle>
                       </FormInput>
                     )}
                   </Field>
@@ -299,7 +315,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                     w={{ base: "95%", md: "80%" }}
                     spacing="12px"
                   >
-                    <MyHeading textAlign="left">Duration:</MyHeading>
+                    <FormTitle textAlign="left">Duration:</FormTitle>
 
                     <HStack w="100%">
                       <Text
@@ -350,7 +366,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.meetingNumber}
                       >
-                        <MyHeading>Zoom Meeting ID:</MyHeading>
+                        <FormTitle>Zoom Meeting ID:</FormTitle>
                       </FormInput>
                     )}
                   </Field>
@@ -370,7 +386,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.meetingPassword}
                       >
-                        <MyHeading>Zoom Meeting Password:</MyHeading>
+                        <FormTitle>Zoom Meeting Password:</FormTitle>
                       </FormInput>
                     )}
                   </Field>
