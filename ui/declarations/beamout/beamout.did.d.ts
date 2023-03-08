@@ -3,15 +3,15 @@ import type { ActorMethod } from '@dfinity/agent';
 
 export type BeamOutId = number;
 export type BeamOutId__1 = number;
-export type BeamOutMeetingId = number;
-export type BeamOutMeetingId__1 = number;
-export interface BeamOutMeetingModel {
+export interface BeamOutMeetingModelV3 {
   'meetingPassword' : string,
-  'meetingId' : BeamOutMeetingId,
+  'meetingId' : BeamOutMeetingString,
 }
-export interface BeamOutModelV2 {
+export type BeamOutMeetingString = string;
+export type BeamOutMeetingString__1 = string;
+export interface BeamOutModelV3 {
   'id' : BeamOutId__1,
-  'beamOutType' : BeamOutType,
+  'beamOutType' : BeamOutTypeV3,
   'createdAt' : Time,
   'recipient' : Principal,
   'updatedAt' : Time,
@@ -19,7 +19,7 @@ export interface BeamOutModelV2 {
   'amount' : TokenAmount,
   'durationNumDays' : number,
 }
-export type BeamOutType = { 'meeting' : BeamOutMeetingModel } |
+export type BeamOutTypeV3 = { 'meeting' : BeamOutMeetingModelV3 } |
   { 'payment' : null };
 export type ErrorCode = { 'invalid_recipient' : string } |
   { 'invalid_id' : string } |
@@ -37,7 +37,7 @@ export interface HttpResponse {
   'upgrade' : boolean,
   'status_code' : number,
 }
-export type Result = { 'ok' : BeamOutModelV2 } |
+export type Result = { 'ok' : BeamOutModelV3 } |
   { 'err' : ErrorCode };
 export type Result_1 = { 'ok' : BeamOutId } |
   { 'err' : ErrorCode };
@@ -57,7 +57,7 @@ export interface _SERVICE {
       TokenType__1,
       Principal,
       number,
-      BeamOutMeetingId__1,
+      BeamOutMeetingString__1,
       string,
     ],
     Result_1

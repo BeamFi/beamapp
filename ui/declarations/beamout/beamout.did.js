@@ -8,7 +8,7 @@ export const idlFactory = ({ IDL }) => {
     duplicated_id: IDL.Text
   })
   const Result_1 = IDL.Variant({ ok: BeamOutId, err: ErrorCode })
-  const BeamOutMeetingId__1 = IDL.Nat32
+  const BeamOutMeetingString__1 = IDL.Text
   const HeaderField = IDL.Tuple(IDL.Text, IDL.Text)
   const HttpRequest = IDL.Record({
     url: IDL.Text,
@@ -23,21 +23,21 @@ export const idlFactory = ({ IDL }) => {
     status_code: IDL.Nat16
   })
   const BeamOutId__1 = IDL.Nat32
-  const BeamOutMeetingId = IDL.Nat32
-  const BeamOutMeetingModel = IDL.Record({
+  const BeamOutMeetingString = IDL.Text
+  const BeamOutMeetingModelV3 = IDL.Record({
     meetingPassword: IDL.Text,
-    meetingId: BeamOutMeetingId
+    meetingId: BeamOutMeetingString
   })
-  const BeamOutType = IDL.Variant({
-    meeting: BeamOutMeetingModel,
+  const BeamOutTypeV3 = IDL.Variant({
+    meeting: BeamOutMeetingModelV3,
     payment: IDL.Null
   })
   const Time = IDL.Int
   const TokenType = IDL.Variant({ icp: IDL.Null })
   const TokenAmount = IDL.Nat64
-  const BeamOutModelV2 = IDL.Record({
+  const BeamOutModelV3 = IDL.Record({
     id: BeamOutId__1,
-    beamOutType: BeamOutType,
+    beamOutType: BeamOutTypeV3,
     createdAt: Time,
     recipient: IDL.Principal,
     updatedAt: Time,
@@ -45,7 +45,7 @@ export const idlFactory = ({ IDL }) => {
     amount: TokenAmount,
     durationNumDays: IDL.Nat32
   })
-  const Result = IDL.Variant({ ok: BeamOutModelV2, err: ErrorCode })
+  const Result = IDL.Variant({ ok: BeamOutModelV3, err: ErrorCode })
   return IDL.Service({
     createBeamOut: IDL.Func(
       [TokenAmount__1, TokenType__1, IDL.Principal, IDL.Nat32],
@@ -58,7 +58,7 @@ export const idlFactory = ({ IDL }) => {
         TokenType__1,
         IDL.Principal,
         IDL.Nat32,
-        BeamOutMeetingId__1,
+        BeamOutMeetingString__1,
         IDL.Text
       ],
       [Result_1],

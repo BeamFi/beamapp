@@ -11,7 +11,7 @@ type Result_1 =
 type Result = 
  variant {
    err: ErrorCode;
-   ok: BeamOutModelV2;
+   ok: BeamOutModelV3;
  };
 type HttpResponse = 
  record {
@@ -38,15 +38,15 @@ type ErrorCode =
    invalid_id: text;
    invalid_recipient: text;
  };
-type BeamOutType = 
+type BeamOutTypeV3 = 
  variant {
-   meeting: BeamOutMeetingModel;
+   meeting: BeamOutMeetingModelV3;
    payment;
  };
-type BeamOutModelV2 = 
+type BeamOutModelV3 = 
  record {
    amount: TokenAmount;
-   beamOutType: BeamOutType;
+   beamOutType: BeamOutTypeV3;
    createdAt: Time;
    durationNumDays: nat32;
    id: BeamOutId__1;
@@ -54,20 +54,20 @@ type BeamOutModelV2 =
    tokenType: TokenType;
    updatedAt: Time;
  };
-type BeamOutMeetingModel = 
+type BeamOutMeetingString__1 = text;
+type BeamOutMeetingString = text;
+type BeamOutMeetingModelV3 = 
  record {
-   meetingId: BeamOutMeetingId;
+   meetingId: BeamOutMeetingString;
    meetingPassword: text;
  };
-type BeamOutMeetingId__1 = nat32;
-type BeamOutMeetingId = nat32;
 type BeamOutId__1 = nat32;
 type BeamOutId = nat32;
 service : {
   createBeamOut: (TokenAmount__1, TokenType__1, principal, nat32) ->
    (Result_1);
   createBeamOutMeeting: (TokenAmount__1, TokenType__1, principal, nat32,
-   BeamOutMeetingId__1, text) -> (Result_1);
+   BeamOutMeetingString__1, text) -> (Result_1);
   getActorBalance: () -> (nat) query;
   http_request: (HttpRequest) -> (HttpResponse) query;
   loadBeamOutById: (BeamOutId) -> (Result) query;
