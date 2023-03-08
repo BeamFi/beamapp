@@ -1,4 +1,4 @@
-import { string, object, number } from "yup"
+import { string, object } from "yup"
 
 export const BeamCreateLinkSchema = object().shape({
   recipient: string()
@@ -12,10 +12,9 @@ export const BeamMeetingCreateLinkSchema = object().shape({
     .min(5, "Too short!")
     .max(3000, "Too long!")
     .required("Enter your wallet Principal ID"),
-  meetingId: number()
-    .positive("Must be positive number")
-    .integer("Must be integer")
-    .max(4294967295, "Too large!")
+  meetingId: string()
+    .min(5, "Too short!")
+    .max(100, "Too long!")
     .required("Enter your Meeting ID"),
   meetingPassword: string()
     .min(3, "Too short!")

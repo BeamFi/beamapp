@@ -179,7 +179,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
         tokenType,
         recipientPrincipal,
         numDays,
-        Number(meetingId),
+        meetingId,
         meetingPassword
       )
 
