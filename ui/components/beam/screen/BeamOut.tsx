@@ -67,7 +67,7 @@ import { AuthProvider } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr } from "../../../utils/date"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
-import { BeamOutModelV2 } from "../../../declarations/beamout/beamout.did"
+import { BeamOutModelV3 } from "../../../declarations/beamout/beamout.did"
 
 const HeadlineStack = () => {
   return (
@@ -147,7 +147,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
           tokenType,
           amount,
           beamOutType
-        }: BeamOutModelV2 = result.ok
+        }: BeamOutModelV3 = result.ok
         const tokenTypeString = unwrapVariant(tokenType)
         const myMeetingModel = unwrapVariantValue(beamOutType)
         setMeetingModel(myMeetingModel)
