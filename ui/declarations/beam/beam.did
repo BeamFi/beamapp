@@ -11,12 +11,32 @@ type Result =
    ok: BeamStatus;
  };
 type Period = nat32;
+type HttpResponse = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   status_code: nat16;
+   upgrade: bool;
+ };
+type HttpRequest = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   method: text;
+   url: text;
+ };
+type HeaderField = 
+ record {
+   text;
+   text;
+ };
 type EscrowId__1 = nat32;
 type EscrowId = nat32;
 type ErrorCode = 
  variant {
    beam_notfound: text;
    invalid_beam: text;
+   permission_denied: text;
  };
 type CanisterMemoryInfo = 
  record {
@@ -39,6 +59,7 @@ type BeamStatus =
    completed;
    paused;
  };
+type BeamRelationObjId = nat32;
 type BeamReadModel = 
  record {
    createdAt: Time;
@@ -53,10 +74,14 @@ type BeamId = nat32;
 service : {
   canisterVersion: () -> (nat32) query;
   createBeam: (EscrowId, Time__1, Period) -> (Result_1);
+  createRelationBeam: (EscrowId, Time__1, Period, BeamRelationObjId) ->
+   (Result_1);
   getActorBalance: () -> (nat) query;
   getCanisterMemoryInfo: () -> (CanisterMemoryInfo) query;
   getManager: () -> (principal) query;
   healthCheck: () -> (bool) query;
+  http_request: (HttpRequest) -> (HttpResponse) query;
   queryBeamByEscrowIds: (vec EscrowId) -> (vec BeamReadModel) query;
+  restartBeam: (EscrowId) -> (Result);
   stopBeam: (EscrowId) -> (Result);
 }

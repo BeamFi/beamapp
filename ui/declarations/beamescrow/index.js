@@ -1,11 +1,11 @@
 import { Actor, HttpAgent } from "@dfinity/agent"
 
 // Imports and re-exports candid interface
-import { idlFactory } from "./beam.did.js"
-export { idlFactory } from "./beam.did.js"
+import { idlFactory } from "./beamescrow.did.js"
+export { idlFactory } from "./beamescrow.did.js"
 
 // CANISTER_ID is replaced by webpack based on node environment
-export const canisterId = process.env.NEXT_PUBLIC_BEAM_CANISTER_ID
+export const canisterId = process.env.NEXT_PUBLIC_BEAMESCROW_CANISTER_ID
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions })

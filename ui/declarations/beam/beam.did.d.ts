@@ -11,6 +11,7 @@ export interface BeamReadModel {
   'scheduledEndDate' : Time,
   'startDate' : Time,
 }
+export type BeamRelationObjId = number;
 export type BeamStatus = { 'active' : null } |
   { 'completed' : null } |
   { 'paused' : null };
@@ -26,9 +27,23 @@ export interface CanisterMemoryInfo {
   'rts_version' : string,
 }
 export type ErrorCode = { 'invalid_beam' : string } |
-  { 'beam_notfound' : string };
+  { 'beam_notfound' : string } |
+  { 'permission_denied' : string };
 export type EscrowId = number;
 export type EscrowId__1 = number;
+export type HeaderField = [string, string];
+export interface HttpRequest {
+  'url' : string,
+  'method' : string,
+  'body' : Uint8Array | number[],
+  'headers' : Array<HeaderField>,
+}
+export interface HttpResponse {
+  'body' : Uint8Array | number[],
+  'headers' : Array<HeaderField>,
+  'upgrade' : boolean,
+  'status_code' : number,
+}
 export type Period = number;
 export type Result = { 'ok' : BeamStatus } |
   { 'err' : ErrorCode };
@@ -39,10 +54,19 @@ export type Time__1 = bigint;
 export interface _SERVICE {
   'canisterVersion' : ActorMethod<[], number>,
   'createBeam' : ActorMethod<[EscrowId, Time__1, Period], Result_1>,
+  'createRelationBeam' : ActorMethod<
+    [EscrowId, Time__1, Period, BeamRelationObjId],
+    Result_1
+  >,
   'getActorBalance' : ActorMethod<[], bigint>,
   'getCanisterMemoryInfo' : ActorMethod<[], CanisterMemoryInfo>,
   'getManager' : ActorMethod<[], Principal>,
   'healthCheck' : ActorMethod<[], boolean>,
-  'queryBeamByEscrowIds' : ActorMethod<[Array<EscrowId>], Array<BeamReadModel>>,
+  'http_request' : ActorMethod<[HttpRequest], HttpResponse>,
+  'queryBeamByEscrowIds' : ActorMethod<
+    [Uint32Array | number[]],
+    Array<BeamReadModel>
+  >,
+  'restartBeam' : ActorMethod<[EscrowId], Result>,
   'stopBeam' : ActorMethod<[EscrowId], Result>,
 }
