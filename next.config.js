@@ -38,6 +38,10 @@ module.exports = removeImports({
         destination: "/"
       },
       {
+        source: "/meeting/:path*",
+        destination: "/"
+      },
+      {
         source: "/mybeams",
         destination: "/"
       },

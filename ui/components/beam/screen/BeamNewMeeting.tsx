@@ -123,7 +123,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
   }
 
   const beamOutLink = id => {
-    return `${window.location.origin}/beamout/${id}`
+    return `${window.location.origin}/meeting/${id}`
   }
 
   const showEndDate = false
@@ -158,7 +158,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
   }
 
   const submit = async (values, actions) => {
-    const { amount, recipient } = values
+    const { amount, recipient, meetingId, meetingPassword } = values
 
     try {
       const isValid = await validateAndConfirm(values)
@@ -170,14 +170,17 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
 
       const e8sAmount = humanToE8s(amount)
       const tokenType = convertToVariant(BeamSupportedTokenType.icp)
-      const recipientPrincipal = Principal.fromText(recipient)
+
+      const recipientPrincipal: Principal = Principal.fromText(recipient)
 
       const beamOutService = await makeBeamOutActor()
-      const result = await beamOutService.createBeamOut(
+      const result = await beamOutService.createBeamOutMeeting(
         e8sAmount,
         tokenType,
         recipientPrincipal,
-        numDays
+        numDays,
+        Number(meetingId),
+        meetingPassword
       )
 
       if (result.ok) {
@@ -252,8 +255,10 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
         <BeamVStack>
           <Formik
             initialValues={{
-              amount: 10,
+              amount: 1,
               recipient: "",
+              meetingId: "",
+              meetingPassword: "",
               isConfirmed: false
             }}
             validationSchema={BeamMeetingCreateLinkSchema}
@@ -351,20 +356,19 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                     </Slider>
                   </VStack>
 
-                  <Field name="meetingNumber">
+                  <Field name="meetingId">
                     {({ field, form }) => (
                       <FormInput
-                        id="meetingNumber"
+                        id="meetingId"
                         field={field}
                         inputFontSize={{ base: "sm", md: "md" }}
                         themeColor="black_5"
                         placeholder="Zoom Meeting ID"
                         w={{ base: "95%", md: "80%" }}
                         isInvalid={
-                          form.errors.meetingNumber &&
-                          form.touched.meetingNumber
+                          form.errors.meetingId && form.touched.meetingId
                         }
-                        errorMesg={form.errors.meetingNumber}
+                        errorMesg={form.errors.meetingId}
                       >
                         <FormTitle>Zoom Meeting ID:</FormTitle>
                       </FormInput>

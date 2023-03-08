@@ -51,9 +51,11 @@ import {
 import { e8sToHuman, humanToE8s } from "../../../utils/e8s"
 import {
   convertDateToCandid,
-  unwrapVariant
+  unwrapVariant,
+  unwrapVariantValue
 } from "../../../model/TypeConversion"
-import { canisterId as escrowPaymentCanisterId } from "../../../declarations/escrowpayment"
+
+import { canisterId as escrowPaymentCanisterId } from "../../../declarations/beamescrow"
 
 import log from "../../../utils/log"
 import { useNavigate, useParams } from "react-router-dom"
@@ -65,6 +67,7 @@ import { AuthProvider } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr } from "../../../utils/date"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
+import { BeamOutModelV2 } from "../../../declarations/beamout/beamout.did"
 
 const HeadlineStack = () => {
   return (
@@ -101,10 +104,11 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
 
   const initLoading = 1
   const defaultNumDays = 7
-  const defaultAmount = 10
+  const defaultAmount = 1
 
   const [numDays, setNumDays] = useState(defaultNumDays)
   const [amount, setAmount] = useState(defaultAmount)
+  const [meetingModel, setMeetingModel] = useState(null)
   const [recipient, setRecipient] = useState("")
 
   const {
@@ -137,8 +141,16 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       const result = await beamOutService.loadBeamOutById(Number(id))
 
       if (result.ok) {
-        const { durationNumDays, recipient, tokenType, amount } = result.ok
+        const {
+          durationNumDays,
+          recipient,
+          tokenType,
+          amount,
+          beamOutType
+        }: BeamOutModelV2 = result.ok
         const tokenTypeString = unwrapVariant(tokenType)
+        const myMeetingModel = unwrapVariantValue(beamOutType)
+        setMeetingModel(myMeetingModel)
 
         if (tokenTypeString != BeamSupportedTokenType.icp) {
           throw new Error(`Unsupported token type: ${tokenTypeString}`)
@@ -183,6 +195,28 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
 
   const cancelLogin = () => {
     setLoading(false)
+  }
+
+  const gotoMeeting = () => {
+    const meetingHost = process.env.NEXT_PUBLIC_MEETING_HOST
+    const { meetingId, meetingPassword } = meetingModel
+    const userName = "Henry"
+
+    window.location.assign(
+      `${meetingHost}?meetingId=${meetingId}&meetingPassword=${meetingPassword}&userName=${userName}`
+    )
+  }
+
+  const gotoMyBeam = () => {
+    navigate("/mybeams")
+  }
+
+  const postBeamCreatedSuccess = () => {
+    if (meetingModel != null) {
+      gotoMeeting()
+    } else {
+      gotoMyBeam()
+    }
   }
 
   const submit = async (values, actions) => {
@@ -233,6 +267,8 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
         )
         return
       }
+
+      log.info("postBeamCreatedSuccess")
 
       // Request transfer
       showToast(
@@ -293,8 +329,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
           "success"
         )
 
-        navigate("/mybeams")
-
+        postBeamCreatedSuccess()
         return
       }
 

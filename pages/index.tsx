@@ -35,6 +35,9 @@ export const BeamApp = props => {
           <Route path="/beamout" element={<BeamOut {...routeUpdateProps} />}>
             <Route path=":beamOutId" element={<BeamOut />} />
           </Route>
+          <Route path="/meeting" element={<BeamOut {...routeUpdateProps} />}>
+            <Route path=":beamOutId" element={<BeamOut />} />
+          </Route>
           <Route
             path="/getpaid"
             element={<BeamGetPaid {...routeUpdateProps} />}

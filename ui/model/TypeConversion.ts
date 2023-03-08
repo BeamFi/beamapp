@@ -17,7 +17,7 @@ export const convertCandidDateToJSDate = candidDate => {
 }
 
 export const convertCandidDateToUnixTimestampMs = candidDate => {
-  return Number(candidDate / 1000000n);
+  return Number(candidDate / 1000000n)
 }
 
 const { InternetIdentity, Plug } = AuthProvider
@@ -54,12 +54,25 @@ export const unwrapOptional = value => {
   return value?.length > 0 ? value[0] : null
 }
 
-export const unwrapVariant = variant => {
+export const unwrapVariant = (variant: any): any => {
   if (variant == null) {
     return null
   }
 
-  const value = Object.keys(variant)
+  const key = Object.keys(variant)
+  if (key == null || key.length == 0) {
+    return null
+  }
+
+  return key[0]
+}
+
+export const unwrapVariantValue = (variant: any): any => {
+  if (variant == null) {
+    return null
+  }
+
+  const value = Object.values(variant)
   if (value == null || value.length == 0) {
     return null
   }
