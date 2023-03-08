@@ -31,6 +31,7 @@ export const idlFactory = ({ IDL }) => {
   })
   const Result_3 = IDL.Variant({ ok: EscrowId, err: ErrorCode })
   const BlockIndex = IDL.Nat64
+  const BeamRelationObjId = IDL.Nat32
   const BitcoinAddress = IDL.Text
   const Satoshi = IDL.Nat64
   const CanisterMemoryInfo = IDL.Record({
@@ -109,6 +110,18 @@ export const idlFactory = ({ IDL }) => {
     ),
     createBeamEscrow: IDL.Func(
       [TokenAmount, BlockIndex, Time__1, IDL.Principal, IDL.Principal],
+      [Result_3],
+      []
+    ),
+    createRelationBeamEscrow: IDL.Func(
+      [
+        TokenAmount,
+        BlockIndex,
+        Time__1,
+        IDL.Principal,
+        IDL.Principal,
+        BeamRelationObjId
+      ],
       [Result_3],
       []
     ),

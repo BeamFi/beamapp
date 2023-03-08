@@ -96,6 +96,7 @@ type CanisterMemoryInfo =
  };
 type BlockIndex = nat64;
 type BitcoinAddress = text;
+type BeamRelationObjId = nat32;
 type BeamEscrowContract = 
  record {
    buyerClaimable: TokenAmount__1;
@@ -123,6 +124,8 @@ service : {
    principal) -> (Result_3);
   createBeamEscrow: (TokenAmount, BlockIndex, Time__1, principal,
    principal) -> (Result_3);
+  createRelationBeamEscrow: (TokenAmount, BlockIndex, Time__1, principal,
+   principal, BeamRelationObjId) -> (Result_3);
   creatorClaim: (EscrowId, TokenType, AccountIdentifier__1) -> (Result_1);
   creatorClaimBTC: (EscrowId, TokenType, BitcoinAddress) -> (Result_1);
   creatorClaimByPrincipal: (EscrowId, TokenType, principal) -> (Result_1);

@@ -397,13 +397,24 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
         "info"
       )
 
-      result = await escrowService.createBeamEscrow(
-        escrowAmount,
-        blockIndex,
-        convertDateToCandid(dueDateUTC),
-        buyerPrincipal,
-        creatorPrincipal
-      )
+      if (isMeeting) {
+        result = await escrowService.createRelationBeamEscrow(
+          escrowAmount,
+          blockIndex,
+          convertDateToCandid(dueDateUTC),
+          buyerPrincipal,
+          creatorPrincipal,
+          meetingModel.meetingId
+        )
+      } else {
+        result = await escrowService.createBeamEscrow(
+          escrowAmount,
+          blockIndex,
+          convertDateToCandid(dueDateUTC),
+          buyerPrincipal,
+          creatorPrincipal
+        )
+      }
 
       if (result.ok) {
         showMediumToast(
