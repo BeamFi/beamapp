@@ -73,6 +73,29 @@ The magical part that connects canister ID to frontend app is dfx.webpack.config
 It reads canister_ids.json and export it as NEXT_PUBLIC_BEAM_CANISTER_ID for Beam canister for example.
 See /ui/declaration/beam/index.js
 
+## Sync BeamFi protocol Candid to Beam App
+
+When changes are made to BeamFi protocol canisters, it is important to copy the candid files to Beamapp so that frontend app can see the new functions and data structures.
+
+E.g BeamOut has new changes  
+Generate new declaration files then copy to Beamapp.
+
+```
+> cd ${BeamFi protocol home}
+> dfx generate beamout
+> cp src/declarations/beamout/* ${Beam app home}/ui/declarations/beamout
+```
+
+Open index.js to delete:
+
+```
+createActor(canisterId)
+```
+
+since it has conflicts with NextJS server side rendering
+
+Notes: You can deleted unused files like \*.wasm
+
 ## Continuous Delivery
 
 Two Github workflows are used for deploying to dev (https://dev.beamfi.app) and prod (https://beamfi.app)
