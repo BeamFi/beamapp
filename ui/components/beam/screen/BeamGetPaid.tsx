@@ -145,13 +145,14 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
       const e8sAmount = humanToE8s(amount)
       const tokenType = convertToVariant(BeamSupportedTokenType.icp)
       const recipientPrincipal = Principal.fromText(recipient)
+      const numMins = numDays * 24 * 60
 
       const beamOutService = await makeBeamOutActor()
       const result = await beamOutService.createBeamOut(
         e8sAmount,
         tokenType,
         recipientPrincipal,
-        numDays
+        numMins
       )
 
       if (result.ok) {

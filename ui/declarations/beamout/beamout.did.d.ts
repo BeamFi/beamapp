@@ -9,7 +9,7 @@ export interface BeamOutMeetingModelV3 {
 }
 export type BeamOutMeetingString = string;
 export type BeamOutMeetingString__1 = string;
-export interface BeamOutModelV3 {
+export interface BeamOutModelV4 {
   'id' : BeamOutId__1,
   'beamOutType' : BeamOutTypeV3,
   'createdAt' : Time,
@@ -17,7 +17,7 @@ export interface BeamOutModelV3 {
   'updatedAt' : Time,
   'tokenType' : TokenType,
   'amount' : TokenAmount,
-  'durationNumDays' : number,
+  'durationNumMins' : number,
 }
 export type BeamOutTypeV3 = { 'meeting' : BeamOutMeetingModelV3 } |
   { 'payment' : null };
@@ -37,7 +37,7 @@ export interface HttpResponse {
   'upgrade' : boolean,
   'status_code' : number,
 }
-export type Result = { 'ok' : BeamOutModelV3 } |
+export type Result = { 'ok' : BeamOutModelV4 } |
   { 'err' : ErrorCode };
 export type Result_1 = { 'ok' : BeamOutId } |
   { 'err' : ErrorCode };

@@ -35,7 +35,7 @@ export const idlFactory = ({ IDL }) => {
   const Time = IDL.Int
   const TokenType = IDL.Variant({ icp: IDL.Null })
   const TokenAmount = IDL.Nat64
-  const BeamOutModelV3 = IDL.Record({
+  const BeamOutModelV4 = IDL.Record({
     id: BeamOutId__1,
     beamOutType: BeamOutTypeV3,
     createdAt: Time,
@@ -43,9 +43,9 @@ export const idlFactory = ({ IDL }) => {
     updatedAt: Time,
     tokenType: TokenType,
     amount: TokenAmount,
-    durationNumDays: IDL.Nat32
+    durationNumMins: IDL.Nat32
   })
-  const Result = IDL.Variant({ ok: BeamOutModelV3, err: ErrorCode })
+  const Result = IDL.Variant({ ok: BeamOutModelV4, err: ErrorCode })
   return IDL.Service({
     createBeamOut: IDL.Func(
       [TokenAmount__1, TokenType__1, IDL.Principal, IDL.Nat32],

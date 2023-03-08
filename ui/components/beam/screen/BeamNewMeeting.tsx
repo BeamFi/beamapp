@@ -113,13 +113,13 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initLoading])
 
-  const defaultNumDays = 7
-  const [numDays, setNumDays] = useState(defaultNumDays)
+  const defaultNumMins = 30
+  const [numMins, setNumMins] = useState(defaultNumMins)
 
   const [beamOutId, setBeamOutId] = useState(null)
 
   const endDateDesc = () => {
-    return moment().add(numDays, "days").format("MMM Do YYYY, h:mm:ss a")
+    return moment().add(numMins, "minutes").format("MMM Do YYYY, h:mm:ss a")
   }
 
   const beamOutLink = id => {
@@ -178,7 +178,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
         e8sAmount,
         tokenType,
         recipientPrincipal,
-        numDays,
+        numMins,
         meetingId,
         meetingPassword
       )
@@ -327,7 +327,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         color="black_5"
                         fontSize={{ base: "16px", md: "18px" }}
                       >
-                        {numDays} Days
+                        {numMins} Minutes
                       </Text>
                       <Spacer />
                       {showEndDate && (
@@ -342,10 +342,10 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                     </HStack>
 
                     <Slider
-                      defaultValue={defaultNumDays}
-                      onChange={setNumDays}
+                      defaultValue={defaultNumMins}
+                      onChange={setNumMins}
                       min={1}
-                      max={90}
+                      max={180}
                       step={1}
                     >
                       <SliderTrack bg="black_gray">

@@ -24,7 +24,16 @@ export const ratePerHr = (
 ) => {
   const numMins = numMinsToDueDate(startDateInMillSecs, dueDateInMilliSecs)
   const numHrs = numMins / 60
-  const beamTokenRatePerHr = truncFloatDecimals(totalTokens / numHrs, 8)
+  const beamTokenRate = truncFloatDecimals(totalTokens / numHrs, 8)
+  return beamTokenRate
+}
 
-  return beamTokenRatePerHr
+export const ratePerMin = (
+  startDateInMillSecs,
+  dueDateInMilliSecs,
+  totalTokens
+) => {
+  const numMins = numMinsToDueDate(startDateInMillSecs, dueDateInMilliSecs)
+  const beamTokenRate = truncFloatDecimals(totalTokens / numMins, 8)
+  return beamTokenRate
 }

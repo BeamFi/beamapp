@@ -11,7 +11,7 @@ type Result_1 =
 type Result = 
  variant {
    err: ErrorCode;
-   ok: BeamOutModelV3;
+   ok: BeamOutModelV4;
  };
 type HttpResponse = 
  record {
@@ -43,12 +43,12 @@ type BeamOutTypeV3 =
    meeting: BeamOutMeetingModelV3;
    payment;
  };
-type BeamOutModelV3 = 
+type BeamOutModelV4 = 
  record {
    amount: TokenAmount;
    beamOutType: BeamOutTypeV3;
    createdAt: Time;
-   durationNumDays: nat32;
+   durationNumMins: nat32;
    id: BeamOutId__1;
    recipient: principal;
    tokenType: TokenType;
