@@ -84,7 +84,7 @@ export const BeamCard = ({
     isOpenDetailEnabled && beamEscrowContract != null && beamReadModel != null
 
   useInterval(() => {
-    if (beamReadModel) {
+    if (beamReadModel && progressRefreshRate > 0) {
       const startTimestamp = convertCandidDateToUnixTimestampMs(
         beamReadModel.createdAt
       )

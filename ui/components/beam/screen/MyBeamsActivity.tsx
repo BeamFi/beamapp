@@ -17,6 +17,7 @@ import { BeamCard } from "./mybeams/BeamCard"
 import { BeamMainActionButtons } from "../BeamMainActionButtons"
 import { StandardSpinner } from "../../StandardSpinner"
 import { ExternalLinkIcon } from "@chakra-ui/icons"
+import { unwrapVariant } from "../../../model/TypeConversion"
 
 export const MyBeamsActivity = ({
   setBeamReadModel,
@@ -90,13 +91,20 @@ export const MyBeamsActivity = ({
           <BeamOutTextIcon w="96px" h="35px" />
         </HStack>
         {isLoading && <StandardSpinner />}
-        {escrows.map((escrow, index) => (
-          <BeamCard
+        {escrows.map((escrow, index) => {
+          const beamReadModel = beamMap[escrow.id]
+          let refreshRate = 1000
+          const beamType = unwrapVariant(beamReadModel.beamType)
+          if (beamType === "relation") {
+            refreshRate = 0
+          }
+
+          ;<BeamCard
             key={index}
             beamEscrowContract={escrow}
             myPrincipalId={myPrincipalId}
-            beamReadModel={beamMap[escrow.id]}
-            progressRefreshRate={1000}
+            beamReadModel={beamReadModel}
+            progressRefreshRate={refreshRate}
             setBeamReadModel={setBeamReadModel}
             setBeamEscrowContract={setBeamEscrowContract}
             transition="width 0.5s, height 0.5s, box-shadow 0.5s"
@@ -106,7 +114,7 @@ export const MyBeamsActivity = ({
               height: "142px"
             }}
           />
-        ))}
+        })}
       </BeamVStack>
       <BeamMainActionButtons
         py="20px"
