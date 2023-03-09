@@ -9,7 +9,7 @@ export const idlFactory = ({ IDL }) => {
     permission_denied: IDL.Text
   })
   const Result_1 = IDL.Variant({ ok: BeamId__1, err: ErrorCode })
-  const BeamRelationObjId = IDL.Text
+  const BeamRelationObjId__1 = IDL.Text
   const CanisterMemoryInfo = IDL.Record({
     rts_max_live_size: IDL.Nat,
     rts_memory_size: IDL.Nat,
@@ -37,11 +37,18 @@ export const idlFactory = ({ IDL }) => {
     completed: IDL.Null,
     paused: IDL.Null
   })
+  const BeamRelationObjId = IDL.Text
+  const BeamRelationModel = IDL.Record({ objId: BeamRelationObjId })
+  const BeamType = IDL.Variant({
+    relation: BeamRelationModel,
+    payment: IDL.Null
+  })
   const Time = IDL.Int
   const EscrowId__1 = IDL.Nat32
   const BeamReadModel = IDL.Record({
     id: BeamId,
     status: BeamStatus__1,
+    beamType: BeamType,
     createdAt: Time,
     escrowId: EscrowId__1,
     scheduledEndDate: Time,
@@ -57,7 +64,7 @@ export const idlFactory = ({ IDL }) => {
     canisterVersion: IDL.Func([], [IDL.Nat32], ["query"]),
     createBeam: IDL.Func([EscrowId, Time__1, Period], [Result_1], []),
     createRelationBeam: IDL.Func(
-      [EscrowId, Time__1, Period, BeamRelationObjId],
+      [EscrowId, Time__1, Period, BeamRelationObjId__1],
       [Result_1],
       []
     ),

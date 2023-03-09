@@ -47,6 +47,11 @@ type CanisterMemoryInfo =
    rts_total_allocation: nat;
    rts_version: text;
  };
+type BeamType = 
+ variant {
+   payment;
+   relation: BeamRelationModel;
+ };
 type BeamStatus__1 = 
  variant {
    active;
@@ -59,9 +64,12 @@ type BeamStatus =
    completed;
    paused;
  };
+type BeamRelationObjId__1 = text;
 type BeamRelationObjId = text;
+type BeamRelationModel = record {objId: BeamRelationObjId;};
 type BeamReadModel = 
  record {
+   beamType: BeamType;
    createdAt: Time;
    escrowId: EscrowId__1;
    id: BeamId;
@@ -74,7 +82,7 @@ type BeamId = nat32;
 service : {
   canisterVersion: () -> (nat32) query;
   createBeam: (EscrowId, Time__1, Period) -> (Result_1);
-  createRelationBeam: (EscrowId, Time__1, Period, BeamRelationObjId) ->
+  createRelationBeam: (EscrowId, Time__1, Period, BeamRelationObjId__1) ->
    (Result_1);
   getActorBalance: () -> (nat) query;
   getCanisterMemoryInfo: () -> (CanisterMemoryInfo) query;

@@ -6,18 +6,23 @@ export type BeamId__1 = number;
 export interface BeamReadModel {
   'id' : BeamId,
   'status' : BeamStatus__1,
+  'beamType' : BeamType,
   'createdAt' : Time,
   'escrowId' : EscrowId__1,
   'scheduledEndDate' : Time,
   'startDate' : Time,
 }
+export interface BeamRelationModel { 'objId' : BeamRelationObjId }
 export type BeamRelationObjId = string;
+export type BeamRelationObjId__1 = string;
 export type BeamStatus = { 'active' : null } |
   { 'completed' : null } |
   { 'paused' : null };
 export type BeamStatus__1 = { 'active' : null } |
   { 'completed' : null } |
   { 'paused' : null };
+export type BeamType = { 'relation' : BeamRelationModel } |
+  { 'payment' : null };
 export interface CanisterMemoryInfo {
   'rts_max_live_size' : bigint,
   'rts_memory_size' : bigint,
@@ -55,7 +60,7 @@ export interface _SERVICE {
   'canisterVersion' : ActorMethod<[], number>,
   'createBeam' : ActorMethod<[EscrowId, Time__1, Period], Result_1>,
   'createRelationBeam' : ActorMethod<
-    [EscrowId, Time__1, Period, BeamRelationObjId],
+    [EscrowId, Time__1, Period, BeamRelationObjId__1],
     Result_1
   >,
   'getActorBalance' : ActorMethod<[], bigint>,
