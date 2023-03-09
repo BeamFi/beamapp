@@ -18,7 +18,7 @@ export interface BeamEscrowContract {
   'buyerClaimed' : TokenAmount__1,
   'creatorClaimable' : TokenAmount__1,
 }
-export type BeamRelationObjId = number;
+export type BeamRelationObjId = string;
 export type BitcoinAddress = string;
 export type BlockIndex = bigint;
 export interface CanisterMemoryInfo {

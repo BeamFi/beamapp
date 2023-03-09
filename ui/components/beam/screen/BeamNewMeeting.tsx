@@ -98,7 +98,7 @@ const HeadlineStack = () => {
             href="https://marketplace.zoom.us/apps/QES-IcTOTgSw-hwz4CVIIA"
             isExternal
           >
-            install Beam Meeting app
+            add Beam Meeting app to your Zoom account
           </Link>{" "}
           so that we can pay you in real time when the meeting started
         </ListItem>

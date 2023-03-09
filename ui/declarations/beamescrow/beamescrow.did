@@ -96,7 +96,7 @@ type CanisterMemoryInfo =
  };
 type BlockIndex = nat64;
 type BitcoinAddress = text;
-type BeamRelationObjId = nat32;
+type BeamRelationObjId = text;
 type BeamEscrowContract = 
  record {
    buyerClaimable: TokenAmount__1;

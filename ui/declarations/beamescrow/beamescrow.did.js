@@ -31,7 +31,7 @@ export const idlFactory = ({ IDL }) => {
   })
   const Result_3 = IDL.Variant({ ok: EscrowId, err: ErrorCode })
   const BlockIndex = IDL.Nat64
-  const BeamRelationObjId = IDL.Nat32
+  const BeamRelationObjId = IDL.Text
   const BitcoinAddress = IDL.Text
   const Satoshi = IDL.Nat64
   const CanisterMemoryInfo = IDL.Record({
