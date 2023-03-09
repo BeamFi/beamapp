@@ -91,30 +91,33 @@ export const MyBeamsActivity = ({
           <BeamOutTextIcon w="96px" h="35px" />
         </HStack>
         {isLoading && <StandardSpinner />}
-        {escrows.map((escrow, index) => {
-          const beamReadModel = beamMap[escrow.id]
-          let refreshRate = 1000
-          const beamType = unwrapVariant(beamReadModel.beamType)
-          if (beamType === "relation") {
-            refreshRate = 0
-          }
+        {beamMap != null &&
+          escrows.map((escrow, index) => {
+            const beamReadModel = beamMap[escrow.id]
+            let refreshRate = 1000
+            const beamType = unwrapVariant(beamReadModel.beamType)
+            if (beamType === "relation") {
+              refreshRate = 0
+            }
 
-          ;<BeamCard
-            key={index}
-            beamEscrowContract={escrow}
-            myPrincipalId={myPrincipalId}
-            beamReadModel={beamReadModel}
-            progressRefreshRate={refreshRate}
-            setBeamReadModel={setBeamReadModel}
-            setBeamEscrowContract={setBeamEscrowContract}
-            transition="width 0.5s, height 0.5s, box-shadow 0.5s"
-            _hover={{
-              boxShadow: "xl",
-              width: "96%",
-              height: "142px"
-            }}
-          />
-        })}
+            return (
+              <BeamCard
+                key={index}
+                beamEscrowContract={escrow}
+                myPrincipalId={myPrincipalId}
+                beamReadModel={beamReadModel}
+                progressRefreshRate={refreshRate}
+                setBeamReadModel={setBeamReadModel}
+                setBeamEscrowContract={setBeamEscrowContract}
+                transition="width 0.5s, height 0.5s, box-shadow 0.5s"
+                _hover={{
+                  boxShadow: "xl",
+                  width: "96%",
+                  height: "142px"
+                }}
+              />
+            )
+          })}
       </BeamVStack>
       <BeamMainActionButtons
         py="20px"

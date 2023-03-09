@@ -95,7 +95,7 @@ const HeadlineStack = () => {
         <ListItem>
           Go to Zoom Marketplace to{" "}
           <Link
-            href="https://marketplace.zoom.us/apps/QES-IcTOTgSw-hwz4CVIIA"
+            href="https://zoom.us/oauth/authorize?response_type=code&client_id=Vy82pQwsRVCMXQEz6BaWDQ&redirect_uri=https://beamfi.app"
             isExternal
           >
             add Beam Meeting app to your Zoom account
