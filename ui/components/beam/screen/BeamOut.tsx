@@ -94,7 +94,13 @@ const HeadlineStack = () => {
   )
 }
 
-const MinDuration = ({ numMins, setNumMins, showEndDate, endDateDesc }) => {
+const MinDuration = ({
+  numMins,
+  setNumMins,
+  showEndDate,
+  endDateDesc,
+  isReadOnly
+}) => {
   return (
     <VStack align="start" w={{ base: "95%", md: "80%" }} spacing="12px">
       <BeamHeading textAlign="left">Duration:</BeamHeading>
@@ -115,24 +121,33 @@ const MinDuration = ({ numMins, setNumMins, showEndDate, endDateDesc }) => {
         )}
       </HStack>
 
-      <Slider
-        defaultValue={numMins}
-        onChange={setNumMins}
-        min={1}
-        max={90}
-        step={1}
-      >
-        <SliderTrack bg="black_gray">
-          <Box position="relative" right={10} />
-          <SliderFilledTrack bg="black_5" />
-        </SliderTrack>
-        <SliderThumb boxSize={6} />
-      </Slider>
+      {!isReadOnly && (
+        <Slider
+          defaultValue={numMins}
+          onChange={setNumMins}
+          min={1}
+          max={90}
+          step={1}
+          isReadOnly={isReadOnly}
+        >
+          <SliderTrack bg="black_gray">
+            <Box position="relative" right={10} />
+            <SliderFilledTrack bg="black_5" />
+          </SliderTrack>
+          <SliderThumb boxSize={6} />
+        </Slider>
+      )}
     </VStack>
   )
 }
 
-const DayDuration = ({ numDays, setNumDays, showEndDate, endDateDesc }) => {
+const DayDuration = ({
+  numDays,
+  setNumDays,
+  showEndDate,
+  endDateDesc,
+  isReadOnly
+}) => {
   return (
     <VStack align="start" w={{ base: "95%", md: "80%" }} spacing="12px">
       <BeamHeading textAlign="left">Duration:</BeamHeading>
@@ -153,19 +168,22 @@ const DayDuration = ({ numDays, setNumDays, showEndDate, endDateDesc }) => {
         )}
       </HStack>
 
-      <Slider
-        defaultValue={numDays}
-        onChange={setNumDays}
-        min={1}
-        max={30}
-        step={1}
-      >
-        <SliderTrack bg="black_gray">
-          <Box position="relative" right={10} />
-          <SliderFilledTrack bg="black_5" />
-        </SliderTrack>
-        <SliderThumb boxSize={6} />
-      </Slider>
+      {!isReadOnly && (
+        <Slider
+          defaultValue={numDays}
+          onChange={setNumDays}
+          min={1}
+          max={30}
+          step={1}
+          isReadOnly={isReadOnly}
+        >
+          <SliderTrack bg="black_gray">
+            <Box position="relative" right={10} />
+            <SliderFilledTrack bg="black_5" />
+          </SliderTrack>
+          <SliderThumb boxSize={6} />
+        </Slider>
+      )}
     </VStack>
   )
 }
@@ -514,6 +532,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                         TokenIcon={ICLogo}
                         themeColor="black_5"
                         trackColor="black_gray"
+                        isReadOnly={isMeeting}
                       >
                         <BeamHeading>ICP Amount:</BeamHeading>
                       </FormNumberInput>
@@ -533,6 +552,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                           form.errors.recipient && form.touched.recipient
                         }
                         errorMesg={form.errors.recipient}
+                        isReadOnly={isMeeting}
                       >
                         <BeamHeading>Recipient Plug Wallet:</BeamHeading>
                       </FormInput>
@@ -545,6 +565,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                       setNumMins={setNumMins}
                       showEndDate={showEndDate}
                       endDateDesc={endDateDesc}
+                      isReadOnly={isMeeting}
                     />
                   )}
 
@@ -554,6 +575,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                       setNumDays={setNumDays}
                       showEndDate={showEndDate}
                       endDateDesc={endDateDesc}
+                      isReadOnly={isMeeting}
                     />
                   )}
 
