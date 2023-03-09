@@ -11,7 +11,7 @@ export interface BeamReadModel {
   'scheduledEndDate' : Time,
   'startDate' : Time,
 }
-export type BeamRelationObjId = number;
+export type BeamRelationObjId = string;
 export type BeamStatus = { 'active' : null } |
   { 'completed' : null } |
   { 'paused' : null };

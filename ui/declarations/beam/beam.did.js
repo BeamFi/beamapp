@@ -9,7 +9,7 @@ export const idlFactory = ({ IDL }) => {
     permission_denied: IDL.Text
   })
   const Result_1 = IDL.Variant({ ok: BeamId__1, err: ErrorCode })
-  const BeamRelationObjId = IDL.Nat32
+  const BeamRelationObjId = IDL.Text
   const CanisterMemoryInfo = IDL.Record({
     rts_max_live_size: IDL.Nat,
     rts_memory_size: IDL.Nat,

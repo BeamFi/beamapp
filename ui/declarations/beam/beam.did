@@ -59,7 +59,7 @@ type BeamStatus =
    completed;
    paused;
  };
-type BeamRelationObjId = nat32;
+type BeamRelationObjId = text;
 type BeamReadModel = 
  record {
    createdAt: Time;
