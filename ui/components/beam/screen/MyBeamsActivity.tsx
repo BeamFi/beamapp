@@ -66,6 +66,12 @@ export const MyBeamsActivity = ({
         return newMap
       }, {})
       setBeamMap(myBeamMap)
+
+      // filter out myEscrows that are not in myBeamMap
+      const myEscrowsWithBeam = myEscrows.filter(
+        escrow => myBeamMap[escrow.id] != null
+      )
+      setEscrows(myEscrowsWithBeam)
     } catch (error) {
       log.error(error)
     } finally {
@@ -94,10 +100,6 @@ export const MyBeamsActivity = ({
         {beamMap != null &&
           escrows.map((escrow, index) => {
             const beamReadModel = beamMap[escrow.id]
-            if (beamReadModel == null) {
-              return null
-            }
-
             let refreshRate = 1000
             const beamType = unwrapVariant(beamReadModel.beamType)
             if (beamType === "relation") {
