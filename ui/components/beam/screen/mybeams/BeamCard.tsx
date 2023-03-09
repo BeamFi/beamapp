@@ -17,7 +17,8 @@ import { EscrowContractClass } from "../../../../model/class/EscrowContractClass
 import { PrincipalInfo } from "../../../wallet/PrincipalInfo"
 import {
   convertCandidDateToJSDate,
-  convertCandidDateToUnixTimestampMs
+  convertCandidDateToUnixTimestampMs,
+  unwrapVariant
 } from "../../../../model/TypeConversion"
 import { truncFloatDecimals } from "../../../../utils/number"
 
@@ -83,8 +84,16 @@ export const BeamCard = ({
   const isAllDataReady =
     isOpenDetailEnabled && beamEscrowContract != null && beamReadModel != null
 
+  let refreshRate = progressRefreshRate
+  if (beamReadModel != null) {
+    const beamType = unwrapVariant(beamReadModel.beamType)
+    if (beamType === "relation") {
+      refreshRate = 0
+    }
+  }
+
   useInterval(() => {
-    if (beamReadModel && progressRefreshRate > 0) {
+    if (beamReadModel != null && refreshRate > 0) {
       const startTimestamp = convertCandidDateToUnixTimestampMs(
         beamReadModel.createdAt
       )

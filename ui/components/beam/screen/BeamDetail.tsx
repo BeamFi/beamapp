@@ -19,7 +19,6 @@ import { AuthProvider } from "../../../config"
 import { makeBeamActor } from "../../../service/actor/actor-locator"
 import { EscrowContractClass } from "../../../model/class/EscrowContractClass"
 import { useEscrow } from "../useEscrow"
-import { unwrapVariant } from "../../../model/TypeConversion"
 
 export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
   const { escrowId } = useParams()
@@ -74,14 +73,6 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
   const escrowObject = escrow != null ? new EscrowContractClass(escrow) : null
   const isBeamRecipient = escrowObject?.isBeamRecipient(myPrincipalId)
 
-  let refreshRate = 100
-  if (beam != null) {
-    const beamType = unwrapVariant(beam.beamType)
-    if (beamType === "relation") {
-      refreshRate = 0
-    }
-  }
-
   return (
     <BeamVStack
       spacing="26px"
@@ -122,7 +113,7 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
           <BeamCard
             beamEscrowContract={escrow}
             beamReadModel={beam}
-            progressRefreshRate={refreshRate}
+            progressRefreshRate={100}
             myPrincipalId={myPrincipalId}
             isOpenDetailEnabled={false}
           />
