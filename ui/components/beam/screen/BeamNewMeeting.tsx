@@ -83,13 +83,28 @@ const HeadlineStack = () => {
         px="30px"
         color="dark_black"
       >
-        <ListItem>Fill out the payment details</ListItem>
         <ListItem>
-          Fill out the Zoom Meeting details: Meeting ID, Meeting Password
+          Fill out the payment details and the Zoom Meeting details
         </ListItem>
-        <ListItem>Copy your unique Beam Meeting link</ListItem>
         <ListItem>
-          Send your unique Beam Meeting link to the meeting participants!
+          Submit the form and get your unique Beam Meeting link
+        </ListItem>
+        <ListItem>
+          Send your unique Beam Meeting link to the meeting participants
+        </ListItem>
+        <ListItem>
+          Go to Zoom Marketplace to{" "}
+          <Link
+            href="https://marketplace.zoom.us/apps/QES-IcTOTgSw-hwz4CVIIA"
+            isExternal
+          >
+            install Beam Meeting app
+          </Link>{" "}
+          so that we can pay you in real time when the meeting started
+        </ListItem>
+        <ListItem>
+          When your participants have joined the meeting, start your meeting as
+          host and get paid in real time as you speak!
         </ListItem>
       </OrderedList>
     </VStack>
