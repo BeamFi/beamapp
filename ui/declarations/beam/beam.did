@@ -56,12 +56,14 @@ type BeamStatus__1 =
  variant {
    active;
    completed;
+   created;
    paused;
  };
 type BeamStatus = 
  variant {
    active;
    completed;
+   created;
    paused;
  };
 type BeamRelationObjId__1 = text;
@@ -89,6 +91,7 @@ service : {
   getManager: () -> (principal) query;
   healthCheck: () -> (bool) query;
   http_request: (HttpRequest) -> (HttpResponse) query;
+  http_request_update: (HttpRequest) -> (HttpResponse);
   queryBeamByEscrowIds: (vec EscrowId) -> (vec BeamReadModel) query;
   restartBeam: (EscrowId) -> (Result);
   stopBeam: (EscrowId) -> (Result);

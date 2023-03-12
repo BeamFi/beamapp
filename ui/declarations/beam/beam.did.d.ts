@@ -15,10 +15,12 @@ export interface BeamReadModel {
 export interface BeamRelationModel { 'objId' : BeamRelationObjId }
 export type BeamRelationObjId = string;
 export type BeamRelationObjId__1 = string;
-export type BeamStatus = { 'active' : null } |
+export type BeamStatus = { 'created' : null } |
+  { 'active' : null } |
   { 'completed' : null } |
   { 'paused' : null };
-export type BeamStatus__1 = { 'active' : null } |
+export type BeamStatus__1 = { 'created' : null } |
+  { 'active' : null } |
   { 'completed' : null } |
   { 'paused' : null };
 export type BeamType = { 'relation' : BeamRelationModel } |
@@ -68,6 +70,7 @@ export interface _SERVICE {
   'getManager' : ActorMethod<[], Principal>,
   'healthCheck' : ActorMethod<[], boolean>,
   'http_request' : ActorMethod<[HttpRequest], HttpResponse>,
+  'http_request_update' : ActorMethod<[HttpRequest], HttpResponse>,
   'queryBeamByEscrowIds' : ActorMethod<
     [Uint32Array | number[]],
     Array<BeamReadModel>

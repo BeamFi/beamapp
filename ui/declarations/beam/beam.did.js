@@ -33,6 +33,7 @@ export const idlFactory = ({ IDL }) => {
   })
   const BeamId = IDL.Nat32
   const BeamStatus__1 = IDL.Variant({
+    created: IDL.Null,
     active: IDL.Null,
     completed: IDL.Null,
     paused: IDL.Null
@@ -55,6 +56,7 @@ export const idlFactory = ({ IDL }) => {
     startDate: Time
   })
   const BeamStatus = IDL.Variant({
+    created: IDL.Null,
     active: IDL.Null,
     completed: IDL.Null,
     paused: IDL.Null
@@ -73,6 +75,7 @@ export const idlFactory = ({ IDL }) => {
     getManager: IDL.Func([], [IDL.Principal], ["query"]),
     healthCheck: IDL.Func([], [IDL.Bool], ["query"]),
     http_request: IDL.Func([HttpRequest], [HttpResponse], ["query"]),
+    http_request_update: IDL.Func([HttpRequest], [HttpResponse], []),
     queryBeamByEscrowIds: IDL.Func(
       [IDL.Vec(EscrowId)],
       [IDL.Vec(BeamReadModel)],
