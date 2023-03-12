@@ -370,8 +370,6 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
         return
       }
 
-      log.info("postBeamCreatedSuccess")
-
       // Request transfer
       showToast(
         toast,
