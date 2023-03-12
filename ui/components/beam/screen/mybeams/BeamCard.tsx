@@ -92,6 +92,8 @@ export const BeamCard = ({
     }
   }
 
+  const hasStarted = unwrapVariant(beamReadModel?.status) !== "created"
+
   useInterval(() => {
     if (beamReadModel != null && refreshRate > 0) {
       const startTimestamp = convertCandidDateToUnixTimestampMs(
@@ -147,8 +149,8 @@ export const BeamCard = ({
           escrowObject.initialDeposit() * (progressPercentage / 100)
         }
         w="90%"
-        startDate={beamReadModel?.createdAt}
-        endDate={beamReadModel?.scheduledEndDate}
+        startDate={hasStarted ? beamReadModel?.createdAt : null}
+        endDate={hasStarted ? beamReadModel?.scheduledEndDate : null}
       />
     </VStack>
   )
