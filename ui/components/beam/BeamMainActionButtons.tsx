@@ -31,6 +31,7 @@ const ActionButton = ({ isShrink, children, ...others }) => {
 
 export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
   const navigate = useNavigate()
+  const enableMeeting = process.env.NEXT_PUBLIC_ENABLE_MEETING === "true"
 
   return (
     <Stack
@@ -39,20 +40,23 @@ export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
       justify="center"
       {...rest}
     >
-      <ActionButton
-        leftIcon={
-          <Icon
-            as={FcConferenceCall}
-            w="23px"
-            h="23px"
-            ml={isShrink ? "110px" : "0px"}
-          />
-        }
-        onClick={() => navigate("/newmeeting")}
-        isShrink={isShrink}
-      >
-        <Text visibility={isShrink ? "hidden" : "visible"}>New Meeting</Text>
-      </ActionButton>
+      {enableMeeting && (
+        <ActionButton
+          leftIcon={
+            <Icon
+              as={FcConferenceCall}
+              w="23px"
+              h="23px"
+              ml={isShrink ? "110px" : "0px"}
+            />
+          }
+          onClick={() => navigate("/newmeeting")}
+          isShrink={isShrink}
+        >
+          <Text visibility={isShrink ? "hidden" : "visible"}>New Meeting</Text>
+        </ActionButton>
+      )}
+
       <ActionButton
         leftIcon={
           <GetPaidIcon
