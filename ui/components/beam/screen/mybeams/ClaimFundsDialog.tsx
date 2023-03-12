@@ -72,7 +72,7 @@ export const ClaimFundsDialog = ({
                 to claim funds.
               </Text>
 
-              <Stat pt="6px">
+              <Stat pt="6px" textAlign="center">
                 <StatLabel
                   py="6px"
                   color="black_2"
