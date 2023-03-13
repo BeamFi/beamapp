@@ -24,7 +24,6 @@ import { truncFloatDecimals } from "../../../../utils/number"
 
 import { useNavigate } from "react-router-dom"
 import { useInterval } from "../../useInterval"
-import log from "../../../../utils/log"
 
 type Props = {
   beamEscrowContract: any
