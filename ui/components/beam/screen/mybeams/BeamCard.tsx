@@ -17,7 +17,8 @@ import { EscrowContractClass } from "../../../../model/class/EscrowContractClass
 import { PrincipalInfo } from "../../../wallet/PrincipalInfo"
 import {
   convertCandidDateToJSDate,
-  convertCandidDateToUnixTimestampMs
+  convertCandidDateToUnixTimestampMs,
+  unwrapVariant
 } from "../../../../model/TypeConversion"
 import { truncFloatDecimals } from "../../../../utils/number"
 
@@ -62,7 +63,7 @@ export const BeamCard = ({
 
   const beamRate = () => {
     if (beamReadModel == null) return "??"
-    const startDate = convertCandidDateToJSDate(beamReadModel.createdAt)
+    const startDate = convertCandidDateToJSDate(beamReadModel.startDate)
     const dueDate = convertCandidDateToJSDate(beamReadModel.scheduledEndDate)
     const rate = escrowObject.beamRatePerHr(
       startDate.getTime(),
@@ -83,15 +84,19 @@ export const BeamCard = ({
   const isAllDataReady =
     isOpenDetailEnabled && beamEscrowContract != null && beamReadModel != null
 
+  const hasStarted = unwrapVariant(beamReadModel?.status) !== "created"
+  const refreshRate = hasStarted ? progressRefreshRate : 0
+
   useInterval(() => {
-    if (beamReadModel) {
+    if (beamReadModel != null && refreshRate > 0) {
       const startTimestamp = convertCandidDateToUnixTimestampMs(
-        beamReadModel.createdAt
+        beamReadModel.startDate
       )
       const dueTimestamp = convertCandidDateToUnixTimestampMs(
         beamReadModel.scheduledEndDate
       )
       const totalDurationMs = dueTimestamp - startTimestamp
+
       const now = Date.now()
       const compareDate = now < dueTimestamp ? now : dueTimestamp
       const elapsedTime = compareDate - startTimestamp // time that has elapsed so far
@@ -138,8 +143,8 @@ export const BeamCard = ({
           escrowObject.initialDeposit() * (progressPercentage / 100)
         }
         w="90%"
-        startDate={beamReadModel?.createdAt}
-        endDate={beamReadModel?.scheduledEndDate}
+        startDate={hasStarted ? beamReadModel?.startDate : null}
+        endDate={hasStarted ? beamReadModel?.scheduledEndDate : null}
       />
     </VStack>
   )

@@ -65,6 +65,12 @@ export const MyBeamsActivity = ({
         return newMap
       }, {})
       setBeamMap(myBeamMap)
+
+      // filter out myEscrows that are not in myBeamMap
+      const myEscrowsWithBeam = myEscrows.filter(
+        escrow => myBeamMap[escrow.id] != null
+      )
+      setEscrows(myEscrowsWithBeam)
     } catch (error) {
       log.error(error)
     } finally {
@@ -90,23 +96,29 @@ export const MyBeamsActivity = ({
           <BeamOutTextIcon w="96px" h="35px" />
         </HStack>
         {isLoading && <StandardSpinner />}
-        {escrows.map((escrow, index) => (
-          <BeamCard
-            key={index}
-            beamEscrowContract={escrow}
-            myPrincipalId={myPrincipalId}
-            beamReadModel={beamMap[escrow.id]}
-            progressRefreshRate={1000}
-            setBeamReadModel={setBeamReadModel}
-            setBeamEscrowContract={setBeamEscrowContract}
-            transition="width 0.5s, height 0.5s, box-shadow 0.5s"
-            _hover={{
-              boxShadow: "xl",
-              width: "96%",
-              height: "142px"
-            }}
-          />
-        ))}
+        {beamMap != null &&
+          escrows != null &&
+          escrows.map((escrow, index) => {
+            const beamReadModel = beamMap[escrow.id]
+
+            return (
+              <BeamCard
+                key={index}
+                beamEscrowContract={escrow}
+                myPrincipalId={myPrincipalId}
+                beamReadModel={beamReadModel}
+                progressRefreshRate={1000}
+                setBeamReadModel={setBeamReadModel}
+                setBeamEscrowContract={setBeamEscrowContract}
+                transition="width 0.5s, height 0.5s, box-shadow 0.5s"
+                _hover={{
+                  boxShadow: "xl",
+                  width: "96%",
+                  height: "142px"
+                }}
+              />
+            )
+          })}
       </BeamVStack>
       <BeamMainActionButtons
         py="20px"

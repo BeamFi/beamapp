@@ -29,12 +29,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const initLoading = 1
 
   useEffect(() => {
+    const enableSplitbee = process.env.NEXT_PUBLIC_ENABLE_SPLITFEE === "true"
+
     async function loadSplitbee() {
       const splitbee = (await import("@splitbee/web")).default
       splitbee.init({})
     }
 
-    loadSplitbee()
+    if (enableSplitbee) loadSplitbee()
 
     router.events.on("routeChangeStart", () => NProgress.start())
     router.events.on("routeChangeComplete", () => NProgress.done())

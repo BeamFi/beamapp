@@ -50,8 +50,9 @@ specifiers:
   process: ^0.11.10
   react: ^18.0.0
   react-dom: ^18.0.0
-  react-icons: ^4.4.0
+  react-icons: ^4.7.1
   react-router-dom: ^6.3.0
+  react-wrap-balancer: ^0.4.0
   swr: ^2.0.4
   typescript: ^4.9.5
   underscore: ^1.13.4
@@ -95,6 +96,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.7.1_react@18.2.0
   react-router-dom: 6.8.2_biqbaboplfbrettd7655fr4n2y
+  react-wrap-balancer: 0.4.0_react@18.2.0
   swr: 2.0.4_react@18.2.0
   underscore: 1.13.6
   util: 0.12.5
@@ -5526,6 +5528,14 @@ packages:
       invariant: 2.2.4
       react: 18.2.0
       tslib: 2.5.0
+    dev: false
+
+  /react-wrap-balancer/0.4.0_react@18.2.0:
+    resolution: {integrity: sha512-MUsROihHd7bFHCo9kCOifKDYBEZPgKTyGvfa8RcwRQKtT2cL7Um9Cc8A7GvuT8t3np7LAGsEkzdEyJdKrr5lVQ==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react/18.2.0:

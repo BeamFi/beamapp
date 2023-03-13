@@ -4,7 +4,7 @@ import { ratePerHr } from "../../utils/date"
 import { e8sToHuman } from "../../utils/e8s"
 import { convertCandidDateToJSDate, unwrapVariant } from "../TypeConversion"
 
-import { type EscrowContract } from "../../declarations/escrowpayment/escrowpayment.did"
+import { type EscrowContract } from "../../declarations/beamescrow/beamescrow.did"
 
 export class EscrowContractClass {
   candidModel: EscrowContract

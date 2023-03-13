@@ -1,0 +1,147 @@
+type Tokens = record {e8s: nat64;};
+type TokenType__1 = 
+ variant {
+   btc;
+   icp;
+ };
+type TokenType = 
+ variant {
+   btc;
+   icp;
+ };
+type TokenAmount__1 = nat64;
+type TokenAmount = nat64;
+type Time__1 = int;
+type Time = int;
+type Satoshi = nat64;
+type Result_3 = 
+ variant {
+   err: ErrorCode;
+   ok: EscrowId;
+ };
+type Result_2 = 
+ variant {
+   err: ErrorCode__1;
+   ok: BeamEscrowContract;
+ };
+type Result_1 = 
+ variant {
+   err: ErrorCode__1;
+   ok: text;
+ };
+type Result = 
+ variant {
+   err: ErrorCode;
+   ok: text;
+ };
+type EscrowPaymentType__1 = 
+ variant {
+   beam;
+   lumpSum;
+ };
+type EscrowPaymentType = 
+ variant {
+   beam;
+   lumpSum;
+ };
+type EscrowId__1 = nat32;
+type EscrowId = nat32;
+type EscrowContract = 
+ record {
+   buyerAccountIdentifier: opt AccountIdentifier;
+   buyerClaimable: TokenAmount__1;
+   buyerClaimed: TokenAmount__1;
+   buyerPrincipal: principal;
+   createdAt: Time;
+   creatorAccountIdentifier: opt AccountIdentifier;
+   creatorClaimable: TokenAmount__1;
+   creatorClaimed: TokenAmount__1;
+   creatorPrincipal: principal;
+   escrowAmount: TokenAmount__1;
+   id: EscrowId__1;
+   initialDeposit: TokenAmount__1;
+   paymentType: EscrowPaymentType;
+   tokenType: TokenType__1;
+   updatedAt: Time;
+ };
+type ErrorCode__1 = 
+ variant {
+   escrow_bitcoin_create_transfer_failed: text;
+   escrow_contract_not_found: text;
+   escrow_contract_verification_failed: text;
+   escrow_invalid_access: text;
+   escrow_invalid_accountid: text;
+   escrow_invalid_allocations: text;
+   escrow_invalid_token_type: text;
+   escrow_payment_not_found: text;
+   escrow_token_owned_not_matched: text;
+   escrow_token_transfer_failed: text;
+ };
+type ErrorCode = 
+ variant {
+   escrow_beam_failed: text;
+   escrow_contract_not_found: text;
+   escrow_contract_verification_failed: text;
+   escrow_payment_not_found: text;
+   escrow_token_owned_not_matched: text;
+ };
+type CanisterMemoryInfo = 
+ record {
+   rts_heap_size: nat;
+   rts_max_live_size: nat;
+   rts_memory_size: nat;
+   rts_reclaimed: nat;
+   rts_total_allocation: nat;
+   rts_version: text;
+ };
+type BlockIndex = nat64;
+type BitcoinAddress = text;
+type BeamRelationObjId = text;
+type BeamEscrowContract = 
+ record {
+   buyerClaimable: TokenAmount__1;
+   buyerClaimed: TokenAmount__1;
+   buyerPrincipal: principal;
+   createdAt: Time;
+   creatorClaimable: TokenAmount__1;
+   creatorClaimed: TokenAmount__1;
+   creatorPrincipal: principal;
+   escrowAmount: TokenAmount__1;
+   id: EscrowId__1;
+   initialDeposit: TokenAmount__1;
+   tokenType: TokenType__1;
+   updatedAt: Time;
+ };
+type Allocation = nat64;
+type AccountIdentifier__1 = blob;
+type AccountIdentifier = blob;
+service : {
+  buyerClaim: (EscrowId, TokenType, AccountIdentifier__1) -> (Result_1);
+  canisterAccount: () -> (AccountIdentifier__1) query;
+  canisterBalance: (TokenType) -> (Tokens);
+  canisterVersion: () -> (nat32) query;
+  createBTCEscrow: (TokenAmount, EscrowPaymentType__1, Time__1, principal,
+   principal) -> (Result_3);
+  createBeamEscrow: (TokenAmount, BlockIndex, Time__1, principal,
+   principal) -> (Result_3);
+  createRelationBeamEscrow: (TokenAmount, BlockIndex, Time__1, principal,
+   principal, BeamRelationObjId) -> (Result_3);
+  creatorClaim: (EscrowId, TokenType, AccountIdentifier__1) -> (Result_1);
+  creatorClaimBTC: (EscrowId, TokenType, BitcoinAddress) -> (Result_1);
+  creatorClaimByPrincipal: (EscrowId, TokenType, principal) -> (Result_1);
+  getActorBalance: () -> (nat) query;
+  getBitcoinBalance: () -> (Satoshi);
+  getBitcoinP2pkhAddress: () -> (BitcoinAddress);
+  getCanisterMemoryInfo: () -> (CanisterMemoryInfo) query;
+  getManager: () -> (principal) query;
+  getOtherBitcoinBalance: (text) -> (Satoshi);
+  healthCheck: () -> (bool) query;
+  loadAllEscrow: (TokenType) -> (vec EscrowContract) query;
+  queryMyBeamEscrow: (EscrowId) -> (Result_2) query;
+  queryMyBeamEscrowBySender: (EscrowId, principal) -> (Result_2) query;
+  queryMyBeams: () -> (vec BeamEscrowContract) query;
+  sumAllEscrowTokens: (TokenType) -> (TokenAmount) query;
+  updateEscrowAllocation: (EscrowId, Allocation, Allocation, Allocation) ->
+   (Result_1);
+  verifyBTCDeposit: (TokenAmount) -> (Result);
+}

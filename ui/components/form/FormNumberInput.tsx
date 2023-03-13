@@ -34,6 +34,7 @@ export const FormNumberInput = forwardRef((props: any, ref: any) => {
     token,
     TokenIcon,
     setFieldValue,
+    isReadOnly,
     ...rest
   } = props
 
@@ -47,6 +48,7 @@ export const FormNumberInput = forwardRef((props: any, ref: any) => {
     <FormControl
       isRequired={isRequired}
       isInvalid={isInvalid}
+      isReadOnly={isReadOnly}
       w={{ base: "300px", md: "324px", lg: "364px", xl: "394px" }}
       {...rest}
     >
@@ -80,38 +82,44 @@ export const FormNumberInput = forwardRef((props: any, ref: any) => {
             fontSize={inputFontSize}
             color={inputFontColor}
           />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
+          {!isReadOnly && (
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          )}
         </NumberInput>
-        <Slider
-          min={min}
-          max={max}
-          focusThumbOnChange={false}
-          value={field.value}
-          onChange={onChange}
-          onMouseEnter={() => setShowTooltip(true)}
-          onMouseLeave={() => setShowTooltip(false)}
-          ml="6px"
-        >
-          <SliderTrack bg={trackColor}>
-            <SliderFilledTrack bg={themeColor} />
-          </SliderTrack>
-          <StandardTooltip
-            hasArrow
-            bg={themeColor}
-            color="white"
-            placement="top"
-            isOpen={showTooltip}
-            label={`${field.value} ${token}`}
-            p="8px"
+
+        {!isReadOnly && (
+          <Slider
+            min={min}
+            max={max}
+            focusThumbOnChange={false}
+            value={field.value}
+            onChange={onChange}
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            ml="6px"
+            isReadOnly={isReadOnly}
           >
-            <SliderThumb boxSize={9}>
-              <TokenIcon h="30px" w="41px" mr="0px" />
-            </SliderThumb>
-          </StandardTooltip>
-        </Slider>
+            <SliderTrack bg={trackColor}>
+              <SliderFilledTrack bg={themeColor} />
+            </SliderTrack>
+            <StandardTooltip
+              hasArrow
+              bg={themeColor}
+              color="white"
+              placement="top"
+              isOpen={showTooltip}
+              label={`${field.value} ${token}`}
+              p="8px"
+            >
+              <SliderThumb boxSize={9}>
+                <TokenIcon h="30px" w="41px" mr="0px" />
+              </SliderThumb>
+            </StandardTooltip>
+          </Slider>
+        )}
       </InputGroup>
       <FormErrorMessage>{errorMesg}</FormErrorMessage>
     </FormControl>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 
 import {
   Box,
+  Heading,
   HStack,
   Link,
   ListItem,
@@ -17,11 +18,11 @@ import {
   useToast,
   VStack
 } from "@chakra-ui/react"
-
+import Balancer from "react-wrap-balancer"
 import moment from "moment"
 
 import { CheckIcon, ExternalLinkIcon, LinkIcon } from "@chakra-ui/icons"
-import { ICLogo, LetsGetYourPaidIcon } from "../../../icon"
+import { ICLogo } from "../../../icon"
 
 import { Field, Form, Formik } from "formik"
 import { FormNumberInput } from "../../form/FormNumberInput"
@@ -29,7 +30,7 @@ import { FormInput } from "../../form/FormInput"
 
 import { BeamGradientActionButton } from "../common/BeamGradientActionButton"
 
-import { BeamCreateLinkSchema } from "../../../schema/beamschema"
+import { BeamMeetingCreateLinkSchema } from "../../../schema/beamschema"
 import {
   BeamCreateLinkConfig,
   BeamSupportedTokenType
@@ -45,32 +46,72 @@ import { BeamHeading } from "../common/BeamHeading"
 import Head from "next/head"
 import { BeamVStack } from "../common/BeamVStack"
 
+const FormTitle = ({ children, ...rest }) => {
+  return (
+    <BeamHeading fontSize={{ base: "14px", md: "20px" }} {...rest}>
+      {children}
+    </BeamHeading>
+  )
+}
+
+const GradientHeading = ({ children, ...rest }) => {
+  return (
+    <Heading bg="gradient.purple.2" bgClip="text" size="xl" {...rest}>
+      <Balancer>{children}</Balancer>
+    </Heading>
+  )
+}
+
 const HeadlineStack = () => {
   return (
     <VStack
-      pt="60px"
+      pt={{ base: "10px", md: "60px" }}
       align={{ base: "center", md: "flex-start" }}
-      spacing="20px"
+      spacing="10px"
+      maxW={{ base: "100%", md: "40%" }}
     >
-      <LetsGetYourPaidIcon
-        w={{ base: "220px", md: "300px", lg: "380px", xl: "513px" }}
-        h={{ base: "70px", md: "96px", lg: "122px", xl: "165px" }}
-      />
+      <GradientHeading
+        px={{ base: "0px", md: "30px" }}
+        py={{ base: "8px", md: "16px" }}
+        w={{ base: "unset", md: "100%" }}
+      >
+        Power Zoom Meeting with streaming payment
+      </GradientHeading>
       <OrderedList
         spacing={{ base: "10px", md: "16px" }}
         fontSize={{ base: "14px", md: "18px" }}
         px="30px"
         color="dark_black"
       >
-        <ListItem>Fill out the payment details</ListItem>
-        <ListItem>Copy your unique Beam link</ListItem>
-        <ListItem>Send your unique Beam link to your payer!</ListItem>
+        <ListItem>
+          Fill out the payment details and the Zoom Meeting details
+        </ListItem>
+        <ListItem>
+          Submit the form and get your unique Beam Meeting link
+        </ListItem>
+        <ListItem>
+          Send your unique Beam Meeting link to the meeting participants
+        </ListItem>
+        <ListItem>
+          Go to Zoom Marketplace to{" "}
+          <Link
+            href="https://zoom.us/oauth/authorize?response_type=code&client_id=Vy82pQwsRVCMXQEz6BaWDQ&redirect_uri=https://beamfi.app"
+            isExternal
+          >
+            add Beam Meeting app to your Zoom account
+          </Link>{" "}
+          so that we can pay you in real time when the meeting started
+        </ListItem>
+        <ListItem>
+          When your participants have joined the meeting, start your meeting as
+          host and get paid in real time as you speak!
+        </ListItem>
       </OrderedList>
     </VStack>
   )
 }
 
-export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
+export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
   const initLoading = 1
   const toast = useToast()
 
@@ -87,17 +128,17 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initLoading])
 
-  const defaultNumDays = 7
-  const [numDays, setNumDays] = useState(defaultNumDays)
+  const defaultNumMins = 30
+  const [numMins, setNumMins] = useState(defaultNumMins)
 
   const [beamOutId, setBeamOutId] = useState(null)
 
   const endDateDesc = () => {
-    return moment().add(numDays, "days").format("MMM Do YYYY, h:mm:ss a")
+    return moment().add(numMins, "minutes").format("MMM Do YYYY, h:mm:ss a")
   }
 
   const beamOutLink = id => {
-    return `${window.location.origin}/beamout/${id}`
+    return `${window.location.origin}/meeting/${id}`
   }
 
   const showEndDate = false
@@ -132,7 +173,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
   }
 
   const submit = async (values, actions) => {
-    const { amount, recipient } = values
+    const { amount, recipient, meetingId, meetingPassword } = values
 
     try {
       const isValid = await validateAndConfirm(values)
@@ -144,15 +185,17 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
 
       const e8sAmount = humanToE8s(amount)
       const tokenType = convertToVariant(BeamSupportedTokenType.icp)
-      const recipientPrincipal = Principal.fromText(recipient)
-      const numMins = numDays * 24 * 60
+
+      const recipientPrincipal: Principal = Principal.fromText(recipient)
 
       const beamOutService = await makeBeamOutActor()
-      const result = await beamOutService.createBeamOut(
+      const result = await beamOutService.createBeamOutMeeting(
         e8sAmount,
         tokenType,
         recipientPrincipal,
-        numMins
+        numMins,
+        meetingId,
+        meetingPassword
       )
 
       if (result.ok) {
@@ -211,11 +254,11 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
   return (
     <Box h="100vh">
       <Stack
-        spacing={{ base: "20px", md: "120px" }}
+        spacing={{ base: "20px", md: "40px", lg: "100px" }}
         w="100%"
         color="dark_black"
         fontSize="16px"
-        pt={{ base: "90px", md: "140px" }}
+        pt={{ base: "80px", md: "100px" }}
         direction={{ base: "column", md: "row" }}
         justifyContent="center"
         px={{ base: "14px", md: "38px" }}
@@ -227,11 +270,13 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
         <BeamVStack>
           <Formik
             initialValues={{
-              amount: 10,
+              amount: 1,
               recipient: "",
+              meetingId: "",
+              meetingPassword: "",
               isConfirmed: false
             }}
-            validationSchema={BeamCreateLinkSchema}
+            validationSchema={BeamMeetingCreateLinkSchema}
             onSubmit={submit}
             enableReinitialize
           >
@@ -241,8 +286,8 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                   bgColor="white"
                   borderRadius="14px"
                   maxW="700px"
-                  spacing={{ base: "24px", md: "32px" }}
-                  py="24px"
+                  spacing={{ base: "16px", md: "16px" }}
+                  py="10px"
                 >
                   <Field name="amount">
                     {({ field, form }) => (
@@ -261,7 +306,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         themeColor="black_5"
                         trackColor="black_gray"
                       >
-                        <BeamHeading>ICP Amount:</BeamHeading>
+                        <FormTitle>ICP Amount:</FormTitle>
                       </FormNumberInput>
                     )}
                   </Field>
@@ -280,7 +325,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.recipient}
                       >
-                        <BeamHeading>Your Plug Wallet:</BeamHeading>
+                        <FormTitle>Your Plug Wallet:</FormTitle>
                       </FormInput>
                     )}
                   </Field>
@@ -290,14 +335,14 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                     w={{ base: "95%", md: "80%" }}
                     spacing="12px"
                   >
-                    <BeamHeading textAlign="left">Duration:</BeamHeading>
+                    <FormTitle textAlign="left">Duration:</FormTitle>
 
                     <HStack w="100%">
                       <Text
                         color="black_5"
                         fontSize={{ base: "16px", md: "18px" }}
                       >
-                        {numDays} Days
+                        {numMins} Minutes
                       </Text>
                       <Spacer />
                       {showEndDate && (
@@ -312,10 +357,10 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                     </HStack>
 
                     <Slider
-                      defaultValue={defaultNumDays}
-                      onChange={setNumDays}
+                      defaultValue={defaultNumMins}
+                      onChange={setNumMins}
                       min={1}
-                      max={90}
+                      max={180}
                       step={1}
                     >
                       <SliderTrack bg="black_gray">
@@ -326,7 +371,46 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                     </Slider>
                   </VStack>
 
-                  <Box w="100%" textAlign="center">
+                  <Field name="meetingId">
+                    {({ field, form }) => (
+                      <FormInput
+                        id="meetingId"
+                        field={field}
+                        inputFontSize={{ base: "sm", md: "md" }}
+                        themeColor="black_5"
+                        placeholder="Zoom Meeting ID"
+                        w={{ base: "95%", md: "80%" }}
+                        isInvalid={
+                          form.errors.meetingId && form.touched.meetingId
+                        }
+                        errorMesg={form.errors.meetingId}
+                      >
+                        <FormTitle>Zoom Meeting ID:</FormTitle>
+                      </FormInput>
+                    )}
+                  </Field>
+
+                  <Field name="meetingPassword">
+                    {({ field, form }) => (
+                      <FormInput
+                        id="meetingPassword"
+                        field={field}
+                        inputFontSize={{ base: "sm", md: "md" }}
+                        themeColor="black_5"
+                        placeholder="Zoom Meeting Password"
+                        w={{ base: "95%", md: "80%" }}
+                        isInvalid={
+                          form.errors.meetingPassword &&
+                          form.touched.meetingPassword
+                        }
+                        errorMesg={form.errors.meetingPassword}
+                      >
+                        <FormTitle>Zoom Meeting Password:</FormTitle>
+                      </FormInput>
+                    )}
+                  </Field>
+
+                  <Box w="100%" textAlign="center" pt="12px">
                     {beamOutId != null && (
                       <Text pt="10px" pb="18px">
                         Link Created:{" "}
@@ -340,7 +424,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                       title={
                         beamOutId != null
                           ? "Copy Link"
-                          : "Create Unique Beam Link"
+                          : "Create Beam Meeting Link"
                       }
                       textSize={{ base: "15px", md: "20px" }}
                       textWeight="semibold"

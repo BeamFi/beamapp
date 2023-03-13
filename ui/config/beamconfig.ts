@@ -1,4 +1,4 @@
-import { canisterId as escrowPaymentCanisterId } from "../declarations/escrowpayment"
+import { canisterId as escrowPaymentCanisterId } from "../declarations/beamescrow"
 
 export const BeamCreateLinkConfig = {
   BudgetMinNumTokens: 0.001,

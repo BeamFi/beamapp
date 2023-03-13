@@ -30,7 +30,15 @@ module.exports = removeImports({
         destination: "/"
       },
       {
+        source: "/newmeeting",
+        destination: "/"
+      },
+      {
         source: "/beamout/:path*",
+        destination: "/"
+      },
+      {
+        source: "/meeting/:path*",
         destination: "/"
       },
       {

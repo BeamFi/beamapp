@@ -51,9 +51,11 @@ import {
 import { e8sToHuman, humanToE8s } from "../../../utils/e8s"
 import {
   convertDateToCandid,
-  unwrapVariant
+  unwrapVariant,
+  unwrapVariantValue
 } from "../../../model/TypeConversion"
-import { canisterId as escrowPaymentCanisterId } from "../../../declarations/escrowpayment"
+
+import { canisterId as escrowPaymentCanisterId } from "../../../declarations/beamescrow"
 
 import log from "../../../utils/log"
 import { useNavigate, useParams } from "react-router-dom"
@@ -63,8 +65,9 @@ import { connectPlugForToken, hasSession } from "../../auth/provider/plug"
 import { principalToAccountIdentifier } from "../../../utils/account-identifier"
 import { AuthProvider } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
-import { ratePerHr } from "../../../utils/date"
+import { ratePerHr, ratePerMin } from "../../../utils/date"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
+import { BeamOutModelV4 } from "../../../declarations/beamout/beamout.did"
 
 const HeadlineStack = () => {
   return (
@@ -91,6 +94,100 @@ const HeadlineStack = () => {
   )
 }
 
+const MinDuration = ({
+  numMins,
+  setNumMins,
+  showEndDate,
+  endDateDesc,
+  isReadOnly
+}) => {
+  return (
+    <VStack align="start" w={{ base: "95%", md: "80%" }} spacing="12px">
+      <BeamHeading textAlign="left">Duration:</BeamHeading>
+
+      <HStack w="100%">
+        <Text color="black_5" fontSize={{ base: "16px", md: "18px" }}>
+          {numMins} Minutes
+        </Text>
+        <Spacer />
+        {showEndDate && (
+          <Text
+            color="black_5"
+            fontSize={{ base: "14px", md: "16px" }}
+            fontWeight="light"
+          >
+            (Ending: {endDateDesc()})
+          </Text>
+        )}
+      </HStack>
+
+      {!isReadOnly && (
+        <Slider
+          defaultValue={numMins}
+          onChange={setNumMins}
+          min={1}
+          max={90}
+          step={1}
+          isReadOnly={isReadOnly}
+        >
+          <SliderTrack bg="black_gray">
+            <Box position="relative" right={10} />
+            <SliderFilledTrack bg="black_5" />
+          </SliderTrack>
+          <SliderThumb boxSize={6} />
+        </Slider>
+      )}
+    </VStack>
+  )
+}
+
+const DayDuration = ({
+  numDays,
+  setNumDays,
+  showEndDate,
+  endDateDesc,
+  isReadOnly
+}) => {
+  return (
+    <VStack align="start" w={{ base: "95%", md: "80%" }} spacing="12px">
+      <BeamHeading textAlign="left">Duration:</BeamHeading>
+
+      <HStack w="100%">
+        <Text color="black_5" fontSize={{ base: "16px", md: "18px" }}>
+          {numDays} Days
+        </Text>
+        <Spacer />
+        {showEndDate && (
+          <Text
+            color="black_5"
+            fontSize={{ base: "14px", md: "16px" }}
+            fontWeight="light"
+          >
+            (Ending: {endDateDesc()})
+          </Text>
+        )}
+      </HStack>
+
+      {!isReadOnly && (
+        <Slider
+          defaultValue={numDays}
+          onChange={setNumDays}
+          min={1}
+          max={30}
+          step={1}
+          isReadOnly={isReadOnly}
+        >
+          <SliderTrack bg="black_gray">
+            <Box position="relative" right={10} />
+            <SliderFilledTrack bg="black_5" />
+          </SliderTrack>
+          <SliderThumb boxSize={6} />
+        </Slider>
+      )}
+    </VStack>
+  )
+}
+
 type BeamOutInProps = {
   setBgColor?: Function
   setHashtags?: Function
@@ -100,12 +197,19 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
   const { beamOutId } = useParams()
 
   const initLoading = 1
-  const defaultNumDays = 7
-  const defaultAmount = 10
+  const defaultNumMins = 30
+  const defaultAmount = 1
 
-  const [numDays, setNumDays] = useState(defaultNumDays)
+  const [numMins, setNumMins] = useState(defaultNumMins)
   const [amount, setAmount] = useState(defaultAmount)
+  const [meetingModel, setMeetingModel] = useState(null)
   const [recipient, setRecipient] = useState("")
+
+  const numDays = numMins / (24 * 60)
+
+  const setNumDays = numDays => {
+    setNumMins(numDays * 24 * 60)
+  }
 
   const {
     isOpen: isSelectAuthOpen,
@@ -137,8 +241,16 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       const result = await beamOutService.loadBeamOutById(Number(id))
 
       if (result.ok) {
-        const { durationNumDays, recipient, tokenType, amount } = result.ok
+        const {
+          durationNumMins,
+          recipient,
+          tokenType,
+          amount,
+          beamOutType
+        }: BeamOutModelV4 = result.ok
         const tokenTypeString = unwrapVariant(tokenType)
+        const myMeetingModel = unwrapVariantValue(beamOutType)
+        setMeetingModel(myMeetingModel)
 
         if (tokenTypeString != BeamSupportedTokenType.icp) {
           throw new Error(`Unsupported token type: ${tokenTypeString}`)
@@ -146,7 +258,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
 
         setAmount(e8sToHuman(amount))
         setRecipient(recipient.toString())
-        setNumDays(Number(durationNumDays))
+        setNumMins(Number(durationNumMins))
       } else if (result.err) {
         log.error(result.err)
         throw new Error(result.err)
@@ -159,7 +271,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
   }
 
   const endDateDesc = () => {
-    return moment().add(numDays, "days").format("MMM Do YYYY, h:mm:ss a")
+    return moment().add(numMins, "minutes").format("MMM Do YYYY, h:mm:ss a")
   }
 
   const showEndDate = false
@@ -183,6 +295,30 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
 
   const cancelLogin = () => {
     setLoading(false)
+  }
+
+  const gotoMeeting = () => {
+    const meetingHost = process.env.NEXT_PUBLIC_MEETING_HOST
+    const { meetingId, meetingPassword } = meetingModel
+    const userName = "Henry"
+
+    window.location.assign(
+      `${meetingHost}?meetingId=${meetingId}&meetingPassword=${meetingPassword}&userName=${userName}`
+    )
+  }
+
+  const gotoMyBeam = () => {
+    navigate("/mybeams")
+  }
+
+  const isMeeting = meetingModel != null
+
+  const postBeamCreatedSuccess = () => {
+    if (isMeeting) {
+      gotoMeeting()
+    } else {
+      gotoMyBeam()
+    }
   }
 
   const submit = async (values, actions) => {
@@ -249,7 +385,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       const buyerPrincipal = Principal.fromText(myPrincipalId)
       const creatorPrincipal = Principal.fromText(recipient)
       const dueDate = moment()
-      dueDate.add(numDays, "days")
+      dueDate.add(numMins, "minutes")
       const dueDateUTC = moment(dueDate).utc().toDate()
 
       // Create request transfer params
@@ -277,13 +413,24 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
         "info"
       )
 
-      result = await escrowService.createBeamEscrow(
-        escrowAmount,
-        blockIndex,
-        convertDateToCandid(dueDateUTC),
-        buyerPrincipal,
-        creatorPrincipal
-      )
+      if (isMeeting) {
+        result = await escrowService.createRelationBeamEscrow(
+          escrowAmount,
+          blockIndex,
+          convertDateToCandid(dueDateUTC),
+          buyerPrincipal,
+          creatorPrincipal,
+          meetingModel.meetingId
+        )
+      } else {
+        result = await escrowService.createBeamEscrow(
+          escrowAmount,
+          blockIndex,
+          convertDateToCandid(dueDateUTC),
+          buyerPrincipal,
+          creatorPrincipal
+        )
+      }
 
       if (result.ok) {
         showMediumToast(
@@ -293,8 +440,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
           "success"
         )
 
-        navigate("/mybeams")
-
+        postBeamCreatedSuccess()
         return
       }
 
@@ -322,13 +468,13 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
     }
   }
 
-  const beamRate = totalTokens => {
+  const beamRate = (totalTokens, rateFunc) => {
     const startDateInMillSecs = moment().valueOf()
     const dueDate = moment()
-    dueDate.add(numDays, "days")
+    dueDate.add(numMins, "minutes")
     const dueDateInMilliSecs = dueDate.valueOf()
 
-    return ratePerHr(startDateInMillSecs, dueDateInMilliSecs, totalTokens)
+    return rateFunc(startDateInMillSecs, dueDateInMilliSecs, totalTokens)
   }
 
   return (
@@ -384,6 +530,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                         TokenIcon={ICLogo}
                         themeColor="black_5"
                         trackColor="black_gray"
+                        isReadOnly={isMeeting}
                       >
                         <BeamHeading>ICP Amount:</BeamHeading>
                       </FormNumberInput>
@@ -403,52 +550,32 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                           form.errors.recipient && form.touched.recipient
                         }
                         errorMesg={form.errors.recipient}
+                        isReadOnly={isMeeting}
                       >
                         <BeamHeading>Recipient Plug Wallet:</BeamHeading>
                       </FormInput>
                     )}
                   </Field>
 
-                  <VStack
-                    align="start"
-                    w={{ base: "95%", md: "80%" }}
-                    spacing="12px"
-                  >
-                    <BeamHeading textAlign="left">Duration:</BeamHeading>
+                  {isMeeting && (
+                    <MinDuration
+                      numMins={numMins}
+                      setNumMins={setNumMins}
+                      showEndDate={showEndDate}
+                      endDateDesc={endDateDesc}
+                      isReadOnly={isMeeting}
+                    />
+                  )}
 
-                    <HStack w="100%">
-                      <Text
-                        color="black_5"
-                        fontSize={{ base: "16px", md: "18px" }}
-                      >
-                        {numDays} Days
-                      </Text>
-                      <Spacer />
-                      {showEndDate && (
-                        <Text
-                          color="black_5"
-                          fontSize={{ base: "14px", md: "16px" }}
-                          fontWeight="light"
-                        >
-                          (Ending: {endDateDesc()})
-                        </Text>
-                      )}
-                    </HStack>
-
-                    <Slider
-                      defaultValue={numDays}
-                      onChange={setNumDays}
-                      min={1}
-                      max={90}
-                      step={1}
-                    >
-                      <SliderTrack bg="black_gray">
-                        <Box position="relative" right={10} />
-                        <SliderFilledTrack bg="black_5" />
-                      </SliderTrack>
-                      <SliderThumb boxSize={6} />
-                    </Slider>
-                  </VStack>
+                  {!isMeeting && (
+                    <DayDuration
+                      numDays={numDays}
+                      setNumDays={setNumDays}
+                      showEndDate={showEndDate}
+                      endDateDesc={endDateDesc}
+                      isReadOnly={isMeeting}
+                    />
+                  )}
 
                   <Box w="100%" textAlign="center">
                     <BeamActionButton
@@ -485,10 +612,22 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                         Cancel
                       </Button>
                     )}
-                    <Text color="gray_light2" pt="20px">
-                      Recipient will receive {beamRate(values.amount)} ICP/hour
-                      for {numDays} days ({values.amount} ICP total)
-                    </Text>
+
+                    {isMeeting && (
+                      <Text color="gray_light2" pt="20px">
+                        Recipient will receive{" "}
+                        {beamRate(values.amount, ratePerMin)} ICP/minute for{" "}
+                        {numMins} minutes ({values.amount} ICP total)
+                      </Text>
+                    )}
+
+                    {!isMeeting && (
+                      <Text color="gray_light2" pt="20px">
+                        Recipient will receive{" "}
+                        {beamRate(values.amount, ratePerHr)} ICP/hour for{" "}
+                        {numMins / 60} hours ({values.amount} ICP total)
+                      </Text>
+                    )}
                   </Box>
                 </VStack>
               </Form>

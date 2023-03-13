@@ -11,7 +11,26 @@ type Result_1 =
 type Result = 
  variant {
    err: ErrorCode;
-   ok: BeamOutModel;
+   ok: BeamOutModelV4;
+ };
+type HttpResponse = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   status_code: nat16;
+   upgrade: bool;
+ };
+type HttpRequest = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   method: text;
+   url: text;
+ };
+type HeaderField = 
+ record {
+   text;
+   text;
  };
 type ErrorCode = 
  variant {
@@ -19,20 +38,37 @@ type ErrorCode =
    invalid_id: text;
    invalid_recipient: text;
  };
-type BeamOutModel = 
+type BeamOutTypeV3 = 
+ variant {
+   meeting: BeamOutMeetingModelV3;
+   payment;
+ };
+type BeamOutModelV4 = 
  record {
    amount: TokenAmount;
+   beamOutType: BeamOutTypeV3;
    createdAt: Time;
-   durationNumDays: nat32;
+   durationNumMins: nat32;
    id: BeamOutId__1;
    recipient: principal;
    tokenType: TokenType;
    updatedAt: Time;
+ };
+type BeamOutMeetingString__1 = text;
+type BeamOutMeetingString = text;
+type BeamOutMeetingModelV3 = 
+ record {
+   meetingId: BeamOutMeetingString;
+   meetingPassword: text;
  };
 type BeamOutId__1 = nat32;
 type BeamOutId = nat32;
 service : {
   createBeamOut: (TokenAmount__1, TokenType__1, principal, nat32) ->
    (Result_1);
+  createBeamOutMeeting: (TokenAmount__1, TokenType__1, principal, nat32,
+   BeamOutMeetingString__1, text) -> (Result_1);
+  getActorBalance: () -> (nat) query;
+  http_request: (HttpRequest) -> (HttpResponse) query;
   loadBeamOutById: (BeamOutId) -> (Result) query;
 }

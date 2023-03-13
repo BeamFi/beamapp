@@ -5,7 +5,7 @@ import { VStack } from "@chakra-ui/react"
 export const BeamVStack = ({ children, ...rest }) => {
   return (
     <VStack
-      w={{ base: "95%", md: "95%", lg: "571px" }}
+      w={{ base: "100%", md: "100%", lg: "571px" }}
       boxShadow="-3px 5px 2px rgba(0, 0, 0, 0.75)"
       borderRadius="30px"
       bg="white"

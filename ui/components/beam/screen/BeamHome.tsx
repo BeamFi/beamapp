@@ -24,7 +24,7 @@ export const BeamHome = ({ setBgColor, setHashtags }) => {
       h="100vh"
       color="dark_black"
       fontSize="16px"
-      pb="260px"
+      pb={{ base: "100px", md: "260px" }}
       justifyContent="center"
     >
       <Head>

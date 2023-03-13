@@ -1,9 +1,11 @@
 import React from "react"
 
-import { HStack, Text } from "@chakra-ui/react"
+import { Stack, Text, Icon } from "@chakra-ui/react"
 import { BeamActionButton } from "./common/BeamActionButton"
 import { BeamOutIcon, GetPaidIcon } from "../../icon"
 import { useNavigate } from "react-router-dom"
+
+import { FcConferenceCall } from "react-icons/fc"
 
 const ActionButton = ({ isShrink, children, ...others }) => {
   return (
@@ -29,17 +31,32 @@ const ActionButton = ({ isShrink, children, ...others }) => {
 
 export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
   const navigate = useNavigate()
-
-  const navigateToBeamOut = () => {
-    navigate("/beamout")
-  }
-
-  const navigateToGetPaid = () => {
-    navigate("/getpaid")
-  }
+  const enableMeeting = process.env.NEXT_PUBLIC_ENABLE_MEETING === "true"
 
   return (
-    <HStack spacing="60px" justify="center" {...rest}>
+    <Stack
+      direction={{ base: "column", md: "row" }}
+      spacing={{ base: "30px", md: "60px" }}
+      justify="center"
+      {...rest}
+    >
+      {enableMeeting && (
+        <ActionButton
+          leftIcon={
+            <Icon
+              as={FcConferenceCall}
+              w="23px"
+              h="23px"
+              ml={isShrink ? "110px" : "0px"}
+            />
+          }
+          onClick={() => navigate("/newmeeting")}
+          isShrink={isShrink}
+        >
+          <Text visibility={isShrink ? "hidden" : "visible"}>New Meeting</Text>
+        </ActionButton>
+      )}
+
       <ActionButton
         leftIcon={
           <GetPaidIcon
@@ -47,9 +64,10 @@ export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
             h="23px"
             color="black_5"
             ml={isShrink ? "76px" : "0px"}
+            mb="4px"
           />
         }
-        onClick={navigateToGetPaid}
+        onClick={() => navigate("/getpaid")}
         isShrink={isShrink}
       >
         <Text visibility={isShrink ? "hidden" : "visible"}>Get Paid</Text>
@@ -63,11 +81,11 @@ export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
             ml={isShrink ? "88px" : "0px"}
           />
         }
-        onClick={navigateToBeamOut}
+        onClick={() => navigate("/beamout")}
         isShrink={isShrink}
       >
         <Text visibility={isShrink ? "hidden" : "visible"}>Beam Out</Text>
       </ActionButton>
-    </HStack>
+    </Stack>
   )
 }

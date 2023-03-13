@@ -14,7 +14,7 @@ import {
   createActor as createEscrowPaymentActor,
   canisterId as escrowPaymentCanisterId,
   idlFactory as escrowPaymentIdlFactory
-} from "../../declarations/escrowpayment"
+} from "../../declarations/beamescrow"
 
 import { makeIIActor, makeIILogout } from "./provider/makeIIActor"
 import { makePlugActor, makePlugLogout } from "./provider/makePlugActor"
