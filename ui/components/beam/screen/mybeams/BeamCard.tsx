@@ -24,6 +24,7 @@ import { truncFloatDecimals } from "../../../../utils/number"
 
 import { useNavigate } from "react-router-dom"
 import { useInterval } from "../../useInterval"
+import log from "../../../../utils/log"
 
 type Props = {
   beamEscrowContract: any
@@ -63,7 +64,7 @@ export const BeamCard = ({
 
   const beamRate = () => {
     if (beamReadModel == null) return "??"
-    const startDate = convertCandidDateToJSDate(beamReadModel.createdAt)
+    const startDate = convertCandidDateToJSDate(beamReadModel.startDate)
     const dueDate = convertCandidDateToJSDate(beamReadModel.scheduledEndDate)
     const rate = escrowObject.beamRatePerHr(
       startDate.getTime(),
@@ -84,25 +85,19 @@ export const BeamCard = ({
   const isAllDataReady =
     isOpenDetailEnabled && beamEscrowContract != null && beamReadModel != null
 
-  let refreshRate = progressRefreshRate
-  if (beamReadModel != null) {
-    const beamType = unwrapVariant(beamReadModel.beamType)
-    if (beamType === "relation") {
-      refreshRate = 0
-    }
-  }
-
   const hasStarted = unwrapVariant(beamReadModel?.status) !== "created"
+  const refreshRate = hasStarted ? progressRefreshRate : 0
 
   useInterval(() => {
     if (beamReadModel != null && refreshRate > 0) {
       const startTimestamp = convertCandidDateToUnixTimestampMs(
-        beamReadModel.createdAt
+        beamReadModel.startDate
       )
       const dueTimestamp = convertCandidDateToUnixTimestampMs(
         beamReadModel.scheduledEndDate
       )
       const totalDurationMs = dueTimestamp - startTimestamp
+
       const now = Date.now()
       const compareDate = now < dueTimestamp ? now : dueTimestamp
       const elapsedTime = compareDate - startTimestamp // time that has elapsed so far
@@ -149,7 +144,7 @@ export const BeamCard = ({
           escrowObject.initialDeposit() * (progressPercentage / 100)
         }
         w="90%"
-        startDate={hasStarted ? beamReadModel?.createdAt : null}
+        startDate={hasStarted ? beamReadModel?.startDate : null}
         endDate={hasStarted ? beamReadModel?.scheduledEndDate : null}
       />
     </VStack>
