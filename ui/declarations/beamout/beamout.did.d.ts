@@ -44,8 +44,10 @@ export type Result_1 = { 'ok' : BeamOutId } |
 export type Time = bigint;
 export type TokenAmount = bigint;
 export type TokenAmount__1 = bigint;
-export type TokenType = { 'icp' : null };
-export type TokenType__1 = { 'icp' : null };
+export type TokenType = { 'icp' : null } |
+  { 'xtc' : null };
+export type TokenType__1 = { 'icp' : null } |
+  { 'xtc' : null };
 export interface _SERVICE {
   'createBeamOut' : ActorMethod<
     [TokenAmount__1, TokenType__1, Principal, number],

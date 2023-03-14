@@ -81,9 +81,11 @@ export type Time__1 = bigint;
 export type TokenAmount = bigint;
 export type TokenAmount__1 = bigint;
 export type TokenType = { 'btc' : null } |
-  { 'icp' : null };
+  { 'icp' : null } |
+  { 'xtc' : null };
 export type TokenType__1 = { 'btc' : null } |
-  { 'icp' : null };
+  { 'icp' : null } |
+  { 'xtc' : null };
 export interface Tokens { 'e8s' : bigint }
 export interface _SERVICE {
   'buyerClaim' : ActorMethod<

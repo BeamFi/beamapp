@@ -1,5 +1,13 @@
-type TokenType__1 = variant {icp;};
-type TokenType = variant {icp;};
+type TokenType__1 = 
+ variant {
+   icp;
+   xtc;
+ };
+type TokenType = 
+ variant {
+   icp;
+   xtc;
+ };
 type TokenAmount__1 = nat64;
 type TokenAmount = nat64;
 type Time = int;

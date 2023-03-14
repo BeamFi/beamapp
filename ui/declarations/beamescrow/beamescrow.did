@@ -3,11 +3,13 @@ type TokenType__1 =
  variant {
    btc;
    icp;
+   xtc;
  };
 type TokenType = 
  variant {
    btc;
    icp;
+   xtc;
  };
 type TokenAmount__1 = nat64;
 type TokenAmount = nat64;
