@@ -50,3 +50,7 @@ export const TokenTypeUIData = {
     icon: XTCIcon
   }
 }
+
+export const XTC = {
+  CanisterId: "aanaa-xaaaa-aaaah-aaeiq-cai"
+}

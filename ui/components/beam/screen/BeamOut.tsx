@@ -35,6 +35,9 @@ import { FormNumberInput } from "../../form/FormNumberInput"
 import { FormInput } from "../../form/FormInput"
 import { BeamCreateLinkSchema } from "../../../schema/beamschema"
 
+// IDL
+import XTC_IDL from "../../../declarations/xtc/xtc.did"
+
 // Config
 import {
   BeamCreateConfig,
@@ -63,7 +66,7 @@ import { StandardSpinner } from "../../StandardSpinner"
 
 import { connectPlugForToken, hasSession } from "../../auth/provider/plug"
 import { principalToAccountIdentifier } from "../../../utils/account-identifier"
-import { AuthProvider, TokenTypeUIData } from "../../../config"
+import { AuthProvider, TokenTypeUIData, XTC } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr, ratePerMin } from "../../../utils/date"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
@@ -196,6 +199,7 @@ type BeamOutInProps = {
 
 export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
   const { beamOutId } = useParams()
+  const { icp, xtc } = BeamSupportedTokenType
 
   const initLoading = 1
   const defaultNumMins = 1440
@@ -211,9 +215,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
   const [amount, setAmount] = useState(defaultAmount)
 
   const [recipient, setRecipient] = useState("")
-  const [tokenType, setTokenType] = useState<BeamSupportedTokenType>(
-    BeamSupportedTokenType.icp
-  )
+  const [tokenType, setTokenType] = useState<BeamSupportedTokenType>(icp)
   const [isFormReadonly, setFormReadonly] = useState(false)
 
   const tokenName = tokenType.toUpperCase()
@@ -332,6 +334,44 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
     }
   }
 
+  const requestICPTransfer = async escrowAmount => {
+    // Create request transfer params
+    const escrowPaymentCanisterAccountId = principalToAccountIdentifier(
+      Principal.fromText(escrowPaymentCanisterId)
+    )
+
+    const params = {
+      to: escrowPaymentCanisterAccountId,
+      amount: escrowAmount,
+      opts: {
+        memo: Number(BeamCreateConfig.JobFlowId)
+      }
+    }
+
+    // Request transfer from Plug
+    return await window.ic.plug.requestTransfer(params)
+  }
+
+  const requestXTCTransfer = async escrowAmount => {
+    const TRANSFER_XTC_TX = {
+      idl: XTC_IDL,
+      canisterId: XTC.CanisterId,
+      methodName: "transferErc20",
+      args: [Principal.fromText(escrowPaymentCanisterId), escrowAmount],
+      onSuccess: async res => {
+        log.logObject("XTC transfer success", res)
+      },
+      onFail: res => {
+        log.logObject("XTC transfer xtc failed", res)
+      }
+    }
+
+    log.info("requestXTCTransfer starts")
+    log.logObject("TRANSFER_XTC_TX:", TRANSFER_XTC_TX)
+
+    return await window.ic.plug.batchTransactions([TRANSFER_XTC_TX])
+  }
+
   const submit = async (values, actions) => {
     const { amount, recipient } = values
 
@@ -398,23 +438,22 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       const dueDate = moment()
       dueDate.add(numMins, "minutes")
       const dueDateUTC = moment(dueDate).utc().toDate()
-
-      // Create request transfer params
-      const escrowPaymentCanisterAccountId = principalToAccountIdentifier(
-        Principal.fromText(escrowPaymentCanisterId)
-      )
-
       const escrowAmount = Number(humanToE8s(amount))
-      const params = {
-        to: escrowPaymentCanisterAccountId,
-        amount: escrowAmount,
-        opts: {
-          memo: Number(BeamCreateConfig.JobFlowId)
+
+      let requestTransferFunc = requestICPTransfer
+      switch (tokenType) {
+        case icp: {
+          requestTransferFunc = requestICPTransfer
+          break
+        }
+        case xtc: {
+          requestTransferFunc = requestXTCTransfer
         }
       }
 
-      // Request transfer from Plug
-      let result = await window.ic.plug.requestTransfer(params)
+      let result = await requestTransferFunc(escrowAmount)
+      log.logObject("Request transfer result: ", result)
+
       const blockIndex = result.height
 
       showMediumToast(
