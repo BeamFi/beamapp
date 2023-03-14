@@ -14,6 +14,7 @@ import {
   Stack,
   Text,
   useDisclosure,
+  useRadioGroup,
   useToast,
   VStack
 } from "@chakra-ui/react"
@@ -21,7 +22,7 @@ import {
 import moment from "moment"
 
 import { CheckIcon, ExternalLinkIcon, LinkIcon } from "@chakra-ui/icons"
-import { ICLogo, LetsGetYourPaidIcon } from "../../../icon"
+import { LetsGetYourPaidIcon } from "../../../icon"
 
 import { Field, Form, Formik } from "formik"
 import { FormNumberInput } from "../../form/FormNumberInput"
@@ -32,7 +33,8 @@ import { BeamGradientActionButton } from "../common/BeamGradientActionButton"
 import { BeamCreateLinkSchema } from "../../../schema/beamschema"
 import {
   BeamCreateLinkConfig,
-  BeamSupportedTokenType
+  BeamSupportedTokenType,
+  nameOfTokenType
 } from "../../../config/beamconfig"
 import log from "../../../utils/log"
 import { Principal } from "@dfinity/principal"
@@ -44,6 +46,8 @@ import { GetPaidAlertDialog } from "./getpaid/GetPaidAlertDialog"
 import { BeamHeading } from "../common/BeamHeading"
 import Head from "next/head"
 import { BeamVStack } from "../common/BeamVStack"
+import { RadioCard } from "../../form/RadioCard"
+import { TokenTypeUIData } from "../../../config"
 
 const HeadlineStack = () => {
   return (
@@ -89,6 +93,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
 
   const defaultNumDays = 7
   const [numDays, setNumDays] = useState(defaultNumDays)
+  const [tokenType, setTokenType] = useState(BeamSupportedTokenType.icp)
 
   const [beamOutId, setBeamOutId] = useState(null)
 
@@ -143,14 +148,14 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
       actions.setSubmitting(true)
 
       const e8sAmount = humanToE8s(amount)
-      const tokenType = convertToVariant(BeamSupportedTokenType.icp)
+      const tokenTypeVariant = convertToVariant(tokenType)
       const recipientPrincipal = Principal.fromText(recipient)
       const numMins = numDays * 24 * 60
 
       const beamOutService = await makeBeamOutActor()
       const result = await beamOutService.createBeamOut(
         e8sAmount,
-        tokenType,
+        tokenTypeVariant,
         recipientPrincipal,
         numMins
       )
@@ -208,6 +213,21 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
     await handleSubmit(values)
   }
 
+  const tokenTypeKeys = Object.keys(BeamSupportedTokenType)
+  const TokenTypeFieldId = "tokenType"
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    name: TokenTypeFieldId,
+    defaultValue: tokenType
+  })
+  const tokenGroup = getRootProps()
+  const tokenIcon = TokenTypeUIData[tokenType]?.icon
+  const tokenName = nameOfTokenType(tokenType)
+
+  const onChangeTokenType = event => {
+    const tokenType = event.target.value
+    setTokenType(tokenType)
+  }
+
   return (
     <Box h="100vh">
       <Stack
@@ -229,7 +249,8 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
             initialValues={{
               amount: 10,
               recipient: "",
-              isConfirmed: false
+              isConfirmed: false,
+              tokenType: BeamSupportedTokenType.icp
             }}
             validationSchema={BeamCreateLinkSchema}
             onSubmit={submit}
@@ -244,6 +265,37 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                   spacing={{ base: "24px", md: "32px" }}
                   py="24px"
                 >
+                  <HStack
+                    spacing="12px"
+                    w={{ base: "95%", md: "80%" }}
+                    {...tokenGroup}
+                    onChange={event => onChangeTokenType(event)}
+                  >
+                    {tokenTypeKeys.map(value => {
+                      const radio = getRadioProps({ value })
+                      const uiData = TokenTypeUIData[value]
+                      const title = nameOfTokenType(value)
+                      const TokenIcon = uiData.icon
+
+                      return (
+                        <RadioCard
+                          key={value}
+                          {...radio}
+                          bgColor="purple_3"
+                          h="110px"
+                          minW="110px"
+                        >
+                          <VStack spacing="12px" justify="center">
+                            <Text fontWeight="semibold" fontSize="14px">
+                              {title}
+                            </Text>
+                            <TokenIcon fontSize="48px" color="black_3" />
+                          </VStack>
+                        </RadioCard>
+                      )
+                    })}
+                  </HStack>
+
                   <Field name="amount">
                     {({ field, form }) => (
                       <FormNumberInput
@@ -256,12 +308,12 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         isInvalid={form.errors.amount && form.touched.amount}
                         errorMesg={form.errors.amount}
                         setFieldValue={setFieldValue}
-                        token="ICP"
-                        TokenIcon={ICLogo}
+                        token={tokenName}
+                        TokenIcon={tokenIcon}
                         themeColor="black_5"
                         trackColor="black_gray"
                       >
-                        <BeamHeading>ICP Amount:</BeamHeading>
+                        <BeamHeading>{tokenName} Amount:</BeamHeading>
                       </FormNumberInput>
                     )}
                   </Field>

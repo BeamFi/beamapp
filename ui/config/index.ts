@@ -1,3 +1,5 @@
+import { ICLogo, XTCIcon } from "../icon"
+
 export enum AuthProvider {
   // eslint-disable-next-line no-unused-vars
   InternetIdentity = "internetIdentity",
@@ -38,4 +40,13 @@ export const AuthConfig = {
 
 export const SWRKey = {
   Escrow: "escrow/"
+}
+
+export const TokenTypeUIData = {
+  icp: {
+    icon: ICLogo
+  },
+  xtc: {
+    icon: XTCIcon
+  }
 }
