@@ -30,7 +30,7 @@ export const BeamHome = ({ setBgColor, setHashtags }) => {
       <Head>
         <title>Beam</title>
       </Head>
-      <GradientHeading size="2xl">Micro Payments with Beam</GradientHeading>
+      <GradientHeading size="2xl">Micro Payments with BeamFi</GradientHeading>
       <VStack
         py="27px"
         align="center"

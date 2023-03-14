@@ -41,12 +41,13 @@ class Log {
     return this.generateMessage("error", message, source)
   }
 
-  logJSONObject(object) {
+  logObject(mesg, object?) {
     if (object == null) {
       return
     }
 
     const jsonString = JSON.stringify(object)
+    this.info(mesg)
     this.info(jsonString)
   }
 
