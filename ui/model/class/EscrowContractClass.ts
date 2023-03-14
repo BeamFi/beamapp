@@ -4,7 +4,10 @@ import { ratePerHr } from "../../utils/date"
 import { e8sToHuman } from "../../utils/e8s"
 import { convertCandidDateToJSDate, unwrapVariant } from "../TypeConversion"
 
-import { type EscrowContract } from "../../declarations/beamescrow/beamescrow.did"
+import {
+  TokenType,
+  type EscrowContract
+} from "../../declarations/beamescrow/beamescrow.did"
 
 export class EscrowContractClass {
   candidModel: EscrowContract
@@ -47,8 +50,16 @@ export class EscrowContractClass {
     return this.paymentType() == EscrowPaymentConfig.PaymentType.LumpSum
   }
 
-  tokenType = () => {
+  tokenTypeRaw = (): TokenType => {
+    return this.candidModel.tokenType
+  }
+
+  tokenType = (): string => {
     return unwrapVariant(this.candidModel.tokenType)
+  }
+
+  tokenTypeName = () => {
+    return this.tokenType()?.toUpperCase()
   }
 
   initialDeposit = () => {

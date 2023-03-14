@@ -27,7 +27,7 @@ import { showMediumToast, showToast, showTopToast } from "../../../utils/toast"
 import { BeamActionButton } from "../common/BeamActionButton"
 
 // Icon
-import { ConfigureBeamOutIcon, ICLogo, RocketIcon } from "../../../icon"
+import { ConfigureBeamOutIcon, RocketIcon } from "../../../icon"
 
 // Form
 import { Field, Form, Formik } from "formik"
@@ -63,11 +63,12 @@ import { StandardSpinner } from "../../StandardSpinner"
 
 import { connectPlugForToken, hasSession } from "../../auth/provider/plug"
 import { principalToAccountIdentifier } from "../../../utils/account-identifier"
-import { AuthProvider } from "../../../config"
+import { AuthProvider, TokenTypeUIData } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr, ratePerMin } from "../../../utils/date"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
 import { BeamOutModelV4 } from "../../../declarations/beamout/beamout.did"
+import { TokenRadioGroup } from "../common/TokenRadioGroup"
 
 const HeadlineStack = () => {
   return (
@@ -197,13 +198,25 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
   const { beamOutId } = useParams()
 
   const initLoading = 1
-  const defaultNumMins = 30
+  const defaultNumMins = 1440
+  const defaultNumMinsForMeeting = 30
   const defaultAmount = 1
 
-  const [numMins, setNumMins] = useState(defaultNumMins)
-  const [amount, setAmount] = useState(defaultAmount)
   const [meetingModel, setMeetingModel] = useState(null)
+  const isMeeting = meetingModel != null
+
+  const [numMins, setNumMins] = useState(
+    isMeeting ? defaultNumMinsForMeeting : defaultNumMins
+  )
+  const [amount, setAmount] = useState(defaultAmount)
+
   const [recipient, setRecipient] = useState("")
+  const [tokenType, setTokenType] = useState<BeamSupportedTokenType>(
+    BeamSupportedTokenType.icp
+  )
+  const [isFormReadonly, setFormReadonly] = useState(false)
+
+  const tokenName = tokenType.toUpperCase()
 
   const numDays = numMins / (24 * 60)
 
@@ -248,17 +261,17 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
           amount,
           beamOutType
         }: BeamOutModelV4 = result.ok
-        const tokenTypeString = unwrapVariant(tokenType)
         const myMeetingModel = unwrapVariantValue(beamOutType)
-        setMeetingModel(myMeetingModel)
+        const myTokenType = unwrapVariant(tokenType)
 
-        if (tokenTypeString != BeamSupportedTokenType.icp) {
-          throw new Error(`Unsupported token type: ${tokenTypeString}`)
-        }
+        setMeetingModel(myMeetingModel)
 
         setAmount(e8sToHuman(amount))
         setRecipient(recipient.toString())
         setNumMins(Number(durationNumMins))
+        setTokenType(myTokenType)
+
+        setFormReadonly(true)
       } else if (result.err) {
         log.error(result.err)
         throw new Error(result.err)
@@ -310,8 +323,6 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
   const gotoMyBeam = () => {
     navigate("/mybeams")
   }
-
-  const isMeeting = meetingModel != null
 
   const postBeamCreatedSuccess = () => {
     if (isMeeting) {
@@ -374,7 +385,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       showToast(
         toast,
         "Create Beam",
-        `1/3 - Requesting transfer of ${amount} ICP from Plug Wallet to Beam.`,
+        `1/3 - Requesting transfer of ${amount} ${tokenName} from Plug Wallet to Beam.`,
         "info"
       )
 
@@ -477,6 +488,13 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
     return rateFunc(startDateInMillSecs, dueDateInMilliSecs, totalTokens)
   }
 
+  const tokenIcon = TokenTypeUIData[tokenType]?.icon
+
+  const onChangeTokenType = event => {
+    const tokenType = event.target.value
+    setTokenType(tokenType)
+  }
+
   return (
     <Box h="100vh">
       <Stack
@@ -484,7 +502,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
         w="100%"
         color="dark_black"
         fontSize="16px"
-        pt={{ base: "90px", md: "140px" }}
+        pt={isFormReadonly ? { base: "90px", md: "140px" } : "80px"}
         direction={{ base: "column", md: "row" }}
         justifyContent="center"
         px={{ base: "14px", md: "38px" }}
@@ -514,6 +532,13 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                   spacing={{ base: "24px", md: "32px" }}
                   py="24px"
                 >
+                  {!isFormReadonly && (
+                    <TokenRadioGroup
+                      onChangeTokenType={onChangeTokenType}
+                      tokenType={tokenType}
+                    />
+                  )}
+
                   <Field name="amount">
                     {({ field, form }) => (
                       <FormNumberInput
@@ -526,13 +551,13 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                         isInvalid={form.errors.amount && form.touched.amount}
                         errorMesg={form.errors.amount}
                         setFieldValue={setFieldValue}
-                        token="ICP"
-                        TokenIcon={ICLogo}
+                        token={tokenType}
+                        TokenIcon={tokenIcon}
                         themeColor="black_5"
                         trackColor="black_gray"
-                        isReadOnly={isMeeting}
+                        isReadOnly={isFormReadonly}
                       >
-                        <BeamHeading>ICP Amount:</BeamHeading>
+                        <BeamHeading>{tokenName} Amount:</BeamHeading>
                       </FormNumberInput>
                     )}
                   </Field>
@@ -550,7 +575,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                           form.errors.recipient && form.touched.recipient
                         }
                         errorMesg={form.errors.recipient}
-                        isReadOnly={isMeeting}
+                        isReadOnly={isFormReadonly}
                       >
                         <BeamHeading>Recipient Plug Wallet:</BeamHeading>
                       </FormInput>
@@ -563,7 +588,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                       setNumMins={setNumMins}
                       showEndDate={showEndDate}
                       endDateDesc={endDateDesc}
-                      isReadOnly={isMeeting}
+                      isReadOnly={isFormReadonly}
                     />
                   )}
 
@@ -573,7 +598,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                       setNumDays={setNumDays}
                       showEndDate={showEndDate}
                       endDateDesc={endDateDesc}
-                      isReadOnly={isMeeting}
+                      isReadOnly={isFormReadonly}
                     />
                   )}
 
@@ -616,16 +641,18 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                     {isMeeting && (
                       <Text color="gray_light2" pt="20px">
                         Recipient will receive{" "}
-                        {beamRate(values.amount, ratePerMin)} ICP/minute for{" "}
-                        {numMins} minutes ({values.amount} ICP total)
+                        {beamRate(values.amount, ratePerMin)} {tokenName}/minute
+                        for {numMins} minutes ({values.amount} {tokenName}{" "}
+                        total)
                       </Text>
                     )}
 
                     {!isMeeting && (
                       <Text color="gray_light2" pt="20px">
                         Recipient will receive{" "}
-                        {beamRate(values.amount, ratePerHr)} ICP/hour for{" "}
-                        {numMins / 60} hours ({values.amount} ICP total)
+                        {beamRate(values.amount, ratePerHr)} {tokenName}/hour
+                        for {numMins / 60} hours ({values.amount} {tokenName}{" "}
+                        total)
                       </Text>
                     )}
                   </Box>

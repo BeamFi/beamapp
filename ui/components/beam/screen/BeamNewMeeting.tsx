@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 
 import {
   Box,
-  Heading,
   HStack,
   Link,
   ListItem,
@@ -16,13 +15,13 @@ import {
   Text,
   useDisclosure,
   useToast,
-  VStack
+  VStack,
+  Wrap,
+  WrapItem
 } from "@chakra-ui/react"
-import Balancer from "react-wrap-balancer"
 import moment from "moment"
 
 import { CheckIcon, ExternalLinkIcon, LinkIcon } from "@chakra-ui/icons"
-import { ICLogo } from "../../../icon"
 
 import { Field, Form, Formik } from "formik"
 import { FormNumberInput } from "../../form/FormNumberInput"
@@ -33,7 +32,8 @@ import { BeamGradientActionButton } from "../common/BeamGradientActionButton"
 import { BeamMeetingCreateLinkSchema } from "../../../schema/beamschema"
 import {
   BeamCreateLinkConfig,
-  BeamSupportedTokenType
+  BeamSupportedTokenType,
+  nameOfTokenType
 } from "../../../config/beamconfig"
 import log from "../../../utils/log"
 import { Principal } from "@dfinity/principal"
@@ -45,6 +45,9 @@ import { GetPaidAlertDialog } from "./getpaid/GetPaidAlertDialog"
 import { BeamHeading } from "../common/BeamHeading"
 import Head from "next/head"
 import { BeamVStack } from "../common/BeamVStack"
+import { TokenRadioGroup } from "../common/TokenRadioGroup"
+import { TokenTypeUIData } from "../../../config"
+import { GradientHeading } from "../common/GradientHeading"
 
 const FormTitle = ({ children, ...rest }) => {
   return (
@@ -54,20 +57,16 @@ const FormTitle = ({ children, ...rest }) => {
   )
 }
 
-const GradientHeading = ({ children, ...rest }) => {
-  return (
-    <Heading bg="gradient.purple.2" bgClip="text" size="xl" {...rest}>
-      <Balancer>{children}</Balancer>
-    </Heading>
-  )
+type Props = {
+  hashtags: string[]
 }
 
-const HeadlineStack = () => {
+const HeadlineStack = ({ hashtags }: Props) => {
   return (
     <VStack
-      pt={{ base: "10px", md: "60px" }}
+      pt={{ base: "10px", md: "50px" }}
       align={{ base: "center", md: "flex-start" }}
-      spacing="10px"
+      spacing="20px"
       maxW={{ base: "100%", md: "40%" }}
     >
       <GradientHeading
@@ -107,6 +106,14 @@ const HeadlineStack = () => {
           host and get paid in real time as you speak!
         </ListItem>
       </OrderedList>
+
+      <Wrap color="black_gray_3" spacing="22px">
+        {hashtags.map((value, index) => (
+          <WrapItem key={index}>
+            <Text fontSize="16px">{value}</Text>
+          </WrapItem>
+        ))}
+      </Wrap>
     </VStack>
   )
 }
@@ -121,16 +128,24 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
     onClose: onCloseAlert
   } = useDisclosure()
 
+  const hashtags = [
+    "#MyTimeMyMoney",
+    "#NoMoreEndOfMonth",
+    "#GetBeamedNotLumped"
+  ]
+
   useEffect(() => {
     setBgColor("beam_green")
-    setHashtags(["#MyTimeMyMoney", "#NoMoreEndOfMonth", "#GetBeamedNotLumped"])
+    setHashtags([])
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initLoading])
 
   const defaultNumMins = 30
   const [numMins, setNumMins] = useState(defaultNumMins)
-
+  const [tokenType, setTokenType] = useState<BeamSupportedTokenType>(
+    BeamSupportedTokenType.icp
+  )
   const [beamOutId, setBeamOutId] = useState(null)
 
   const endDateDesc = () => {
@@ -184,14 +199,14 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
       actions.setSubmitting(true)
 
       const e8sAmount = humanToE8s(amount)
-      const tokenType = convertToVariant(BeamSupportedTokenType.icp)
+      const tokenTypeVariant = convertToVariant(tokenType)
 
       const recipientPrincipal: Principal = Principal.fromText(recipient)
 
       const beamOutService = await makeBeamOutActor()
       const result = await beamOutService.createBeamOutMeeting(
         e8sAmount,
-        tokenType,
+        tokenTypeVariant,
         recipientPrincipal,
         numMins,
         meetingId,
@@ -251,6 +266,14 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
     await handleSubmit(values)
   }
 
+  const tokenIcon = TokenTypeUIData[tokenType]?.icon
+  const tokenName = nameOfTokenType(tokenType)
+
+  const onChangeTokenType = event => {
+    const tokenType = event.target.value
+    setTokenType(tokenType)
+  }
+
   return (
     <Box h="100vh">
       <Stack
@@ -258,7 +281,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
         w="100%"
         color="dark_black"
         fontSize="16px"
-        pt={{ base: "80px", md: "100px" }}
+        pt="60px"
         direction={{ base: "column", md: "row" }}
         justifyContent="center"
         px={{ base: "14px", md: "38px" }}
@@ -266,7 +289,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
         <Head>
           <title>Get Paid - Beam</title>
         </Head>
-        <HeadlineStack />
+        <HeadlineStack hashtags={hashtags} />
         <BeamVStack>
           <Formik
             initialValues={{
@@ -274,7 +297,8 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
               recipient: "",
               meetingId: "",
               meetingPassword: "",
-              isConfirmed: false
+              isConfirmed: false,
+              tokenType: BeamSupportedTokenType.icp
             }}
             validationSchema={BeamMeetingCreateLinkSchema}
             onSubmit={submit}
@@ -289,6 +313,11 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                   spacing={{ base: "16px", md: "16px" }}
                   py="10px"
                 >
+                  <TokenRadioGroup
+                    onChangeTokenType={onChangeTokenType}
+                    tokenType={tokenType}
+                  />
+
                   <Field name="amount">
                     {({ field, form }) => (
                       <FormNumberInput
@@ -301,12 +330,12 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         isInvalid={form.errors.amount && form.touched.amount}
                         errorMesg={form.errors.amount}
                         setFieldValue={setFieldValue}
-                        token="ICP"
-                        TokenIcon={ICLogo}
+                        token={tokenName}
+                        TokenIcon={tokenIcon}
                         themeColor="black_5"
                         trackColor="black_gray"
                       >
-                        <FormTitle>ICP Amount:</FormTitle>
+                        <FormTitle>{tokenName} Amount:</FormTitle>
                       </FormNumberInput>
                     )}
                   </Field>

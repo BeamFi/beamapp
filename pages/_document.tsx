@@ -47,12 +47,12 @@ export default class Document extends NextDocument {
           <meta property="og:title" content="Beam" key="ogtitle" />
           <meta
             property="og:description"
-            content="Send or Receive a constant stream of ICP. We should all be paid in real-time, not at the end of the month. Make that happen now."
+            content="Send or Receive a constant stream of micro payments. We should all be paid in real-time, not at the end of the month. Make that happen now."
             key="ogdesc"
           />
           <meta
             name="description"
-            content="Send or Receive a constant stream of ICP. We should all be paid in real-time, not at the end of the month. Make that happen now."
+            content="Send or Receive a constant stream of micro payments. We should all be paid in real-time, not at the end of the month. Make that happen now."
             key="desc"
           />
           <meta

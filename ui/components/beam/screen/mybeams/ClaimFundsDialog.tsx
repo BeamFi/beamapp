@@ -27,7 +27,8 @@ export const ClaimFundsDialog = ({
   isOpen,
   onClose,
   submit,
-  numClaimableTokens
+  numClaimableTokens,
+  tokenTypeName
 }) => {
   const cancelRef = useRef()
 
@@ -98,7 +99,7 @@ export const ClaimFundsDialog = ({
                     borderRadius="full"
                     mx="12px"
                   >
-                    <ICLogo h="30x" w="41px" color="black_3" /> ICP
+                    <ICLogo h="30x" w="41px" color="black_3" /> {tokenTypeName}
                   </Tag>
                 </StatNumber>
                 <StatHelpText color="black_gray" fontSize="16px">

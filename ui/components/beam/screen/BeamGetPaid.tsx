@@ -14,7 +14,6 @@ import {
   Stack,
   Text,
   useDisclosure,
-  useRadioGroup,
   useToast,
   VStack
 } from "@chakra-ui/react"
@@ -46,8 +45,8 @@ import { GetPaidAlertDialog } from "./getpaid/GetPaidAlertDialog"
 import { BeamHeading } from "../common/BeamHeading"
 import Head from "next/head"
 import { BeamVStack } from "../common/BeamVStack"
-import { RadioCard } from "../../form/RadioCard"
 import { TokenTypeUIData } from "../../../config"
+import { TokenRadioGroup } from "../common/TokenRadioGroup"
 
 const HeadlineStack = () => {
   return (
@@ -93,7 +92,9 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
 
   const defaultNumDays = 7
   const [numDays, setNumDays] = useState(defaultNumDays)
-  const [tokenType, setTokenType] = useState(BeamSupportedTokenType.icp)
+  const [tokenType, setTokenType] = useState<BeamSupportedTokenType>(
+    BeamSupportedTokenType.icp
+  )
 
   const [beamOutId, setBeamOutId] = useState(null)
 
@@ -213,13 +214,6 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
     await handleSubmit(values)
   }
 
-  const tokenTypeKeys = Object.keys(BeamSupportedTokenType)
-  const TokenTypeFieldId = "tokenType"
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: TokenTypeFieldId,
-    defaultValue: tokenType
-  })
-  const tokenGroup = getRootProps()
   const tokenIcon = TokenTypeUIData[tokenType]?.icon
   const tokenName = nameOfTokenType(tokenType)
 
@@ -235,7 +229,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
         w="100%"
         color="dark_black"
         fontSize="16px"
-        pt={{ base: "90px", md: "140px" }}
+        pt="80px"
         direction={{ base: "column", md: "row" }}
         justifyContent="center"
         px={{ base: "14px", md: "38px" }}
@@ -265,36 +259,10 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                   spacing={{ base: "24px", md: "32px" }}
                   py="24px"
                 >
-                  <HStack
-                    spacing="12px"
-                    w={{ base: "95%", md: "80%" }}
-                    {...tokenGroup}
-                    onChange={event => onChangeTokenType(event)}
-                  >
-                    {tokenTypeKeys.map(value => {
-                      const radio = getRadioProps({ value })
-                      const uiData = TokenTypeUIData[value]
-                      const title = nameOfTokenType(value)
-                      const TokenIcon = uiData.icon
-
-                      return (
-                        <RadioCard
-                          key={value}
-                          {...radio}
-                          bgColor="purple_3"
-                          h="110px"
-                          minW="110px"
-                        >
-                          <VStack spacing="12px" justify="center">
-                            <Text fontWeight="semibold" fontSize="14px">
-                              {title}
-                            </Text>
-                            <TokenIcon fontSize="48px" color="black_3" />
-                          </VStack>
-                        </RadioCard>
-                      )
-                    })}
-                  </HStack>
+                  <TokenRadioGroup
+                    onChangeTokenType={onChangeTokenType}
+                    tokenType={tokenType}
+                  />
 
                   <Field name="amount">
                     {({ field, form }) => (
