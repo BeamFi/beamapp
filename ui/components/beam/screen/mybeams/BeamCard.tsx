@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom"
 import { useInterval } from "../../useInterval"
 import { BeamReadModel } from "../../../../declarations/beam/beam.did"
 import { EscrowContract } from "../../../../declarations/beamescrow/beamescrow.did"
-import { TokenTypeUIData } from "../../../../config"
+import { TokenTypeData } from "../../../../config"
 
 type Props = {
   beamEscrowContract: EscrowContract
@@ -57,7 +57,7 @@ export const BeamCard = ({
     escrowObject.otherPartyPrincipalId(myPrincipalId)
   const tokenType = escrowObject.tokenType()
   const tokenName = escrowObject.tokenTypeName()
-  const TokenIcon = TokenTypeUIData[tokenType]?.icon
+  const TokenIcon = TokenTypeData[tokenType]?.icon
 
   const bgColor = escrowObject.isBeamRecipient(myPrincipalId)
     ? "beam_green"

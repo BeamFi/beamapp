@@ -46,7 +46,7 @@ import { BeamHeading } from "../common/BeamHeading"
 import Head from "next/head"
 import { BeamVStack } from "../common/BeamVStack"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
-import { TokenTypeUIData } from "../../../config"
+import { TokenTypeData } from "../../../config"
 import { GradientHeading } from "../common/GradientHeading"
 
 const FormTitle = ({ children, ...rest }) => {
@@ -266,7 +266,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
     await handleSubmit(values)
   }
 
-  const tokenIcon = TokenTypeUIData[tokenType]?.icon
+  const tokenIcon = TokenTypeData[tokenType]?.icon
   const tokenName = nameOfTokenType(tokenType)
 
   const onChangeTokenType = event => {

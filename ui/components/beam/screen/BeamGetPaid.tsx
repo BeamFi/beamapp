@@ -45,7 +45,7 @@ import { GetPaidAlertDialog } from "./getpaid/GetPaidAlertDialog"
 import { BeamHeading } from "../common/BeamHeading"
 import Head from "next/head"
 import { BeamVStack } from "../common/BeamVStack"
-import { TokenTypeUIData } from "../../../config"
+import { TokenTypeData } from "../../../config"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
 
 const HeadlineStack = () => {
@@ -214,7 +214,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
     await handleSubmit(values)
   }
 
-  const tokenIcon = TokenTypeUIData[tokenType]?.icon
+  const tokenIcon = TokenTypeData[tokenType]?.icon
   const tokenName = nameOfTokenType(tokenType)
 
   const onChangeTokenType = event => {

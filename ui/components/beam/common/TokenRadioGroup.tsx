@@ -1,6 +1,6 @@
 import { HStack, useRadioGroup, VStack, Text } from "@chakra-ui/react"
 
-import { TokenTypeUIData } from "../../../config"
+import { TokenTypeData } from "../../../config"
 import {
   BeamSupportedTokenType,
   nameOfTokenType
@@ -26,7 +26,7 @@ export const TokenRadioGroup = ({ tokenType, onChangeTokenType }) => {
     >
       {tokenTypeKeys.map(value => {
         const radio = getRadioProps({ value })
-        const uiData = TokenTypeUIData[value]
+        const uiData = TokenTypeData[value]
         const title = nameOfTokenType(value)
         const TokenIcon = uiData.icon
 
