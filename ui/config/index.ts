@@ -46,7 +46,8 @@ export const TokenTypeData = {
   },
   xtc: {
     icon: XTCIcon,
-    fee: 0
+    // fee in e12s
+    fee: 2000000000n
   }
 }
 
