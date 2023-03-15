@@ -12,10 +12,6 @@ export const OneHourInNano = BigInt(3600000000000)
 export const OneDayInNano = BigInt(24) * OneHourInNano
 
 export const EscrowPaymentConfig = {
-  ICP: {
-    // fee in e8s
-    fee: 10000n
-  },
   PaymentType: {
     LumpSum: "lumpSum",
     Beam: "beam"
@@ -42,12 +38,15 @@ export const SWRKey = {
   Escrow: "escrow/"
 }
 
-export const TokenTypeUIData = {
+export const TokenTypeData = {
   icp: {
-    icon: ICLogo
+    icon: ICLogo,
+    // fee in e8s
+    fee: 10000n
   },
   xtc: {
-    icon: XTCIcon
+    icon: XTCIcon,
+    fee: 0
   }
 }
 

@@ -51,7 +51,7 @@ import {
   makeBeamOutActor,
   makeEscrowPaymentActor
 } from "../../../service/actor/actor-locator"
-import { e8sToHuman, humanToE8s } from "../../../utils/e8s"
+import { humanToE12s, humanToE8s } from "../../../utils/e8s"
 import {
   convertDateToCandid,
   convertToVariant,
@@ -67,12 +67,13 @@ import { StandardSpinner } from "../../StandardSpinner"
 
 import { connectPlugForToken, hasSession } from "../../auth/provider/plug"
 import { principalToAccountIdentifier } from "../../../utils/account-identifier"
-import { AuthProvider, TokenTypeUIData, XTC } from "../../../config"
+import { AuthProvider, TokenTypeData, XTC } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr, ratePerMin } from "../../../utils/date"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
 import { BeamOutModelV4 } from "../../../declarations/beamout/beamout.did"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
+import { esToHuman } from "../../../utils/token"
 
 const HeadlineStack = () => {
   return (
@@ -248,6 +249,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
 
   useEffect(() => {
     if (beamOutId != null) loadBeamOut(beamOutId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [beamOutId])
 
   const loadBeamOut = async id => {
@@ -269,7 +271,8 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
 
         setMeetingModel(myMeetingModel)
 
-        setAmount(e8sToHuman(amount))
+        const esToHumanFunc = esToHuman(tokenType)
+        setAmount(esToHumanFunc(amount))
         setRecipient(recipient.toString())
         setNumMins(Number(durationNumMins))
         setTokenType(myTokenType)
@@ -354,13 +357,21 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
   }
 
   const requestXTCTransfer = async escrowAmount => {
+    let height: number = 0
+
     const TRANSFER_XTC_TX = {
       idl: XTC_IDL,
       canisterId: XTC.CanisterId,
       methodName: "transferErc20",
       args: [Principal.fromText(escrowPaymentCanisterId), escrowAmount],
       onSuccess: async res => {
-        log.logObject("XTC transfer success", res)
+        log.logObject("XTC transfer success:", res)
+
+        if (res.Ok) {
+          height = res.Ok
+        } else {
+          throw new Error("Block height not found")
+        }
       },
       onFail: res => {
         log.logObject("XTC transfer xtc failed", res)
@@ -370,7 +381,10 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
     log.info("requestXTCTransfer starts")
     log.logObject("TRANSFER_XTC_TX:", TRANSFER_XTC_TX)
 
-    return await window.ic.plug.batchTransactions([TRANSFER_XTC_TX])
+    const result = await window.ic.plug.batchTransactions([TRANSFER_XTC_TX])
+    log.logObject("batchTransactions result: ", result)
+
+    return { height }
   }
 
   const submit = async (values, actions) => {
@@ -439,16 +453,18 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       const dueDate = moment()
       dueDate.add(numMins, "minutes")
       const dueDateUTC = moment(dueDate).utc().toDate()
-      const escrowAmount = Number(humanToE8s(amount))
 
+      let escrowAmount: number = 0
       let requestTransferFunc = requestICPTransfer
       switch (tokenType) {
         case icp: {
           requestTransferFunc = requestICPTransfer
+          escrowAmount = Number(humanToE8s(amount))
           break
         }
         case xtc: {
           requestTransferFunc = requestXTCTransfer
+          escrowAmount = Number(humanToE12s(amount))
         }
       }
 
@@ -530,7 +546,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
     return rateFunc(startDateInMillSecs, dueDateInMilliSecs, totalTokens)
   }
 
-  const tokenIcon = TokenTypeUIData[tokenType]?.icon
+  const tokenIcon = TokenTypeData[tokenType]?.icon
 
   const onChangeTokenType = event => {
     const tokenType = event.target.value

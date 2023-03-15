@@ -46,9 +46,14 @@ class Log {
       return
     }
 
-    const jsonString = JSON.stringify(object)
     this.info(mesg)
-    this.info(jsonString)
+
+    try {
+      const jsonString = JSON.stringify(object)
+      this.info(jsonString)
+    } catch (error) {
+      this.info(object)
+    }
   }
 
   flattenCandidError(candidError) {

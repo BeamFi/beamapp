@@ -145,7 +145,7 @@ export const ClaimButton = ({
         onClose={onClose}
         submit={claimFunds}
         numClaimableTokens={numClaimableTokens}
-        tokenTypeName={escrowObject.tokenTypeName()}
+        escrowObject={escrowObject}
       />
     </>
   )
