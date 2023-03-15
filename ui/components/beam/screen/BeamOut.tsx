@@ -54,6 +54,7 @@ import {
 import { e8sToHuman, humanToE8s } from "../../../utils/e8s"
 import {
   convertDateToCandid,
+  convertToVariant,
   unwrapVariant,
   unwrapVariantValue
 } from "../../../model/TypeConversion"
@@ -466,6 +467,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       if (isMeeting) {
         result = await escrowService.createRelationBeamEscrow(
           escrowAmount,
+          convertToVariant(tokenType),
           blockIndex,
           convertDateToCandid(dueDateUTC),
           buyerPrincipal,
@@ -475,6 +477,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       } else {
         result = await escrowService.createBeamEscrow(
           escrowAmount,
+          convertToVariant(tokenType),
           blockIndex,
           convertDateToCandid(dueDateUTC),
           buyerPrincipal,
