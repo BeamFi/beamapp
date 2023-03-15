@@ -100,19 +100,24 @@ export interface _SERVICE {
     Result_3
   >,
   'createBeamEscrow' : ActorMethod<
-    [TokenAmount, BlockIndex, Time__1, Principal, Principal],
+    [TokenAmount, TokenType, BlockIndex, Time__1, Principal, Principal],
     Result_3
   >,
   'createRelationBeamEscrow' : ActorMethod<
-    [TokenAmount, BlockIndex, Time__1, Principal, Principal, BeamRelationObjId],
+    [
+      TokenAmount,
+      TokenType,
+      BlockIndex,
+      Time__1,
+      Principal,
+      Principal,
+      BeamRelationObjId,
+    ],
     Result_3
   >,
-  'creatorClaim' : ActorMethod<
+  'creatorClaimBTC' : ActorMethod<[EscrowId, BitcoinAddress], Result_1>,
+  'creatorClaimByAccountId' : ActorMethod<
     [EscrowId, TokenType, AccountIdentifier__1],
-    Result_1
-  >,
-  'creatorClaimBTC' : ActorMethod<
-    [EscrowId, TokenType, BitcoinAddress],
     Result_1
   >,
   'creatorClaimByPrincipal' : ActorMethod<

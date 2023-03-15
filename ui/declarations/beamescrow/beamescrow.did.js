@@ -117,13 +117,21 @@ export const idlFactory = ({ IDL }) => {
       []
     ),
     createBeamEscrow: IDL.Func(
-      [TokenAmount, BlockIndex, Time__1, IDL.Principal, IDL.Principal],
+      [
+        TokenAmount,
+        TokenType,
+        BlockIndex,
+        Time__1,
+        IDL.Principal,
+        IDL.Principal
+      ],
       [Result_3],
       []
     ),
     createRelationBeamEscrow: IDL.Func(
       [
         TokenAmount,
+        TokenType,
         BlockIndex,
         Time__1,
         IDL.Principal,
@@ -133,13 +141,9 @@ export const idlFactory = ({ IDL }) => {
       [Result_3],
       []
     ),
-    creatorClaim: IDL.Func(
+    creatorClaimBTC: IDL.Func([EscrowId, BitcoinAddress], [Result_1], []),
+    creatorClaimByAccountId: IDL.Func(
       [EscrowId, TokenType, AccountIdentifier__1],
-      [Result_1],
-      []
-    ),
-    creatorClaimBTC: IDL.Func(
-      [EscrowId, TokenType, BitcoinAddress],
       [Result_1],
       []
     ),

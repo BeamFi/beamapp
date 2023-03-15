@@ -124,12 +124,13 @@ service : {
   canisterVersion: () -> (nat32) query;
   createBTCEscrow: (TokenAmount, EscrowPaymentType__1, Time__1, principal,
    principal) -> (Result_3);
-  createBeamEscrow: (TokenAmount, BlockIndex, Time__1, principal,
+  createBeamEscrow: (TokenAmount, TokenType, BlockIndex, Time__1, principal,
    principal) -> (Result_3);
-  createRelationBeamEscrow: (TokenAmount, BlockIndex, Time__1, principal,
-   principal, BeamRelationObjId) -> (Result_3);
-  creatorClaim: (EscrowId, TokenType, AccountIdentifier__1) -> (Result_1);
-  creatorClaimBTC: (EscrowId, TokenType, BitcoinAddress) -> (Result_1);
+  createRelationBeamEscrow: (TokenAmount, TokenType, BlockIndex, Time__1,
+   principal, principal, BeamRelationObjId) -> (Result_3);
+  creatorClaimBTC: (EscrowId, BitcoinAddress) -> (Result_1);
+  creatorClaimByAccountId: (EscrowId, TokenType, AccountIdentifier__1) ->
+   (Result_1);
   creatorClaimByPrincipal: (EscrowId, TokenType, principal) -> (Result_1);
   getActorBalance: () -> (nat) query;
   getBitcoinBalance: () -> (Satoshi);
