@@ -71,11 +71,14 @@ const HeadlineStack = ({ hashtags }: Props) => {
     >
       <GradientHeading
         px={{ base: "0px", md: "30px" }}
-        py={{ base: "8px", md: "16px" }}
+        py="0px"
         w={{ base: "unset", md: "100%" }}
       >
         Power Zoom Meeting with streaming payment
       </GradientHeading>
+      <Text fontStyle="italic" textAlign="center" w="full">
+        Limited Beta
+      </Text>
       <OrderedList
         spacing={{ base: "10px", md: "16px" }}
         fontSize={{ base: "14px", md: "18px" }}
