@@ -8,6 +8,7 @@ import { EscrowContractClass } from "../../../../model/class/EscrowContractClass
 
 export const ClaimInfo = ({ beamEscrowContract, ...rest }) => {
   const escrowObject = new EscrowContractClass(beamEscrowContract)
+  const tokenTypeName = escrowObject.tokenTypeName()
 
   const numCreatorClaimedTokens = escrowObject.creatorClaimed()
   const numCreatorClaimableTokens = escrowObject.creatorClaimable()
@@ -57,10 +58,10 @@ export const ClaimInfo = ({ beamEscrowContract, ...rest }) => {
               fontWeight="medium"
               pt="12px"
             >
-              {truncFloatDecimals(numCreatorClaimedTokens, 6)} ICP
+              {truncFloatDecimals(numCreatorClaimedTokens, 6)} {tokenTypeName}
             </Text>
             <Text fontSize={{ base: "16px", md: "20px" }} fontWeight="light">
-              /{truncFloatDecimals(totalTokens, 6)} ICP Total
+              /{truncFloatDecimals(totalTokens, 6)} {tokenTypeName} Total
             </Text>
           </VStack>
         </Box>
@@ -80,7 +81,7 @@ export const ClaimInfo = ({ beamEscrowContract, ...rest }) => {
             fontWeight="medium"
             color="white"
           >
-            {truncFloatDecimals(numCreatorClaimableTokens, 6)} ICP
+            {truncFloatDecimals(numCreatorClaimableTokens, 6)} {tokenTypeName}
           </Text>
           <ClaimButton
             escrowObject={escrowObject}

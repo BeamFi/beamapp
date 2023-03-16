@@ -1,3 +1,5 @@
+import { ICLogo, XTCIcon } from "../icon"
+
 export enum AuthProvider {
   // eslint-disable-next-line no-unused-vars
   InternetIdentity = "internetIdentity",
@@ -10,10 +12,6 @@ export const OneHourInNano = BigInt(3600000000000)
 export const OneDayInNano = BigInt(24) * OneHourInNano
 
 export const EscrowPaymentConfig = {
-  ICP: {
-    // fee in e8s
-    fee: 10000n
-  },
   PaymentType: {
     LumpSum: "lumpSum",
     Beam: "beam"
@@ -38,4 +36,21 @@ export const AuthConfig = {
 
 export const SWRKey = {
   Escrow: "escrow/"
+}
+
+export const TokenTypeData = {
+  icp: {
+    icon: ICLogo,
+    // fee in e8s
+    fee: 10000n
+  },
+  xtc: {
+    icon: XTCIcon,
+    // fee in e12s
+    fee: 2000000000n
+  }
+}
+
+export const XTC = {
+  CanisterId: "aanaa-xaaaa-aaaah-aaeiq-cai"
 }

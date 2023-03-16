@@ -5,7 +5,6 @@ import { useDisclosure, useToast } from "@chakra-ui/react"
 import { ClaimFundsDialog } from "./ClaimFundsDialog"
 import { BeamActionButton } from "../../common/BeamActionButton"
 
-import { convertToVariant } from "../../../../model/TypeConversion"
 import { makeEscrowPaymentActor } from "../../../../service/actor/actor-locator"
 import { accountIdentifierHexToBlob } from "../../../../utils/account-identifier"
 
@@ -14,16 +13,28 @@ import { AuthProvider } from "../../../../config"
 
 import { showToast } from "../../../../utils/toast"
 import log from "../../../../utils/log"
+import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
+import { AccountIdentifier } from "../../../../declarations/beamescrow/beamescrow.did"
+
+import { BeamSupportedTokenType } from "../../../../config/beamconfig"
+import { Principal } from "@dfinity/principal"
+
+type Props = {
+  escrowObject: EscrowContractClass
+  numClaimableTokens: number
+  isDisabled: boolean
+}
 
 export const ClaimButton = ({
   escrowObject,
   numClaimableTokens,
   isDisabled
-}) => {
+}: Props) => {
   const [isLoading, setLoading] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const toast = useToast()
+  const { icp, xtc } = BeamSupportedTokenType
 
   const claimFunds = async () => {
     setLoading(true)
@@ -57,19 +68,39 @@ export const ClaimButton = ({
     }
 
     try {
-      const accountIdBlob = accountIdentifierHexToBlob(plugAccountId)
       const escrowService = await makeEscrowPaymentActor(
         null,
         AuthProvider.Plug
       )
 
-      const result = await escrowService.creatorClaim(
-        escrowObject.id(),
-        convertToVariant("icp"),
-        accountIdBlob
-      )
+      const tokenType = escrowObject.tokenType()
 
-      if (result.ok) {
+      let result: { ok: any; err: any }
+      switch (tokenType) {
+        case icp: {
+          const accountIdBlob: AccountIdentifier =
+            accountIdentifierHexToBlob(plugAccountId)
+          result = await escrowService.creatorClaimByAccountId(
+            escrowObject.id(),
+            escrowObject.tokenTypeRaw(),
+            accountIdBlob
+          )
+          break
+        }
+        case xtc: {
+          const myPrincipalId =
+            window?.ic?.plug?.sessionManager?.sessionData?.principalId
+          const creatorPrincipal = Principal.fromText(myPrincipalId)
+          result = await escrowService.creatorClaimByPrincipal(
+            escrowObject.id(),
+            escrowObject.tokenTypeRaw(),
+            creatorPrincipal
+          )
+          break
+        }
+      }
+
+      if (result?.ok) {
         showToast(
           toast,
           "Claim Funds",
@@ -114,6 +145,7 @@ export const ClaimButton = ({
         onClose={onClose}
         submit={claimFunds}
         numClaimableTokens={numClaimableTokens}
+        escrowObject={escrowObject}
       />
     </>
   )

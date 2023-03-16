@@ -1,9 +1,9 @@
-const removeImports = require("next-remove-imports")()
+// const removeImports = require("next-remove-imports")()
 
 const DFXWebPackConfig = require("./dfx.webpack.config")
 DFXWebPackConfig.initCanisterIds()
 
-module.exports = removeImports({
+module.exports = {
   webpack: (
     config,
     // eslint-disable-next-line no-unused-vars
@@ -55,4 +55,4 @@ module.exports = removeImports({
       }
     ]
   }
-})
+}

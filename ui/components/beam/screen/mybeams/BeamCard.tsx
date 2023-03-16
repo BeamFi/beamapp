@@ -10,8 +10,6 @@ import {
 } from "@chakra-ui/react"
 import { TokenProgressBar } from "./TokenProgressBar"
 
-import { ICPIcon } from "../../../../icon"
-
 import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
 
 import { PrincipalInfo } from "../../../wallet/PrincipalInfo"
@@ -24,10 +22,13 @@ import { truncFloatDecimals } from "../../../../utils/number"
 
 import { useNavigate } from "react-router-dom"
 import { useInterval } from "../../useInterval"
+import { BeamReadModel } from "../../../../declarations/beam/beam.did"
+import { EscrowContract } from "../../../../declarations/beamescrow/beamescrow.did"
+import { TokenTypeData } from "../../../../config"
 
 type Props = {
-  beamEscrowContract: any
-  beamReadModel: any
+  beamEscrowContract: EscrowContract
+  beamReadModel?: BeamReadModel
   myPrincipalId: string
   isOpenDetailEnabled?: boolean
   setBeamEscrowContract?: Function
@@ -54,6 +55,9 @@ export const BeamCard = ({
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)")
   const otherPartyPrincipalId =
     escrowObject.otherPartyPrincipalId(myPrincipalId)
+  const tokenType = escrowObject.tokenType()
+  const tokenName = escrowObject.tokenTypeName()
+  const TokenIcon = TokenTypeData[tokenType]?.icon
 
   const bgColor = escrowObject.isBeamRecipient(myPrincipalId)
     ? "beam_green"
@@ -118,7 +122,7 @@ export const BeamCard = ({
       <HStack w="100%" py="20px" px="27px">
         <Avatar
           bg="white"
-          icon={<ICPIcon w="38px" h="38px" />}
+          icon={<TokenIcon w="38px" h="38px" />}
           boxShadow="0px 2.375px 4.75px rgba(0, 0, 0, 0.5)"
           size="1rem"
         />
@@ -131,10 +135,10 @@ export const BeamCard = ({
         </PrincipalInfo>
         <Spacer />
         <Text fontSize="16px" color="black_3">
-          {escrowObject.initialDeposit()} ICP
+          {escrowObject.initialDeposit()} {tokenName}
         </Text>
         <Text fontSize="14px" color="black_3">
-          ({beamRate()} ICP/hr)
+          ({beamRate()} {tokenName}/hr)
         </Text>
       </HStack>
       <TokenProgressBar
@@ -145,6 +149,7 @@ export const BeamCard = ({
         w="90%"
         startDate={hasStarted ? beamReadModel?.startDate : null}
         endDate={hasStarted ? beamReadModel?.scheduledEndDate : null}
+        tokenTypeName={tokenName}
       />
     </VStack>
   )

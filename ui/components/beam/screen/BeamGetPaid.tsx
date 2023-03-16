@@ -21,7 +21,7 @@ import {
 import moment from "moment"
 
 import { CheckIcon, ExternalLinkIcon, LinkIcon } from "@chakra-ui/icons"
-import { ICLogo, LetsGetYourPaidIcon } from "../../../icon"
+import { LetsGetYourPaidIcon } from "../../../icon"
 
 import { Field, Form, Formik } from "formik"
 import { FormNumberInput } from "../../form/FormNumberInput"
@@ -32,7 +32,8 @@ import { BeamGradientActionButton } from "../common/BeamGradientActionButton"
 import { BeamCreateLinkSchema } from "../../../schema/beamschema"
 import {
   BeamCreateLinkConfig,
-  BeamSupportedTokenType
+  BeamSupportedTokenType,
+  nameOfTokenType
 } from "../../../config/beamconfig"
 import log from "../../../utils/log"
 import { Principal } from "@dfinity/principal"
@@ -44,6 +45,8 @@ import { GetPaidAlertDialog } from "./getpaid/GetPaidAlertDialog"
 import { BeamHeading } from "../common/BeamHeading"
 import Head from "next/head"
 import { BeamVStack } from "../common/BeamVStack"
+import { TokenTypeData } from "../../../config"
+import { TokenRadioGroup } from "../common/TokenRadioGroup"
 
 const HeadlineStack = () => {
   return (
@@ -89,6 +92,9 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
 
   const defaultNumDays = 7
   const [numDays, setNumDays] = useState(defaultNumDays)
+  const [tokenType, setTokenType] = useState<BeamSupportedTokenType>(
+    BeamSupportedTokenType.icp
+  )
 
   const [beamOutId, setBeamOutId] = useState(null)
 
@@ -143,14 +149,14 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
       actions.setSubmitting(true)
 
       const e8sAmount = humanToE8s(amount)
-      const tokenType = convertToVariant(BeamSupportedTokenType.icp)
+      const tokenTypeVariant = convertToVariant(tokenType)
       const recipientPrincipal = Principal.fromText(recipient)
       const numMins = numDays * 24 * 60
 
       const beamOutService = await makeBeamOutActor()
       const result = await beamOutService.createBeamOut(
         e8sAmount,
-        tokenType,
+        tokenTypeVariant,
         recipientPrincipal,
         numMins
       )
@@ -208,6 +214,14 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
     await handleSubmit(values)
   }
 
+  const tokenIcon = TokenTypeData[tokenType]?.icon
+  const tokenName = nameOfTokenType(tokenType)
+
+  const onChangeTokenType = event => {
+    const tokenType = event.target.value
+    setTokenType(tokenType)
+  }
+
   return (
     <Box h="100vh">
       <Stack
@@ -215,7 +229,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
         w="100%"
         color="dark_black"
         fontSize="16px"
-        pt={{ base: "90px", md: "140px" }}
+        pt="80px"
         direction={{ base: "column", md: "row" }}
         justifyContent="center"
         px={{ base: "14px", md: "38px" }}
@@ -229,7 +243,8 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
             initialValues={{
               amount: 10,
               recipient: "",
-              isConfirmed: false
+              isConfirmed: false,
+              tokenType: BeamSupportedTokenType.icp
             }}
             validationSchema={BeamCreateLinkSchema}
             onSubmit={submit}
@@ -244,6 +259,11 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                   spacing={{ base: "24px", md: "32px" }}
                   py="24px"
                 >
+                  <TokenRadioGroup
+                    onChangeTokenType={onChangeTokenType}
+                    tokenType={tokenType}
+                  />
+
                   <Field name="amount">
                     {({ field, form }) => (
                       <FormNumberInput
@@ -256,12 +276,12 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         isInvalid={form.errors.amount && form.touched.amount}
                         errorMesg={form.errors.amount}
                         setFieldValue={setFieldValue}
-                        token="ICP"
-                        TokenIcon={ICLogo}
+                        token={tokenName}
+                        TokenIcon={tokenIcon}
                         themeColor="black_5"
                         trackColor="black_gray"
                       >
-                        <BeamHeading>ICP Amount:</BeamHeading>
+                        <BeamHeading>{tokenName} Amount:</BeamHeading>
                       </FormNumberInput>
                     )}
                   </Field>

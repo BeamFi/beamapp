@@ -81,9 +81,11 @@ export type Time__1 = bigint;
 export type TokenAmount = bigint;
 export type TokenAmount__1 = bigint;
 export type TokenType = { 'btc' : null } |
-  { 'icp' : null };
+  { 'icp' : null } |
+  { 'xtc' : null };
 export type TokenType__1 = { 'btc' : null } |
-  { 'icp' : null };
+  { 'icp' : null } |
+  { 'xtc' : null };
 export interface Tokens { 'e8s' : bigint }
 export interface _SERVICE {
   'buyerClaim' : ActorMethod<
@@ -98,19 +100,24 @@ export interface _SERVICE {
     Result_3
   >,
   'createBeamEscrow' : ActorMethod<
-    [TokenAmount, BlockIndex, Time__1, Principal, Principal],
+    [TokenAmount, TokenType, BlockIndex, Time__1, Principal, Principal],
     Result_3
   >,
   'createRelationBeamEscrow' : ActorMethod<
-    [TokenAmount, BlockIndex, Time__1, Principal, Principal, BeamRelationObjId],
+    [
+      TokenAmount,
+      TokenType,
+      BlockIndex,
+      Time__1,
+      Principal,
+      Principal,
+      BeamRelationObjId,
+    ],
     Result_3
   >,
-  'creatorClaim' : ActorMethod<
+  'creatorClaimBTC' : ActorMethod<[EscrowId, BitcoinAddress], Result_1>,
+  'creatorClaimByAccountId' : ActorMethod<
     [EscrowId, TokenType, AccountIdentifier__1],
-    Result_1
-  >,
-  'creatorClaimBTC' : ActorMethod<
-    [EscrowId, TokenType, BitcoinAddress],
     Result_1
   >,
   'creatorClaimByPrincipal' : ActorMethod<

@@ -1,6 +1,10 @@
 export const idlFactory = ({ IDL }) => {
   const EscrowId = IDL.Nat32
-  const TokenType = IDL.Variant({ btc: IDL.Null, icp: IDL.Null })
+  const TokenType = IDL.Variant({
+    btc: IDL.Null,
+    icp: IDL.Null,
+    xtc: IDL.Null
+  })
   const AccountIdentifier__1 = IDL.Vec(IDL.Nat8)
   const ErrorCode__1 = IDL.Variant({
     escrow_token_owned_not_matched: IDL.Text,
@@ -50,7 +54,11 @@ export const idlFactory = ({ IDL }) => {
     beam: IDL.Null,
     lumpSum: IDL.Null
   })
-  const TokenType__1 = IDL.Variant({ btc: IDL.Null, icp: IDL.Null })
+  const TokenType__1 = IDL.Variant({
+    btc: IDL.Null,
+    icp: IDL.Null,
+    xtc: IDL.Null
+  })
   const EscrowContract = IDL.Record({
     id: EscrowId__1,
     buyerAccountIdentifier: IDL.Opt(AccountIdentifier),
@@ -109,13 +117,21 @@ export const idlFactory = ({ IDL }) => {
       []
     ),
     createBeamEscrow: IDL.Func(
-      [TokenAmount, BlockIndex, Time__1, IDL.Principal, IDL.Principal],
+      [
+        TokenAmount,
+        TokenType,
+        BlockIndex,
+        Time__1,
+        IDL.Principal,
+        IDL.Principal
+      ],
       [Result_3],
       []
     ),
     createRelationBeamEscrow: IDL.Func(
       [
         TokenAmount,
+        TokenType,
         BlockIndex,
         Time__1,
         IDL.Principal,
@@ -125,13 +141,9 @@ export const idlFactory = ({ IDL }) => {
       [Result_3],
       []
     ),
-    creatorClaim: IDL.Func(
+    creatorClaimBTC: IDL.Func([EscrowId, BitcoinAddress], [Result_1], []),
+    creatorClaimByAccountId: IDL.Func(
       [EscrowId, TokenType, AccountIdentifier__1],
-      [Result_1],
-      []
-    ),
-    creatorClaimBTC: IDL.Func(
-      [EscrowId, TokenType, BitcoinAddress],
       [Result_1],
       []
     ),

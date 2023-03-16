@@ -1,6 +1,6 @@
 export const idlFactory = ({ IDL }) => {
   const TokenAmount__1 = IDL.Nat64
-  const TokenType__1 = IDL.Variant({ icp: IDL.Null })
+  const TokenType__1 = IDL.Variant({ icp: IDL.Null, xtc: IDL.Null })
   const BeamOutId = IDL.Nat32
   const ErrorCode = IDL.Variant({
     invalid_recipient: IDL.Text,
@@ -33,7 +33,7 @@ export const idlFactory = ({ IDL }) => {
     payment: IDL.Null
   })
   const Time = IDL.Int
-  const TokenType = IDL.Variant({ icp: IDL.Null })
+  const TokenType = IDL.Variant({ icp: IDL.Null, xtc: IDL.Null })
   const TokenAmount = IDL.Nat64
   const BeamOutModelV4 = IDL.Record({
     id: BeamOutId__1,

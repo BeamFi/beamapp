@@ -17,26 +17,44 @@ import {
   VStack
 } from "@chakra-ui/react"
 
-import { ICLogo, PlugConnectIcon } from "../../../../icon"
-import { EscrowPaymentConfig } from "../../../../config"
-import { e8sToHuman } from "../../../../utils/e8s"
+import { PlugConnectIcon } from "../../../../icon"
+import { TokenTypeData } from "../../../../config"
 import ExternalLink from "../../../ExternalLink"
 import { BeamActionButton } from "../../common/BeamActionButton"
+import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
+import { esToHuman, tokenIcon } from "../../../../utils/token"
+
+type Props = {
+  isOpen: boolean
+  onClose: any
+  submit: any
+  numClaimableTokens: number
+  escrowObject: EscrowContractClass
+}
 
 export const ClaimFundsDialog = ({
   isOpen,
   onClose,
   submit,
-  numClaimableTokens
-}) => {
+  numClaimableTokens,
+  escrowObject
+}: Props) => {
   const cancelRef = useRef()
 
-  const transferFee = e8sToHuman(EscrowPaymentConfig.ICP.fee)
+  const tokenType = escrowObject.tokenType()
 
   const confirm = () => {
     onClose()
     submit()
   }
+
+  const transferFee = () => {
+    const tokenData = TokenTypeData[tokenType]
+    const esToHumanFunc = esToHuman(tokenType)
+    return esToHumanFunc(tokenData.fee)
+  }
+
+  const TokenIcon = tokenIcon(tokenType)
 
   return (
     <AlertDialog
@@ -98,12 +116,22 @@ export const ClaimFundsDialog = ({
                     borderRadius="full"
                     mx="12px"
                   >
-                    <ICLogo h="30x" w="41px" color="black_3" /> ICP
+                    <TokenIcon
+                      h="30x"
+                      w="41px"
+                      color="black_3"
+                      px="5px"
+                      py="2px"
+                    />
+                    {escrowObject.tokenTypeName()}
                   </Tag>
                 </StatNumber>
-                <StatHelpText color="black_gray" fontSize="16px">
-                  A standard IC transfer fee {transferFee} ICP is applied.
-                </StatHelpText>
+                {transferFee() > 0 && (
+                  <StatHelpText color="black_gray" fontSize="16px">
+                    A standard transfer fee {transferFee()}{" "}
+                    {escrowObject.tokenTypeName()} is applied.
+                  </StatHelpText>
+                )}
               </Stat>
             </VStack>
           </AlertDialogBody>

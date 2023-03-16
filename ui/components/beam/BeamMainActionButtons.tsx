@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Stack, Text, Icon } from "@chakra-ui/react"
+import { Stack, Text, Icon, VStack } from "@chakra-ui/react"
 import { BeamActionButton } from "./common/BeamActionButton"
 import { BeamOutIcon, GetPaidIcon } from "../../icon"
 import { useNavigate } from "react-router-dom"
@@ -41,20 +41,27 @@ export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
       {...rest}
     >
       {enableMeeting && (
-        <ActionButton
-          leftIcon={
-            <Icon
-              as={FcConferenceCall}
-              w="23px"
-              h="23px"
-              ml={isShrink ? "110px" : "0px"}
-            />
-          }
-          onClick={() => navigate("/newmeeting")}
-          isShrink={isShrink}
-        >
-          <Text visibility={isShrink ? "hidden" : "visible"}>New Meeting</Text>
-        </ActionButton>
+        <VStack>
+          <ActionButton
+            leftIcon={
+              <Icon
+                as={FcConferenceCall}
+                w="23px"
+                h="23px"
+                ml={isShrink ? "110px" : "0px"}
+              />
+            }
+            onClick={() => navigate("/newmeeting")}
+            isShrink={isShrink}
+          >
+            <Text visibility={isShrink ? "hidden" : "visible"}>
+              New Meeting
+            </Text>
+          </ActionButton>
+          <Text visibility={isShrink ? "hidden" : "visible"} fontStyle="italic">
+            Limited Beta
+          </Text>
+        </VStack>
       )}
 
       <ActionButton

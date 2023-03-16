@@ -17,6 +17,7 @@ export const TokenProgressBar = ({
   numTokensOwned,
   startDate,
   endDate,
+  tokenTypeName,
   ...others
 }) => {
   const truncValue = truncFloatDecimals(value, 2)
@@ -55,7 +56,8 @@ export const TokenProgressBar = ({
         textAlign={"center"}
       >
         {markDesc}&nbsp;
-        {!isLargerThan768 ? <br /> : null}({truncNumTokensOwned} ICP)
+        {!isLargerThan768 ? <br /> : null}({truncNumTokensOwned} {tokenTypeName}
+        )
       </SliderMark>
       <SliderMark flex={1} value={100} ml="-65px" mt="16px">
         <Text flex={1} as="span" fontSize="11px">

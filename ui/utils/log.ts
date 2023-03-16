@@ -41,13 +41,19 @@ class Log {
     return this.generateMessage("error", message, source)
   }
 
-  logJSONObject(object) {
+  logObject(mesg, object?) {
     if (object == null) {
       return
     }
 
-    const jsonString = JSON.stringify(object)
-    this.info(jsonString)
+    this.info(mesg)
+
+    try {
+      const jsonString = JSON.stringify(object)
+      this.info(jsonString)
+    } catch (error) {
+      this.info(object)
+    }
   }
 
   flattenCandidError(candidError) {
