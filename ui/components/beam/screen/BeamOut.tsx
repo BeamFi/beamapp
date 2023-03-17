@@ -378,12 +378,17 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       }
     }
 
-    const result = await window.ic.plug.batchTransactions([TRANSFER_XTC_TX])
-    if (result) {
-      return { height }
-    }
+    log.info("requestXTCTransfer starts")
+    log.logObject("TRANSFER_XTC_TX:", TRANSFER_XTC_TX)
 
-    throw new Error("XTC transfer failed")
+    const result = await window.ic.plug.batchTransactions([TRANSFER_XTC_TX])
+    log.logObject("batchTransactions result: ", result)
+
+    // if (result) {
+    return { height }
+    // }
+
+    // throw new Error("XTC transfer failed")
   }
 
   const submit = async (values, actions) => {
