@@ -39,7 +39,7 @@ You can get ICP tokens from exchanges like Binance AU or speak to Henry (henry@b
 ## Git Branches
 
 dev - all development code will first merge to dev first, any push to dev will trigger deployment to https://dev.beamfi.app  
-main - this is where the productuction stable code is, it require manual trigger in Github Action to deploy to https://beamfi.app
+main - this is where the production stable code is, it requires manual trigger in Github Action to deploy to https://beamfi.app
 
 ## Pull Request & Review
 
@@ -70,7 +70,7 @@ React Router is used for client side routing. See /pages/index.js and /ui/compon
 ## Wiring of Canister ID to frontend
 
 The magical part that connects canister ID to frontend app is dfx.webpack.config.js.
-It reads canister_ids.json and export it as NEXT_PUBLIC_BEAM_CANISTER_ID for Beam canister for example.
+It reads canister_ids.json and exports it as NEXT_PUBLIC_BEAM_CANISTER_ID for Beam canister for example.
 See /ui/declaration/beam/index.js
 
 ## Sync BeamFi protocol Candid to Beam App
@@ -94,7 +94,7 @@ createActor(canisterId)
 
 since it has conflicts with NextJS server side rendering
 
-Notes: You can deleted unused files like \*.wasm
+Notes: You can delete unused files like \*.wasm
 
 ## Continuous Delivery
 
@@ -143,7 +143,7 @@ Twitter: @kinwo
 
 ## Contributing
 
-Pleaes feel free to raise issue or submit a pull request.
+Please feel free to raise issue or submit a pull request.
 
 ## License
 
