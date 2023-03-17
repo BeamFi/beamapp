@@ -41,7 +41,7 @@ export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
       {...rest}
     >
       {enableMeeting && (
-        <VStack>
+        <VStack spacing="12px" px="0" mx="0">
           <ActionButton
             leftIcon={
               <Icon
@@ -58,9 +58,7 @@ export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
               New Meeting
             </Text>
           </ActionButton>
-          <Text visibility={isShrink ? "hidden" : "visible"} fontStyle="italic">
-            Limited Beta
-          </Text>
+          {!isShrink && <Text fontStyle="italic">Limited Beta</Text>}
         </VStack>
       )}
 
