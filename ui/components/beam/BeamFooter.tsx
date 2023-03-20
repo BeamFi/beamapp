@@ -9,23 +9,14 @@ import {
   Link,
   Spacer,
   Text,
-  useDisclosure,
   VStack
 } from "@chakra-ui/react"
 import { BeamLogo, PoweredByICSquare } from "../../icon"
-import { LinkIcon } from "@chakra-ui/icons"
 import { FaDiscord, FaMediumM, FaTwitter } from "react-icons/fa"
-import { ShareURLModal } from "../socialmedia/ShareURLModal"
-import { BeamGradientActionButton } from "./common/BeamGradientActionButton"
 import ExternalLink from "../ExternalLink"
 import { useMatch } from "react-router-dom"
 
 export const BeamFooter = ({ hashtags, ...rest }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const shareURL = window.location.origin
-  const shareName = `Beam - Trustless Streaming Payment`
-  const shareBody = `Beam is a new Streaming Payment protocol with trustless escrow payment enabling creators to receive a continuous stream of payment each minute in real time.`
-
   const gotoICWebsite = () => {
     window.open("https://internetcomputer.org", "_blank")
   }
@@ -94,14 +85,6 @@ export const BeamFooter = ({ hashtags, ...rest }) => {
           </HStack>
         </VStack>
       </Center>
-      <ShareURLModal
-        headingTitle="Share Beam App"
-        url={shareURL}
-        title={shareName}
-        body={shareBody}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
     </Box>
   )
 }

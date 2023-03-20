@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 
 import {
   Box,
-  Center,
   HStack,
   Link,
   ListItem,
