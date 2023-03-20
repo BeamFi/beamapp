@@ -47,6 +47,7 @@ import Head from "next/head"
 import { BeamVStack } from "../common/BeamVStack"
 import { TokenTypeData } from "../../../config"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
+import { sanitizeJSURL } from "../../../utils/security"
 
 const HeadlineStack = () => {
   return (
@@ -350,7 +351,10 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                     {beamOutId != null && (
                       <Text pt="10px" pb="18px">
                         Link Created:{" "}
-                        <Link href={beamOutLink(beamOutId)} isExternal>
+                        <Link
+                          href={beamOutLink(sanitizeJSURL(beamOutId))}
+                          isExternal
+                        >
                           {beamOutLink(beamOutId)}
                         </Link>
                         <ExternalLinkIcon ml="6px" mb="2px" color="black_5" />
