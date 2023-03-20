@@ -54,5 +54,16 @@ module.exports = {
         destination: "/"
       }
     ]
+  },
+  images: {
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "marketplacecontent.zoom.us",
+        port: "",
+        pathname: "/zoom_marketplace/img/**"
+      }
+    ]
   }
 }

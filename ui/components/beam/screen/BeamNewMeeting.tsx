@@ -50,6 +50,7 @@ import { BeamVStack } from "../common/BeamVStack"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
 import { TokenTypeData } from "../../../config"
 import { GradientHeading } from "../common/GradientHeading"
+import Image from "next/image"
 
 const FormTitle = ({ children, ...rest }) => {
   return (
@@ -97,20 +98,41 @@ const HeadlineStack = ({ hashtags }: Props) => {
           Send your unique Beam Meeting link to the meeting participants
         </ListItem>
         <ListItem>
-          Go to Zoom Marketplace to{" "}
           <Link
             href="https://zoom.us/oauth/authorize?response_type=code&client_id=Vy82pQwsRVCMXQEz6BaWDQ&redirect_uri=https://beamfi.app"
             isExternal
           >
-            add Beam Meeting app to your Zoom account
+            Add BeamFi Meeting app to your Zoom account
           </Link>{" "}
-          so that we can pay you in real time when the meeting started
+          or click on ADD TO ZOOM button below so that we can pay you in real
+          time when the meeting starts
         </ListItem>
         <ListItem>
-          When your participants have joined the meeting, start your meeting as
+          After your participants have joined the meeting, you will get
+          notification from Zoom to start the meeting. Start your meeting as
           host and get paid in real time as you speak!
         </ListItem>
       </OrderedList>
+
+      <HStack spacing="24px">
+        <Link
+          href="https://zoom.us/oauth/authorize?response_type=code&client_id=Vy82pQwsRVCMXQEz6BaWDQ&redirect_uri=https://beamfi.app"
+          isExternal
+        >
+          <Image
+            src="https://marketplacecontent.zoom.us/zoom_marketplace/img/add_to_zoom.png"
+            width="169"
+            height="40"
+            alt="Add to ZOOM"
+          />
+        </Link>
+        <Link
+          href="https://beamfi.freshdesk.com/support/solutions/articles/51000335010-beamfi-zoom-app-user-guide"
+          isExternal
+        >
+          Learn More
+        </Link>
+      </HStack>
 
       <Wrap color="black_gray_3" spacing="22px">
         {hashtags.map((value, index) => (
