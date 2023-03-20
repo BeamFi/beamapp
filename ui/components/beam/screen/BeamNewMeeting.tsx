@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 
 import {
   Box,
+  Button,
   HStack,
   Link,
   ListItem,
@@ -102,7 +103,7 @@ const HeadlineStack = ({ hashtags }: Props) => {
             href="https://zoom.us/oauth/authorize?response_type=code&client_id=Vy82pQwsRVCMXQEz6BaWDQ&redirect_uri=https://beamfi.app"
             isExternal
           >
-            Add Beam Meeting app to your Zoom account
+            Add BeamFi Meeting app to your Zoom account
           </Link>{" "}
           or click on ADD TO ZOOM button below so that we can pay you in real
           time when the meeting starts
@@ -114,17 +115,25 @@ const HeadlineStack = ({ hashtags }: Props) => {
         </ListItem>
       </OrderedList>
 
-      <Link
-        href="https://zoom.us/oauth/authorize?response_type=code&client_id=Vy82pQwsRVCMXQEz6BaWDQ&redirect_uri=https://beamfi.app"
-        isExternal
-      >
-        <Image
-          src="https://marketplacecontent.zoom.us/zoom_marketplace/img/add_to_zoom.png"
-          width="169"
-          height="40"
-          alt="Add to ZOOM"
-        />
-      </Link>
+      <HStack spacing="24px">
+        <Link
+          href="https://zoom.us/oauth/authorize?response_type=code&client_id=Vy82pQwsRVCMXQEz6BaWDQ&redirect_uri=https://beamfi.app"
+          isExternal
+        >
+          <Image
+            src="https://marketplacecontent.zoom.us/zoom_marketplace/img/add_to_zoom.png"
+            width="169"
+            height="40"
+            alt="Add to ZOOM"
+          />
+        </Link>
+        <Link
+          href="https://beamfi.freshdesk.com/support/solutions/articles/51000335010-beamfi-zoom-app-user-guide"
+          isExternal
+        >
+          Learn More
+        </Link>
+      </HStack>
 
       <Wrap color="black_gray_3" spacing="22px">
         {hashtags.map((value, index) => (
