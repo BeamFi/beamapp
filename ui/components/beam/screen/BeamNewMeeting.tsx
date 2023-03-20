@@ -21,6 +21,8 @@ import {
 } from "@chakra-ui/react"
 import moment from "moment"
 
+import { sanitizeJSURL } from "../../../utils/security"
+
 import { CheckIcon, ExternalLinkIcon, LinkIcon } from "@chakra-ui/icons"
 
 import { Field, Form, Formik } from "formik"
@@ -446,7 +448,10 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                     {beamOutId != null && (
                       <Text pt="10px" pb="18px">
                         Link Created:{" "}
-                        <Link href={beamOutLink(beamOutId)} isExternal>
+                        <Link
+                          href={beamOutLink(sanitizeJSURL(beamOutId))}
+                          isExternal
+                        >
                           {beamOutLink(beamOutId)}
                         </Link>
                         <ExternalLinkIcon ml="6px" mb="2px" color="black_5" />
