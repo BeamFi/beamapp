@@ -56,19 +56,13 @@ export const BeamFooter = ({ hashtags, ...rest }) => {
             <Link href="https://discord.gg/uuDzQxdmmY" isExternal>
               <FaDiscord size="28px" color="gray" />
             </Link>
-            <Link
-              href="https://beamfi.freshdesk.com/support/solutions/articles/51000335011-terms-of-use"
-              isExternal
-            >
+            <Link href="https://doc.beamfi.app/terms" isExternal>
               Terms
             </Link>
-            <Link
-              href="https://beamfi.freshdesk.com/support/solutions/articles/51000335012-privacy-policy"
-              isExternal
-            >
+            <Link href="https://doc.beamfi.app/privacy" isExternal>
               Privacy
             </Link>
-            <Link href="https://beamfi.freshdesk.com/" isExternal>
+            <Link href="https://doc.beamfi.app/support" isExternal>
               Support
             </Link>
             <Spacer />
