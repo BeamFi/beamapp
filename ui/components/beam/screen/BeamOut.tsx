@@ -74,6 +74,7 @@ import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
 import { BeamOutModelV4 } from "../../../declarations/beamout/beamout.did"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
 import { esToHuman } from "../../../utils/token"
+import { encrypt, importKey, pack } from "../../../utils/crypto"
 
 const HeadlineStack = () => {
   return (
@@ -316,23 +317,37 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
     setLoading(false)
   }
 
-  const gotoMeeting = () => {
-    const meetingHost = process.env.NEXT_PUBLIC_MEETING_HOST
+  const gotoMeeting = async () => {
+    const meetingHost = process.env.NEXT_PUBLIC_MEETING_HOST as string
     const { meetingId, meetingPassword } = meetingModel
-    const userName = "Henry"
 
-    window.location.assign(
-      `${meetingHost}?meetingId=${meetingId}&meetingPassword=${meetingPassword}&userName=${userName}`
-    )
+    // encrypt query data
+    const queryData = JSON.stringify({ meetingId, meetingPassword })
+    const { cipher, iv } = await encryptMeetingData(queryData)
+
+    // redirect to meeting host with encrypted query data
+    const encodedCipher = encodeURIComponent(pack(cipher))
+    const encodedIV = encodeURIComponent(pack(iv))
+    const redirectedURL = `${meetingHost}?cipher=${encodedCipher}&iv=${encodedIV}`
+
+    window.location.assign(redirectedURL)
+  }
+
+  const encryptMeetingData = async (
+    data: string
+  ): Promise<{ cipher: ArrayBuffer; iv: Uint8Array }> => {
+    const rawKey = process.env.NEXT_PUBLIC_WEB_CRYPTO_KEY as string
+    const cryptoKey = await importKey(rawKey)
+    return await encrypt(data, cryptoKey)
   }
 
   const gotoMyBeam = () => {
     navigate("/mybeams")
   }
 
-  const postBeamCreatedSuccess = () => {
+  const postBeamCreatedSuccess = async () => {
     if (isMeeting) {
-      gotoMeeting()
+      await gotoMeeting()
     } else {
       gotoMyBeam()
     }
@@ -365,8 +380,6 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       methodName: "transferErc20",
       args: [Principal.fromText(escrowPaymentCanisterId), escrowAmount],
       onSuccess: async res => {
-        log.logObject("XTC transfer success:", res)
-
         if (res.Ok) {
           height = res.Ok
         } else {
@@ -378,11 +391,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       }
     }
 
-    log.info("requestXTCTransfer starts")
-    log.logObject("TRANSFER_XTC_TX:", TRANSFER_XTC_TX)
-
     const result = await window.ic.plug.batchTransactions([TRANSFER_XTC_TX])
-    log.logObject("batchTransactions result: ", result)
 
     if (result) {
       return { height }
@@ -473,8 +482,6 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       }
 
       let result = await requestTransferFunc(escrowAmount)
-      log.logObject("Request transfer result: ", result)
-
       const blockIndex = result.height
 
       showMediumToast(
@@ -513,7 +520,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
           "success"
         )
 
-        postBeamCreatedSuccess()
+        await postBeamCreatedSuccess()
         return
       }
 
