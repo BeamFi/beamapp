@@ -9,6 +9,8 @@ jobs:
       - uses: actions/checkout@v3
       - run: corepack enable && corepack prepare pnpm@latest --activate
       - run: ./scripts/setup-ui-prod.sh && pnpm install && pnpm run build
+        env:
+          NEXT_PUBLIC_WEB_CRYPTO_KEY: ${{ secrets.NEXT_PUBLIC_WEB_CRYPTO_KEY }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
