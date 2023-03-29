@@ -474,7 +474,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                           href={beamOutLink(sanitizeJSURL(beamOutId))}
                           isExternal
                         >
-                          {beamOutLink(beamOutId)}
+                          {beamOutLink(sanitizeJSURL(beamOutId))}
                         </Link>
                         <ExternalLinkIcon ml="6px" mb="2px" color="black_5" />
                       </Text>
