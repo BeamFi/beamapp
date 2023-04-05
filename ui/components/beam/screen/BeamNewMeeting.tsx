@@ -13,6 +13,7 @@ import {
   Spacer,
   Stack,
   Text,
+  Tooltip,
   useDisclosure,
   useToast,
   VStack,
@@ -89,7 +90,10 @@ const HeadlineStack = ({ hashtags }: Props) => {
         color="dark_black"
       >
         <ListItem>
-          Fill out the payment details and the Zoom Meeting details
+          Fill out the payment details and the Zoom Meeting ID and password.
+          <Text fontStyle="italic">
+            (Do not enter the Zoom meeting ID previously used with BeamFi)
+          </Text>
         </ListItem>
         <ListItem>
           Submit the form and get your unique Beam Meeting link
@@ -127,7 +131,7 @@ const HeadlineStack = ({ hashtags }: Props) => {
           />
         </Link>
         <Link
-          href="https://beamfi.freshdesk.com/support/solutions/articles/51000335010-beamfi-zoom-app-user-guide"
+          href="https://beamfi.freshdesk.com/support/solutions/folders/51000336019"
           isExternal
         >
           Learn More
@@ -362,7 +366,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         themeColor="black_5"
                         trackColor="black_gray"
                       >
-                        <FormTitle>{tokenName} Amount:</FormTitle>
+                        <FormTitle>{tokenName} Amount</FormTitle>
                       </FormNumberInput>
                     )}
                   </Field>
@@ -381,7 +385,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.recipient}
                       >
-                        <FormTitle>Your Plug Wallet:</FormTitle>
+                        <FormTitle>Your Plug Wallet</FormTitle>
                       </FormInput>
                     )}
                   </Field>
@@ -391,7 +395,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                     w={{ base: "95%", md: "80%" }}
                     spacing="12px"
                   >
-                    <FormTitle textAlign="left">Duration:</FormTitle>
+                    <FormTitle textAlign="left">Duration</FormTitle>
 
                     <HStack w="100%">
                       <Text
@@ -441,7 +445,16 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.meetingId}
                       >
-                        <FormTitle>Zoom Meeting ID:</FormTitle>
+                        <FormTitle>
+                          <Tooltip
+                            label="Generate a new Meeting ID. Do not enter the Zoom meeting ID previously used with BeamFi."
+                            placement="right-end"
+                            bg="gray.100"
+                            color="black"
+                          >
+                            Zoom Meeting ID
+                          </Tooltip>
+                        </FormTitle>
                       </FormInput>
                     )}
                   </Field>
@@ -461,7 +474,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.meetingPassword}
                       >
-                        <FormTitle>Zoom Meeting Password:</FormTitle>
+                        <FormTitle>Zoom Meeting Password</FormTitle>
                       </FormInput>
                     )}
                   </Field>
