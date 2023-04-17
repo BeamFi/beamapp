@@ -9,7 +9,6 @@ import { makeEscrowPaymentActor } from "../../../../service/actor/actor-locator"
 import { accountIdentifierHexToBlob } from "../../../../utils/account-identifier"
 
 import { connectPlugForToken, hasSession } from "../../../auth/provider/plug"
-import { AuthProvider } from "../../../../config"
 
 import { showToast } from "../../../../utils/toast"
 import log from "../../../../utils/log"
@@ -68,10 +67,7 @@ export const ClaimButton = ({
     }
 
     try {
-      const escrowService = await makeEscrowPaymentActor(
-        null,
-        AuthProvider.Plug
-      )
+      const escrowService = await makeEscrowPaymentActor()
 
       const tokenType = escrowObject.tokenType()
 

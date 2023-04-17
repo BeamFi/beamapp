@@ -5,7 +5,6 @@ import useSWR from "swr"
 
 import { SWRKey } from "../../config"
 
-import { AuthProvider } from "../../config"
 import { makeEscrowPaymentActor } from "../../service/actor/actor-locator"
 import log from "../../utils/log"
 
@@ -20,10 +19,7 @@ export const useEscrow = (escrowId, refreshSecs = 5) => {
     try {
       setFetching(true)
 
-      const escrowService = await makeEscrowPaymentActor(
-        null,
-        AuthProvider.Plug
-      )
+      const escrowService = await makeEscrowPaymentActor()
       const result = await escrowService.queryMyBeamEscrow(escrowId)
 
       if (result.ok) {

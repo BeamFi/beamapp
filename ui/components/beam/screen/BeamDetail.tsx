@@ -15,7 +15,6 @@ import { HStack, Spacer } from "@chakra-ui/react"
 import { ClaimInfo } from "./mybeams/ClaimInfo"
 import { verifyBeamPlugConnection } from "../../auth/provider/plug"
 import { StandardSpinner } from "../../StandardSpinner"
-import { AuthProvider } from "../../../config"
 import { makeBeamActor } from "../../../service/actor/actor-locator"
 import { EscrowContractClass } from "../../../model/class/EscrowContractClass"
 import { useEscrow } from "../useEscrow"
@@ -51,7 +50,7 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
       setLoading(true)
       await verifyBeamPlugConnection()
 
-      const beamService = await makeBeamActor(null, AuthProvider.Plug)
+      const beamService = await makeBeamActor()
       const idNum = Number(id)
       const escrowIds = [idNum]
       const myBeamReadModels = await beamService.queryBeamByEscrowIds(escrowIds)

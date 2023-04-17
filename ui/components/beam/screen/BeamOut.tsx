@@ -67,7 +67,7 @@ import { StandardSpinner } from "../../StandardSpinner"
 
 import { connectPlugForToken, hasSession } from "../../auth/provider/plug"
 import { principalToAccountIdentifier } from "../../../utils/account-identifier"
-import { AuthProvider, TokenTypeData, XTC } from "../../../config"
+import { TokenTypeData, XTC } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr, ratePerMin } from "../../../utils/date"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
@@ -427,11 +427,8 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       }
 
       // Health check
-      const escrowService = await makeEscrowPaymentActor(
-        null,
-        AuthProvider.Plug
-      )
-      const beamService = await makeBeamActor(null, AuthProvider.Plug)
+      const escrowService = await makeEscrowPaymentActor()
+      const beamService = await makeBeamActor()
 
       const promiseAllFunc = []
       promiseAllFunc.push(escrowService.healthCheck())
