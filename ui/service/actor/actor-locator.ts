@@ -42,7 +42,7 @@ export const clearCache = () => {
 
 const makeActor = async (canisterId, idlFactory, createActor, actorKey) => {
   const cache = actorCache[actorKey]
-  let principalId = ""
+  let principalId = null
 
   // Check NFID II first
   const authClient = await AuthClient.create({
@@ -52,9 +52,15 @@ const makeActor = async (canisterId, idlFactory, createActor, actorKey) => {
     }
   })
 
-  const identity = (await authClient.getIdentity()) as unknown as Identity
-  principalId = identity?.getPrincipal()?.toString()
   let authProvider = InternetIdentity
+  let identity = null
+
+  const isIIAuthenticated = await authClient.isAuthenticated()
+
+  if (isIIAuthenticated) {
+    identity = (await authClient.getIdentity()) as unknown as Identity
+    principalId = identity?.getPrincipal()?.toString()
+  }
 
   if (principalId != null) {
     authProvider = InternetIdentity

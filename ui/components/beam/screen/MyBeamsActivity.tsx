@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 
 import { HStack, Link } from "@chakra-ui/react"
 
-import { verifyBeamPlugConnection } from "../../auth/provider/plug"
 import {
   makeBeamActor,
   makeEscrowPaymentActor
@@ -15,6 +14,7 @@ import { BeamCard } from "./mybeams/BeamCard"
 import { BeamMainActionButtons } from "../BeamMainActionButtons"
 import { StandardSpinner } from "../../StandardSpinner"
 import { ExternalLinkIcon } from "@chakra-ui/icons"
+import { checkUserAuthPrincipalId } from "../../auth/checkUserAuth"
 
 export const MyBeamsActivity = ({
   setBeamReadModel,
@@ -36,15 +36,15 @@ export const MyBeamsActivity = ({
   const loadMyBeams = async () => {
     try {
       setLoading(true)
-      await verifyBeamPlugConnection()
 
-      const principalId =
-        window?.ic?.plug?.sessionManager?.sessionData?.principalId
+      const principalId = await checkUserAuthPrincipalId()
       setMyPrincipalId(principalId)
 
-      const escrowService = await makeEscrowPaymentActor()
+      log.info(`loadMyBeams: principalId=${principalId}`)
 
+      const escrowService = await makeEscrowPaymentActor()
       const myEscrows = await escrowService.queryMyBeams()
+
       setEscrows(myEscrows)
 
       // Early stop of loading spinner so user can see the main info asap

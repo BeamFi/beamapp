@@ -25,7 +25,7 @@ import { PlugConfig } from "../../../config/beamconfig"
 import { AuthProvider } from "../../../config"
 import { createIILogin } from "../../auth/provider/internet-identity"
 
-import log from "../../../utils/log"
+import { makeLogout } from "../../../service/actor/actor-locator"
 
 const ActionButton = ({ children, ...others }) => {
   return (
@@ -66,8 +66,6 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
   }
 
   const handleAuthUpdate = identity => {
-    log.info(identity)
-
     if (identity == null) {
       showToast(
         toast,
@@ -106,6 +104,11 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
         )
 
         setLoading(true)
+
+        // Logout the other provider
+        const logoutFunc = makeLogout(InternetIdentity)
+        await logoutFunc()
+
         await authLogin()
         break
       }
@@ -113,6 +116,10 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
         const authLogin = createIILogin(handleAuthUpdate, authProvider)
 
         setLoading(true)
+
+        // Logout the other provider
+        await makeLogout(Plug)
+
         await authLogin()
         break
       }

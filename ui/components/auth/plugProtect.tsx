@@ -8,8 +8,6 @@ import { checkUserAuth } from "./checkUserAuth"
 // Components
 import { FullPageSpinner } from "../FullPageSpinner"
 
-import { AuthProvider } from "../../config"
-
 import log from "../../utils/log"
 
 export const userProtectWithPublic = Component => props => {
@@ -27,9 +25,7 @@ const authProtect = Component => props => {
       setLoading(true)
 
       try {
-        const identity = await checkUserAuth(AuthProvider.Plug, {
-          isCreateAgent: false
-        })
+        const identity = await checkUserAuth()
 
         if (identity != null) {
           updateIdentity(identity)

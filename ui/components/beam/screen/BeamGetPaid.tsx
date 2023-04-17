@@ -49,6 +49,7 @@ import { BeamVStack } from "../common/BeamVStack"
 import { TokenTypeData } from "../../../config"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
 import { sanitizeJSURL } from "../../../utils/security"
+import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
 
 const HeadlineStack = () => {
   return (
@@ -224,6 +225,14 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
     setTokenType(tokenType)
   }
 
+  const {
+    isOpen: isSelectAuthOpen,
+    onOpen: onSelectAuthOpen,
+    onClose: onSelectAuthClose
+  } = useDisclosure()
+
+  const selectAuth = async () => {}
+
   return (
     <Box h="100vh">
       <Stack
@@ -306,11 +315,20 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                           <HStack>
                             <Box>Your Plug Wallet</Box>
                             <Spacer />
-                            <Button variant="solid" colorScheme="purple_scheme">
+                            <Button
+                              variant="solid"
+                              colorScheme="purple_scheme"
+                              onClick={onSelectAuthOpen}
+                            >
                               Connect
                             </Button>
                           </HStack>
                         </BeamHeading>
+                        <BeamSelectWalletModal
+                          isOpen={isSelectAuthOpen}
+                          onClose={onSelectAuthClose}
+                          selectAuth={selectAuth}
+                        />
                       </FormInput>
                     )}
                   </Field>

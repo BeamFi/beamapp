@@ -53,6 +53,7 @@ import { TokenRadioGroup } from "../common/TokenRadioGroup"
 import { TokenTypeData } from "../../../config"
 import { GradientHeading } from "../common/GradientHeading"
 import Image from "next/image"
+import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
 
 const FormTitle = ({ children, ...rest }) => {
   return (
@@ -306,6 +307,14 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
     setTokenType(tokenType)
   }
 
+  const {
+    isOpen: isSelectAuthOpen,
+    onOpen: onSelectAuthOpen,
+    onClose: onSelectAuthClose
+  } = useDisclosure()
+
+  const selectAuth = async () => {}
+
   return (
     <Box h="100vh">
       <Stack
@@ -390,11 +399,21 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                           <HStack>
                             <Box>Your Plug Wallet</Box>
                             <Spacer />
-                            <Button variant="solid" colorScheme="purple_scheme">
+                            <Button
+                              variant="solid"
+                              colorScheme="purple_scheme"
+                              onClick={onSelectAuthOpen}
+                            >
                               Connect
                             </Button>
                           </HStack>
                         </FormTitle>
+
+                        <BeamSelectWalletModal
+                          isOpen={isSelectAuthOpen}
+                          onClose={onSelectAuthClose}
+                          selectAuth={selectAuth}
+                        />
                       </FormInput>
                     )}
                   </Field>
