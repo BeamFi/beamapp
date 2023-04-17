@@ -22,6 +22,10 @@ import { showToast } from "../../../utils/toast"
 
 import { createPlugLogin } from "../../auth/provider/plug"
 import { PlugConfig } from "../../../config/beamconfig"
+import { AuthProvider } from "../../../config"
+import { createIILogin } from "../../auth/provider/internet-identity"
+
+import log from "../../../utils/log"
 
 const ActionButton = ({ children, ...others }) => {
   return (
@@ -34,6 +38,8 @@ const ActionButton = ({ children, ...others }) => {
 export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
   const initLoading = 1
   const toast = useToast()
+
+  const { InternetIdentity, Plug } = AuthProvider
 
   useEffect(() => {
     setBgColor("beam_blue")
@@ -60,6 +66,8 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
   }
 
   const handleAuthUpdate = identity => {
+    log.info(identity)
+
     if (identity == null) {
       showToast(
         toast,
@@ -82,21 +90,33 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
   const selectAuth = async authProvider => {
     onSelectAuthClose()
 
-    const authLogin = createPlugLogin(
-      handleAuthUpdate,
-      authProvider,
-      PlugConfig.whitelist
-    )
+    switch (authProvider) {
+      case Plug: {
+        const authLogin = createPlugLogin(
+          handleAuthUpdate,
+          authProvider,
+          PlugConfig.whitelist
+        )
 
-    showToast(
-      toast,
-      "Login with Plug",
-      "Please make sure your have unlocked your Plug Wallet.",
-      "info"
-    )
+        showToast(
+          toast,
+          "Login with Plug",
+          "Please make sure your have unlocked your Plug Wallet.",
+          "info"
+        )
 
-    setLoading(true)
-    await authLogin()
+        setLoading(true)
+        await authLogin()
+        break
+      }
+      case InternetIdentity: {
+        const authLogin = createIILogin(handleAuthUpdate, authProvider)
+
+        setLoading(true)
+        await authLogin()
+        break
+      }
+    }
   }
 
   return (

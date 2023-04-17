@@ -1,5 +1,7 @@
 import React from "react"
 
+import Image from "next/image"
+
 import {
   Modal,
   ModalOverlay,
@@ -27,7 +29,7 @@ export const BeamSelectWalletModal = ({ isOpen, onClose, selectAuth }) => {
     onClose: onPlugModalClose
   } = useDisclosure()
 
-  const { Plug } = AuthProvider
+  const { Plug, InternetIdentity } = AuthProvider
 
   const onClickSelectAuth = authProvider => {
     switch (authProvider) {
@@ -58,6 +60,16 @@ export const BeamSelectWalletModal = ({ isOpen, onClose, selectAuth }) => {
           <ModalHeader>Choose</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <BlackOutlineButton
+              onClick={() => onClickSelectAuth(InternetIdentity)}
+            >
+              <Image
+                src="./nfid-logo-dark.png"
+                width="85"
+                height="40"
+                alt="Connect NFID"
+              />
+            </BlackOutlineButton>
             <BlackOutlineButton onClick={() => onClickSelectAuth(Plug)}>
               <PlugConnectIcon h="40px" mr="18px" />
               Plug Wallet
@@ -65,8 +77,19 @@ export const BeamSelectWalletModal = ({ isOpen, onClose, selectAuth }) => {
 
             <VStack py="12px">
               <Text align="center" fontWeight="medium">
-                Don&apos;t have Plug Wallet?
+                Don&apos;t have NFID or Plug Wallet?
               </Text>
+
+              <Link
+                isExternal
+                href="https://nfid.one"
+                color="blue_2"
+                fontSize="16px"
+                fontWeight="light"
+              >
+                Learn more about NFID
+                <ExternalLinkIcon ml="6px" mb="2px" />
+              </Link>
               <Link
                 isExternal
                 href="https://plugwallet.ooo"
