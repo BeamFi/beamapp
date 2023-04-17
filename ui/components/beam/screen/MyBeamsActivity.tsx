@@ -8,8 +8,6 @@ import {
   makeEscrowPaymentActor
 } from "../../../service/actor/actor-locator"
 
-import { AuthProvider } from "../../../config"
-
 import log from "../../../utils/log"
 import { BeamVStack } from "../common/BeamVStack"
 import { BeamInTextIcon, BeamOutTextIcon } from "../../../icon"
@@ -44,10 +42,7 @@ export const MyBeamsActivity = ({
         window?.ic?.plug?.sessionManager?.sessionData?.principalId
       setMyPrincipalId(principalId)
 
-      const escrowService = await makeEscrowPaymentActor(
-        null,
-        AuthProvider.Plug
-      )
+      const escrowService = await makeEscrowPaymentActor()
 
       const myEscrows = await escrowService.queryMyBeams()
       setEscrows(myEscrows)
@@ -55,7 +50,7 @@ export const MyBeamsActivity = ({
       // Early stop of loading spinner so user can see the main info asap
       setLoading(false)
 
-      const beamService = await makeBeamActor(null, AuthProvider.Plug)
+      const beamService = await makeBeamActor()
       const escrowIds = myEscrows.map(escrow => escrow.id)
       const myBeamReadModels = await beamService.queryBeamByEscrowIds(escrowIds)
 
