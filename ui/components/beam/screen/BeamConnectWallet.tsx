@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 
 import Head from "next/head"
 
@@ -20,13 +20,6 @@ import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
 
 import { showToast } from "../../../utils/toast"
 
-import { createPlugLogin } from "../../auth/provider/plug"
-import { PlugConfig } from "../../../config/beamconfig"
-import { AuthProvider } from "../../../config"
-import { createIILogin } from "../../auth/provider/internet-identity"
-
-import { makeLogout } from "../../../service/actor/actor-locator"
-
 const ActionButton = ({ children, ...others }) => {
   return (
     <BeamActionButton w={{ base: "200px", md: "223px" }} h="52px" {...others}>
@@ -38,8 +31,6 @@ const ActionButton = ({ children, ...others }) => {
 export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
   const initLoading = 1
   const toast = useToast()
-
-  const { InternetIdentity, Plug } = AuthProvider
 
   useEffect(() => {
     setBgColor("beam_blue")
@@ -59,10 +50,9 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
     onOpen: onSelectAuthOpen,
     onClose: onSelectAuthClose
   } = useDisclosure()
-  const [isLoading, setLoading] = useState(false)
 
   const cancelLogin = () => {
-    setLoading(false)
+    onSelectAuthClose()
   }
 
   const handleAuthUpdate = identity => {
@@ -83,47 +73,6 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
       "success"
     )
     navigateToMyBeams()
-  }
-
-  const selectAuth = async authProvider => {
-    onSelectAuthClose()
-
-    switch (authProvider) {
-      case Plug: {
-        const authLogin = createPlugLogin(
-          handleAuthUpdate,
-          authProvider,
-          PlugConfig.whitelist
-        )
-
-        showToast(
-          toast,
-          "Login with Plug",
-          "Please make sure your have unlocked your Plug Wallet.",
-          "info"
-        )
-
-        setLoading(true)
-
-        // Logout the other provider
-        const logoutFunc = makeLogout(InternetIdentity)
-        await logoutFunc()
-
-        await authLogin()
-        break
-      }
-      case InternetIdentity: {
-        const authLogin = createIILogin(handleAuthUpdate, authProvider)
-
-        setLoading(true)
-
-        // Logout the other provider
-        await makeLogout(Plug)
-
-        await authLogin()
-        break
-      }
-    }
   }
 
   return (
@@ -165,9 +114,9 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
         <BeamSelectWalletModal
           isOpen={isSelectAuthOpen}
           onClose={onSelectAuthClose}
-          selectAuth={selectAuth}
+          handleAuthUpdate={handleAuthUpdate}
         />
-        {isLoading && (
+        {isSelectAuthOpen && (
           <Button
             w="110px"
             h="38px"

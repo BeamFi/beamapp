@@ -14,15 +14,25 @@ import {
   Link,
   Text,
   VStack,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from "@chakra-ui/react"
 
 import { ExternalLinkIcon } from "@chakra-ui/icons"
 import { AuthProvider } from "../../../config"
 import { BlackOutlineButton } from "../../button/BlackOutlineButton"
 import { PlugConnectIcon } from "../../../icon"
+import { PlugConfig } from "../../../config/beamconfig"
+import { makeLogout } from "../../../service/actor/actor-locator"
+import { showToast } from "../../../utils/toast"
+import { createIILogin } from "../../auth/provider/internet-identity"
+import { createPlugLogin } from "../../auth/provider/plug"
 
-export const BeamSelectWalletModal = ({ isOpen, onClose, selectAuth }) => {
+export const BeamSelectWalletModal = ({
+  isOpen,
+  onClose,
+  handleAuthUpdate
+}) => {
   const {
     isOpen: isPlugModalOpen,
     onOpen: onPlugModalOpen,
@@ -30,6 +40,8 @@ export const BeamSelectWalletModal = ({ isOpen, onClose, selectAuth }) => {
   } = useDisclosure()
 
   const { Plug, InternetIdentity } = AuthProvider
+
+  const toast = useToast()
 
   const onClickSelectAuth = authProvider => {
     switch (authProvider) {
@@ -50,6 +62,43 @@ export const BeamSelectWalletModal = ({ isOpen, onClose, selectAuth }) => {
   const closeAll = () => {
     onPlugModalClose()
     onClose()
+  }
+
+  const selectAuth = async authProvider => {
+    onClose()
+
+    switch (authProvider) {
+      case Plug: {
+        const authLogin = createPlugLogin(
+          handleAuthUpdate,
+          authProvider,
+          PlugConfig.whitelist
+        )
+
+        showToast(
+          toast,
+          "Login with Plug",
+          "Please make sure your have unlocked your Plug Wallet.",
+          "info"
+        )
+
+        // Logout the other provider
+        const logoutFunc = makeLogout(InternetIdentity)
+        await logoutFunc()
+
+        await authLogin()
+        break
+      }
+      case InternetIdentity: {
+        const authLogin = createIILogin(handleAuthUpdate, authProvider)
+
+        // Logout the other provider
+        await makeLogout(Plug)
+
+        await authLogin()
+        break
+      }
+    }
   }
 
   return (

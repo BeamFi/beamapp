@@ -686,10 +686,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                     <BeamSelectWalletModal
                       isOpen={isSelectAuthOpen}
                       onClose={onSelectAuthClose}
-                      selectAuth={() => {
-                        onSelectAuthClose()
-                        handleSubmit()
-                      }}
+                      handleAuthUpdate={handleSubmit}
                     />
                     {isLoading && (
                       <Button

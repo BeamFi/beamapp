@@ -54,6 +54,7 @@ import { TokenTypeData } from "../../../config"
 import { GradientHeading } from "../common/GradientHeading"
 import Image from "next/image"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
+import { Identity } from "@dfinity/agent"
 
 const FormTitle = ({ children, ...rest }) => {
   return (
@@ -313,7 +314,11 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
     onClose: onSelectAuthClose
   } = useDisclosure()
 
-  const selectAuth = async () => {}
+  const handleAuthUpdate = async (identity: Identity, setFieldValue) => {
+    const principal = await identity.getPrincipal()
+    const principalString = principal.toString()
+    setFieldValue("recipient", principalString)
+  }
 
   return (
     <Box h="100vh">
@@ -397,7 +402,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                       >
                         <FormTitle>
                           <HStack>
-                            <Box>Your Plug Wallet</Box>
+                            <Box>Your Wallet</Box>
                             <Spacer />
                             <Button
                               variant="solid"
@@ -412,7 +417,9 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         <BeamSelectWalletModal
                           isOpen={isSelectAuthOpen}
                           onClose={onSelectAuthClose}
-                          selectAuth={selectAuth}
+                          handleAuthUpdate={identity =>
+                            handleAuthUpdate(identity, setFieldValue)
+                          }
                         />
                       </FormInput>
                     )}
@@ -492,6 +499,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                       <FormInput
                         id="meetingPassword"
                         field={field}
+                        type="password"
                         inputFontSize={{ base: "sm", md: "md" }}
                         themeColor="black_5"
                         placeholder="Zoom Meeting Password"

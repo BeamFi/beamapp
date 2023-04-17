@@ -50,6 +50,7 @@ import { TokenTypeData } from "../../../config"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
 import { sanitizeJSURL } from "../../../utils/security"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
+import { Identity } from "@dfinity/agent"
 
 const HeadlineStack = () => {
   return (
@@ -231,7 +232,11 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
     onClose: onSelectAuthClose
   } = useDisclosure()
 
-  const selectAuth = async () => {}
+  const handleAuthUpdate = async (identity: Identity, setFieldValue) => {
+    const principal = await identity.getPrincipal()
+    const principalString = principal.toString()
+    setFieldValue("recipient", principalString)
+  }
 
   return (
     <Box h="100vh">
@@ -313,7 +318,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                       >
                         <BeamHeading>
                           <HStack>
-                            <Box>Your Plug Wallet</Box>
+                            <Box>Your Wallet</Box>
                             <Spacer />
                             <Button
                               variant="solid"
@@ -327,7 +332,9 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         <BeamSelectWalletModal
                           isOpen={isSelectAuthOpen}
                           onClose={onSelectAuthClose}
-                          selectAuth={selectAuth}
+                          handleAuthUpdate={identity =>
+                            handleAuthUpdate(identity, setFieldValue)
+                          }
                         />
                       </FormInput>
                     )}
