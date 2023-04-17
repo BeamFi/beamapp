@@ -30,7 +30,7 @@ export const nameOfEscrowPayment = value => {
 
 // 7 days session duration and idle timeout
 export const AuthConfig = {
-  MaxSessionDurationNanoSecs: BigInt(7) * OneDayInNano,
+  MaxSessionDurationNanoSecs: BigInt(30) * OneDayInNano,
   CheckInterval: 60 * 1000
 }
 
