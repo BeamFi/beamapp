@@ -81,7 +81,7 @@
     "swr": "^2.1.0",
     "underscore": "^1.13.6",
     "util": "^0.12.5",
-    "yup": "^1.0.2"
+    "yup": "^1.1.1"
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix",
