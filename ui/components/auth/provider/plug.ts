@@ -7,12 +7,21 @@ const host = process.env.NEXT_PUBLIC_IC_HOST
 export const createPlugLogin = (
   handleAuthenticated,
   authProvider,
-  whiteList
+  whiteList,
+  showLoginMesg
 ) => {
   return async () => {
     try {
-      const isConnected = await connectPlug(whiteList)
+      const isCreated = await isAgentCreated()
+      if (isCreated) {
+        const identity = window.ic.plug.agent
+        await handleAuthenticated(identity, authProvider)
+        return
+      }
 
+      showLoginMesg()
+
+      const isConnected = await connectPlug(whiteList)
       if (!isConnected) {
         log.info("createPlugLogin - Plug wallet connection was refused")
         await handleAuthenticated(null, authProvider)

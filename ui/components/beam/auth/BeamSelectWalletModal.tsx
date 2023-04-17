@@ -64,6 +64,15 @@ export const BeamSelectWalletModal = ({
     onClose()
   }
 
+  const showPlugLoginMesg = () => {
+    showToast(
+      toast,
+      "Login with Plug",
+      "Please make sure your have unlocked your Plug Wallet.",
+      "info"
+    )
+  }
+
   const selectAuth = async authProvider => {
     onClose()
 
@@ -72,14 +81,8 @@ export const BeamSelectWalletModal = ({
         const authLogin = createPlugLogin(
           handleAuthUpdate,
           authProvider,
-          PlugConfig.whitelist
-        )
-
-        showToast(
-          toast,
-          "Login with Plug",
-          "Please make sure your have unlocked your Plug Wallet.",
-          "info"
+          PlugConfig.whitelist,
+          showPlugLoginMesg
         )
 
         // Logout the other provider
@@ -113,7 +116,7 @@ export const BeamSelectWalletModal = ({
               onClick={() => onClickSelectAuth(InternetIdentity)}
             >
               <Image
-                src="./nfid-logo-dark.png"
+                src="/nfid-logo-dark.png"
                 width="85"
                 height="40"
                 alt="Connect NFID"

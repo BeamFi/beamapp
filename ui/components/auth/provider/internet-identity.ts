@@ -24,6 +24,13 @@ export function createIILogin(handleAuthenticated, authProvider) {
       }
     })
 
+    const isAuthenticated = await authClient.isAuthenticated()
+    if (isAuthenticated) {
+      const identity = await authClient.getIdentity()
+      await handleAuthenticated(identity, authProvider)
+      return
+    }
+
     const openerFeatures =
       `left=${window.screen.width / 2 - 525 / 2}, ` +
       `top=${window.screen.height / 2 - 705 / 2},` +
@@ -52,8 +59,8 @@ export async function checkIIUserAuth() {
       disableDefaultIdleCallback: true
     }
   })
-  const isAuthenticated = await authClient.isAuthenticated()
 
+  const isAuthenticated = await authClient.isAuthenticated()
   if (isAuthenticated) {
     const identity = await authClient.getIdentity()
     return identity

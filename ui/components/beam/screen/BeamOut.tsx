@@ -643,7 +643,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                         errorMesg={form.errors.recipient}
                         isReadOnly={isFormReadonly}
                       >
-                        <BeamHeading>Recipient Plug Wallet:</BeamHeading>
+                        <BeamHeading>Recipient Wallet:</BeamHeading>
                       </FormInput>
                     )}
                   </Field>
