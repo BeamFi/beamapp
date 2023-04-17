@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 
 import {
   Box,
+  Button,
   HStack,
   Link,
   ListItem,
@@ -236,7 +237,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
         px={{ base: "14px", md: "38px" }}
       >
         <Head>
-          <title>Get Paid - Beam</title>
+          <title>New Beam - BeamFi</title>
         </Head>
         <HeadlineStack />
         <BeamVStack>
@@ -282,7 +283,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         themeColor="black_5"
                         trackColor="black_gray"
                       >
-                        <BeamHeading>{tokenName} Amount:</BeamHeading>
+                        <BeamHeading>{tokenName} Amount</BeamHeading>
                       </FormNumberInput>
                     )}
                   </Field>
@@ -301,7 +302,15 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.recipient}
                       >
-                        <BeamHeading>Your Plug Wallet:</BeamHeading>
+                        <BeamHeading>
+                          <HStack>
+                            <Box>Your Plug Wallet</Box>
+                            <Spacer />
+                            <Button variant="solid" colorScheme="purple_scheme">
+                              Connect
+                            </Button>
+                          </HStack>
+                        </BeamHeading>
                       </FormInput>
                     )}
                   </Field>
@@ -311,7 +320,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                     w={{ base: "95%", md: "80%" }}
                     spacing="12px"
                   >
-                    <BeamHeading textAlign="left">Duration:</BeamHeading>
+                    <BeamHeading textAlign="left">Duration</BeamHeading>
 
                     <HStack w="100%">
                       <Text
@@ -362,9 +371,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                     )}
                     <BeamGradientActionButton
                       title={
-                        beamOutId != null
-                          ? "Copy Link"
-                          : "Create Unique Beam Link"
+                        beamOutId != null ? "Copy Link" : "Create Beam Link"
                       }
                       textSize={{ base: "15px", md: "20px" }}
                       textWeight="semibold"

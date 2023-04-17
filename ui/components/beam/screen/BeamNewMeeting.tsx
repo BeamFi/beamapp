@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 
 import {
   Box,
+  Button,
   HStack,
   Link,
   ListItem,
@@ -318,7 +319,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
         px={{ base: "14px", md: "38px" }}
       >
         <Head>
-          <title>Get Paid - Beam</title>
+          <title>New Meeting - BeamFi</title>
         </Head>
         <HeadlineStack hashtags={hashtags} />
         <BeamVStack>
@@ -385,7 +386,15 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.recipient}
                       >
-                        <FormTitle>Your Plug Wallet</FormTitle>
+                        <FormTitle>
+                          <HStack>
+                            <Box>Your Plug Wallet</Box>
+                            <Spacer />
+                            <Button variant="solid" colorScheme="purple_scheme">
+                              Connect
+                            </Button>
+                          </HStack>
+                        </FormTitle>
                       </FormInput>
                     )}
                   </Field>
