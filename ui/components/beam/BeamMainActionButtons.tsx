@@ -75,7 +75,7 @@ export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
         onClick={() => navigate("/getpaid")}
         isShrink={isShrink}
       >
-        <Text visibility={isShrink ? "hidden" : "visible"}>Get Paid</Text>
+        <Text visibility={isShrink ? "hidden" : "visible"}>New Beam</Text>
       </ActionButton>
       <ActionButton
         leftIcon={
