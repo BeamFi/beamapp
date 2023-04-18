@@ -111,24 +111,24 @@ export const BeamSelectWalletModal = ({
         <ModalContent>
           <ModalHeader>Choose</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <BlackOutlineButton
-              onClick={() => onClickSelectAuth(InternetIdentity)}
-            >
-              <Image
-                src="/nfid-logo-dark.png"
-                width="85"
-                height="40"
-                alt="Connect NFID"
-              />
-            </BlackOutlineButton>
-            <BlackOutlineButton onClick={() => onClickSelectAuth(Plug)}>
-              <PlugConnectIcon h="40px" mr="18px" />
-              Plug Wallet
-            </BlackOutlineButton>
+          <ModalBody py="18px">
+            <VStack>
+              <BlackOutlineButton
+                onClick={() => onClickSelectAuth(InternetIdentity)}
+              >
+                <Image
+                  src="/nfid-logo-dark.png"
+                  width="85"
+                  height="40"
+                  alt="Connect NFID"
+                />
+              </BlackOutlineButton>
+              <BlackOutlineButton onClick={() => onClickSelectAuth(Plug)}>
+                <PlugConnectIcon h="40px" mr="18px" />
+                Plug Wallet
+              </BlackOutlineButton>
 
-            <VStack py="12px">
-              <Text align="center" fontWeight="medium">
+              <Text align="center" fontWeight="medium" pt="12px">
                 Don&apos;t have NFID or Plug Wallet?
               </Text>
 

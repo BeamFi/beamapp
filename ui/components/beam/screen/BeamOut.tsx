@@ -40,7 +40,6 @@ import XTC_IDL from "../../../declarations/xtc/xtc.did"
 
 // Config
 import {
-  BeamCreateConfig,
   BeamCreateLinkConfig,
   BeamSupportedTokenType
 } from "../../../config/beamconfig"
@@ -65,9 +64,8 @@ import log from "../../../utils/log"
 import { useNavigate, useParams } from "react-router-dom"
 import { StandardSpinner } from "../../StandardSpinner"
 
-import { connectPlugForToken, hasSession } from "../../auth/provider/plug"
 import { principalToAccountIdentifier } from "../../../utils/account-identifier"
-import { TokenTypeData, XTC } from "../../../config"
+import { AuthProvider, TokenTypeData, XTC } from "../../../config"
 import { BeamVStack } from "../common/BeamVStack"
 import { ratePerHr, ratePerMin } from "../../../utils/date"
 import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
@@ -75,6 +73,12 @@ import { BeamOutModelV4 } from "../../../declarations/beamout/beamout.did"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
 import { esToHuman } from "../../../utils/token"
 import { encrypt, importKey, pack } from "../../../utils/crypto"
+import {
+  checkUserAuthPrincipalId,
+  checkUserAuthProvider
+} from "../../auth/checkUserAuth"
+import { transferICP as nfidTransferICP } from "../../auth/provider/internet-identity"
+import { transferICP as plugTransferICP } from "../../auth/provider/plug"
 
 const HeadlineStack = () => {
   return (
@@ -229,6 +233,8 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
     setNumMins(numDays * 24 * 60)
   }
 
+  const { InternetIdentity, Plug } = AuthProvider
+
   const {
     isOpen: isSelectAuthOpen,
     onOpen: onSelectAuthOpen,
@@ -353,26 +359,34 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
     }
   }
 
-  const requestICPTransfer = async escrowAmount => {
+  const requestICPTransfer = async (amount: number): Promise<number> => {
     // Create request transfer params
     const escrowPaymentCanisterAccountId = principalToAccountIdentifier(
       Principal.fromText(escrowPaymentCanisterId)
     )
 
-    const params = {
-      to: escrowPaymentCanisterAccountId,
-      amount: escrowAmount,
-      opts: {
-        memo: Number(BeamCreateConfig.JobFlowId)
+    // check current auth provider
+    const provider: AuthProvider = await checkUserAuthProvider()
+
+    // Request transfer from Plug
+    let transferFunc = plugTransferICP
+    switch (provider) {
+      case Plug: {
+        transferFunc = plugTransferICP
+        break
+      }
+      case InternetIdentity: {
+        transferFunc = nfidTransferICP
+        break
       }
     }
 
-    // Request transfer from Plug
-    return await window.ic.plug.requestTransfer(params)
+    return await transferFunc(escrowPaymentCanisterAccountId, amount)
   }
 
-  const requestXTCTransfer = async escrowAmount => {
+  const requestXTCTransfer = async (amount: number): Promise<number> => {
     let height: number = 0
+    const escrowAmount = Number(humanToE12s(amount))
 
     const TRANSFER_XTC_TX = {
       idl: XTC_IDL,
@@ -394,7 +408,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
     const result = await window.ic.plug.batchTransactions([TRANSFER_XTC_TX])
 
     if (result) {
-      return { height }
+      return height
     }
 
     throw new Error("XTC transfer failed")
@@ -410,21 +424,6 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       }
 
       actions.setSubmitting(true)
-
-      // Check if Plug is available, else show popup mesg
-      let isConnected = await hasSession()
-      if (!isConnected || window.ic?.plug?.accountId == null) {
-        isConnected = await connectPlugForToken({
-          showToast,
-          toast,
-          title: "Create Beam"
-        })
-
-        if (!isConnected) {
-          actions.setSubmitting(false)
-          return
-        }
-      }
 
       // Health check
       const escrowService = await makeEscrowPaymentActor()
@@ -450,14 +449,13 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
       showToast(
         toast,
         "Create Beam",
-        `1/3 - Requesting transfer of ${amount} ${tokenName} from Plug Wallet to Beam.`,
+        `1/3 - Requesting transfer of ${amount} ${tokenName} from your Wallet to Beam.`,
         "info"
       )
 
       // Prepare / validate post requestTransfer canister request parameters
       // to catch any potential error before making token transfer
-      const myPrincipalId =
-        window?.ic?.plug?.sessionManager?.sessionData?.principalId
+      const myPrincipalId = await checkUserAuthPrincipalId()
       const buyerPrincipal = Principal.fromText(myPrincipalId)
       const creatorPrincipal = Principal.fromText(recipient)
       const dueDate = moment()
@@ -475,11 +473,11 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
         case xtc: {
           requestTransferFunc = requestXTCTransfer
           escrowAmount = Number(humanToE12s(amount))
+          break
         }
       }
 
-      let result = await requestTransferFunc(escrowAmount)
-      const blockIndex = result.height
+      const blockIndex = await requestTransferFunc(amount)
 
       showMediumToast(
         toast,
@@ -488,6 +486,7 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
         "info"
       )
 
+      let result = null
       if (isMeeting) {
         result = await escrowService.createRelationBeamEscrow(
           escrowAmount,
@@ -520,6 +519,8 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
         await postBeamCreatedSuccess()
         return
       }
+
+      log.info(result)
 
       throw new Error(result.err)
     } catch (error) {
@@ -579,150 +580,152 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
         <HeadlineStack />
         <BeamVStack>
           {isLoading && <StandardSpinner />}
-          <Formik
-            initialValues={{
-              amount: amount,
-              recipient: recipient,
-              isConfirmed: false
-            }}
-            validationSchema={BeamCreateLinkSchema}
-            onSubmit={submit}
-            enableReinitialize
-          >
-            {({ values, isSubmitting, handleSubmit, setFieldValue }) => (
-              <Form style={{ width: "100%" }}>
-                <VStack
-                  bgColor="white"
-                  borderRadius="14px"
-                  maxW="700px"
-                  spacing={{ base: "24px", md: "32px" }}
-                  py="24px"
-                >
-                  {!isFormReadonly && (
-                    <TokenRadioGroup
-                      onChangeTokenType={onChangeTokenType}
-                      tokenType={tokenType}
-                    />
-                  )}
-
-                  <Field name="amount">
-                    {({ field, form }) => (
-                      <FormNumberInput
-                        id="amount"
-                        field={field}
-                        min={BeamCreateLinkConfig.BudgetMinNumTokens}
-                        max={BeamCreateLinkConfig.BudgetMaxNumTokens}
-                        inputFontSize={{ base: "sm", md: "md" }}
-                        w={{ base: "95%", md: "80%" }}
-                        isInvalid={form.errors.amount && form.touched.amount}
-                        errorMesg={form.errors.amount}
-                        setFieldValue={setFieldValue}
-                        token={tokenType}
-                        TokenIcon={tokenIcon}
-                        themeColor="black_5"
-                        trackColor="black_gray"
-                        isReadOnly={isFormReadonly}
-                      >
-                        <BeamHeading>{tokenName} Amount:</BeamHeading>
-                      </FormNumberInput>
+          {!isLoading && (
+            <Formik
+              initialValues={{
+                amount: amount,
+                recipient: recipient,
+                isConfirmed: false
+              }}
+              validationSchema={BeamCreateLinkSchema}
+              onSubmit={submit}
+              enableReinitialize
+            >
+              {({ values, isSubmitting, handleSubmit, setFieldValue }) => (
+                <Form style={{ width: "100%" }}>
+                  <VStack
+                    bgColor="white"
+                    borderRadius="14px"
+                    maxW="700px"
+                    spacing={{ base: "24px", md: "32px" }}
+                    py="24px"
+                  >
+                    {!isFormReadonly && (
+                      <TokenRadioGroup
+                        onChangeTokenType={onChangeTokenType}
+                        tokenType={tokenType}
+                      />
                     )}
-                  </Field>
 
-                  <Field name="recipient">
-                    {({ field, form }) => (
-                      <FormInput
-                        id="recipient"
-                        field={field}
-                        inputFontSize={{ base: "sm", md: "md" }}
-                        themeColor="black_5"
-                        placeholder="Wallet Principal ID"
-                        w={{ base: "95%", md: "80%" }}
-                        isInvalid={
-                          form.errors.recipient && form.touched.recipient
-                        }
-                        errorMesg={form.errors.recipient}
-                        isReadOnly={isFormReadonly}
-                      >
-                        <BeamHeading>Recipient Wallet:</BeamHeading>
-                      </FormInput>
-                    )}
-                  </Field>
+                    <Field name="amount">
+                      {({ field, form }) => (
+                        <FormNumberInput
+                          id="amount"
+                          field={field}
+                          min={BeamCreateLinkConfig.BudgetMinNumTokens}
+                          max={BeamCreateLinkConfig.BudgetMaxNumTokens}
+                          inputFontSize={{ base: "sm", md: "md" }}
+                          w={{ base: "95%", md: "80%" }}
+                          isInvalid={form.errors.amount && form.touched.amount}
+                          errorMesg={form.errors.amount}
+                          setFieldValue={setFieldValue}
+                          token={tokenType}
+                          TokenIcon={tokenIcon}
+                          themeColor="black_5"
+                          trackColor="black_gray"
+                          isReadOnly={isFormReadonly}
+                        >
+                          <BeamHeading>{tokenName} Amount:</BeamHeading>
+                        </FormNumberInput>
+                      )}
+                    </Field>
 
-                  {isMeeting && (
-                    <MinDuration
-                      numMins={numMins}
-                      setNumMins={setNumMins}
-                      showEndDate={showEndDate}
-                      endDateDesc={endDateDesc}
-                      isReadOnly={isFormReadonly}
-                    />
-                  )}
-
-                  {!isMeeting && (
-                    <DayDuration
-                      numDays={numDays}
-                      setNumDays={setNumDays}
-                      showEndDate={showEndDate}
-                      endDateDesc={endDateDesc}
-                      isReadOnly={isFormReadonly}
-                    />
-                  )}
-
-                  <Box w="100%" textAlign="center">
-                    <BeamActionButton
-                      leftIcon={
-                        <RocketIcon w="23px" h="23px" color="black_5" />
-                      }
-                      isLoading={isSubmitting}
-                      w={{ base: "95%", md: "80%" }}
-                      h="62px"
-                      fontWeight="semibold"
-                      fontSize="21px"
-                      bg="beam_pink"
-                      onClick={onSelectAuthOpen}
-                    >
-                      Create Beam
-                    </BeamActionButton>
-                    <BeamSelectWalletModal
-                      isOpen={isSelectAuthOpen}
-                      onClose={onSelectAuthClose}
-                      handleAuthUpdate={handleSubmit}
-                    />
-                    {isLoading && (
-                      <Button
-                        w="110px"
-                        h="38px"
-                        color="blue_1"
-                        variant="link"
-                        textAlign="center"
-                        onClick={cancelLogin}
-                      >
-                        Cancel
-                      </Button>
-                    )}
+                    <Field name="recipient">
+                      {({ field, form }) => (
+                        <FormInput
+                          id="recipient"
+                          field={field}
+                          inputFontSize={{ base: "sm", md: "md" }}
+                          themeColor="black_5"
+                          placeholder="Wallet Principal ID"
+                          w={{ base: "95%", md: "80%" }}
+                          isInvalid={
+                            form.errors.recipient && form.touched.recipient
+                          }
+                          errorMesg={form.errors.recipient}
+                          isReadOnly={isFormReadonly}
+                        >
+                          <BeamHeading>Recipient Wallet:</BeamHeading>
+                        </FormInput>
+                      )}
+                    </Field>
 
                     {isMeeting && (
-                      <Text color="gray_light2" pt="20px">
-                        Recipient will receive{" "}
-                        {beamRate(values.amount, ratePerMin)} {tokenName}/minute
-                        for {numMins} minutes ({values.amount} {tokenName}{" "}
-                        total)
-                      </Text>
+                      <MinDuration
+                        numMins={numMins}
+                        setNumMins={setNumMins}
+                        showEndDate={showEndDate}
+                        endDateDesc={endDateDesc}
+                        isReadOnly={isFormReadonly}
+                      />
                     )}
 
                     {!isMeeting && (
-                      <Text color="gray_light2" pt="20px">
-                        Recipient will receive{" "}
-                        {beamRate(values.amount, ratePerHr)} {tokenName}/hour
-                        for {numMins / 60} hours ({values.amount} {tokenName}{" "}
-                        total)
-                      </Text>
+                      <DayDuration
+                        numDays={numDays}
+                        setNumDays={setNumDays}
+                        showEndDate={showEndDate}
+                        endDateDesc={endDateDesc}
+                        isReadOnly={isFormReadonly}
+                      />
                     )}
-                  </Box>
-                </VStack>
-              </Form>
-            )}
-          </Formik>
+
+                    <Box w="100%" textAlign="center">
+                      <BeamActionButton
+                        leftIcon={
+                          <RocketIcon w="23px" h="23px" color="black_5" />
+                        }
+                        isLoading={isSubmitting}
+                        w={{ base: "95%", md: "80%" }}
+                        h="62px"
+                        fontWeight="semibold"
+                        fontSize="21px"
+                        bg="beam_pink"
+                        onClick={onSelectAuthOpen}
+                      >
+                        Create Beam
+                      </BeamActionButton>
+                      <BeamSelectWalletModal
+                        isOpen={isSelectAuthOpen}
+                        onClose={onSelectAuthClose}
+                        handleAuthUpdate={handleSubmit}
+                      />
+                      {isLoading && (
+                        <Button
+                          w="110px"
+                          h="38px"
+                          color="blue_1"
+                          variant="link"
+                          textAlign="center"
+                          onClick={cancelLogin}
+                        >
+                          Cancel
+                        </Button>
+                      )}
+
+                      {isMeeting && (
+                        <Text color="gray_light2" pt="20px">
+                          Recipient will receive{" "}
+                          {beamRate(values.amount, ratePerMin)} {tokenName}
+                          /minute for {numMins} minutes ({values.amount}{" "}
+                          {tokenName} total)
+                        </Text>
+                      )}
+
+                      {!isMeeting && (
+                        <Text color="gray_light2" pt="20px">
+                          Recipient will receive{" "}
+                          {beamRate(values.amount, ratePerHr)} {tokenName}/hour
+                          for {numMins / 60} hours ({values.amount} {tokenName}{" "}
+                          total)
+                        </Text>
+                      )}
+                    </Box>
+                  </VStack>
+                </Form>
+              )}
+            </Formik>
+          )}
         </BeamVStack>
       </Stack>
     </Box>

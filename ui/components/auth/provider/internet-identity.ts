@@ -6,14 +6,19 @@ import { AuthConfig } from "../../../config"
 // Util
 import log from "../../../utils/log"
 
-const APPLICATION_NAME = "BeamFi%20App"
-const APPLICATION_LOGO_URL = "https%3A%2F%2Fbeamfi.app%2Fbeamicon.jpg"
-const AUTH_PATH =
+// NFID
+const NFID_APPLICATION_NAME = "BeamFi%20App"
+const NFID_APPLICATION_LOGO_URL = "https%3A%2F%2Fbeamfi.app%2Fbeamicon.jpg"
+const NFID_ORIGIN = process.env.NEXT_PUBLIC_II_CANISTER
+
+const NFID_AUTH_PATH =
   "/authenticate/?applicationName=" +
-  APPLICATION_NAME +
+  NFID_APPLICATION_NAME +
   "&applicationLogo=" +
-  APPLICATION_LOGO_URL +
+  NFID_APPLICATION_LOGO_URL +
   "#authorize"
+
+const NFID_AUTH_PROVIDER_URL = NFID_ORIGIN + NFID_AUTH_PATH
 
 export function createIILogin(handleAuthenticated, authProvider) {
   return async () => {
@@ -47,7 +52,7 @@ export function createIILogin(handleAuthenticated, authProvider) {
         log.error(error)
         await handleAuthenticated(null, authProvider)
       },
-      identityProvider: process.env.NEXT_PUBLIC_II_CANISTER + AUTH_PATH
+      identityProvider: NFID_AUTH_PROVIDER_URL
     })
   }
 }
@@ -67,4 +72,31 @@ export async function checkIIUserAuth() {
   }
 
   return null
+}
+
+const NFID_RE_TRANSFER_APP_META = `applicationName=${NFID_APPLICATION_NAME}&applicationLogo=${NFID_APPLICATION_LOGO_URL}`
+const NFID_REQ_TRANSFER = "wallet/request-transfer"
+
+const REQ_TRANSFER_PROVIDER_URL = new URL(
+  `${NFID_ORIGIN}/${NFID_REQ_TRANSFER}?${NFID_RE_TRANSFER_APP_META}`
+)
+
+export async function transferICP(to: string, amount: number): Promise<number> {
+  const { requestTransfer } = await import("@nfid/wallet")
+
+  const result = await requestTransfer(
+    { to, amount },
+    {
+      provider: REQ_TRANSFER_PROVIDER_URL
+    }
+  )
+
+  log.info(result)
+
+  switch (result.status) {
+    case "SUCCESS":
+      return result.height
+    default:
+      throw new Error(`Failed to transfer ICP: ${result.message}`)
+  }
 }

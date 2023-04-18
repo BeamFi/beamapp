@@ -1,5 +1,6 @@
 // Util
 import { PlugConfig } from "../../../config/beamconfig"
+import { humanToE8s } from "../../../utils/e8s"
 import log from "../../../utils/log"
 
 const host = process.env.NEXT_PUBLIC_IC_HOST
@@ -159,4 +160,25 @@ export const verifyBeamPlugConnection = async (): Promise<void> => {
       log.info("Plug agent has been created")
     }
   }
+}
+
+type PlugTransferParams = {
+  to: string
+  amount: number
+}
+
+export const transferICP = async (
+  to: string,
+  amount: number
+): Promise<number> => {
+  const escrowAmount: number = Number(humanToE8s(amount))
+
+  const params: PlugTransferParams = {
+    to,
+    amount: escrowAmount
+  }
+
+  // Request transfer from Plug
+  const result = await window.ic.plug.requestTransfer(params)
+  return result.height
 }

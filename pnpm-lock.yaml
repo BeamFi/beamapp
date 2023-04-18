@@ -31,6 +31,9 @@ dependencies:
   '@fontsource/poppins':
     specifier: ^4.5.10
     version: 4.5.10
+  '@nfid/wallet':
+    specifier: ^1.1.0
+    version: 1.1.0
   '@splitbee/web':
     specifier: ^0.3.0
     version: 0.3.0
@@ -2922,6 +2925,21 @@ packages:
     dev: false
     optional: true
 
+  /@nfid/core@1.0.2(tslib@2.4.0):
+    resolution: {integrity: sha512-Utw8R69KSlwnfVcoritY99iW0eF/z/JGj0MKWawTQQdqFZL1xCN7RtFx35Lwupnx9cWzcIvv6lQfzp7wQsPjFg==}
+    peerDependencies:
+      tslib: 2.4.0
+    dependencies:
+      tslib: 2.4.0
+    dev: false
+
+  /@nfid/wallet@1.1.0:
+    resolution: {integrity: sha512-vZXhWihuBze7EenT2tTkF5wpiLWWNweuuvKuLxLTqZV0Yljd/ICqSFbJBqxouNmbQemethGhjKzfGvFT8xS/Sw==}
+    dependencies:
+      '@nfid/core': 1.0.2(tslib@2.4.0)
+      tslib: 2.4.0
+    dev: false
+
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -5061,6 +5079,7 @@ packages:
   /next@13.2.4(@babel/core@7.21.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-g1I30317cThkEpvzfXujf0O4wtaQHtDCLhlivwlTJ885Ld+eOgcz7r3TGQzeU+cSRoNHtD8tsJgzxVdYojFssw==}
     engines: {node: '>=14.6.0'}
+    hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.4.0
       fibers: '>= 3.1.0'
@@ -5935,6 +5954,7 @@ packages:
 
   /ts-node@10.9.1(@types/node@18.15.3)(typescript@4.9.5):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
+    hasBin: true
     peerDependencies:
       '@swc/core': '>=1.2.50'
       '@swc/wasm': '>=1.2.50'
@@ -6068,6 +6088,7 @@ packages:
 
   /update-browserslist-db@1.0.10(browserslist@4.21.5):
     resolution: {integrity: sha512-OztqDenkfFkbSG+tRxBeAnCVPckDBcvibKd35yDONx6OU8N7sqgwc7rCbkJ/WcYtVRZ4ba68d6byhC21GFh7sQ==}
+    hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
     dependencies:

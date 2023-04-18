@@ -51,6 +51,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/poppins": "^4.5.10",
+    "@nfid/wallet": "^1.1.0",
     "@splitbee/web": "^0.3.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
