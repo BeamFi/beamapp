@@ -200,11 +200,16 @@ const DayDuration = ({
 }
 
 type BeamOutInProps = {
+  setAuthProvider?: Function
   setBgColor?: Function
   setHashtags?: Function
 }
 
-export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
+export const BeamOut = ({
+  setAuthProvider,
+  setBgColor,
+  setHashtags
+}: BeamOutInProps) => {
   const { beamOutId } = useParams()
   const { icp, xtc } = BeamSupportedTokenType
 
@@ -688,7 +693,10 @@ export const BeamOut = ({ setBgColor, setHashtags }: BeamOutInProps) => {
                       <BeamSelectWalletModal
                         isOpen={isSelectAuthOpen}
                         onClose={onSelectAuthClose}
-                        handleAuthUpdate={handleSubmit}
+                        handleAuthUpdate={(identiy, authProvider) => {
+                          setAuthProvider(authProvider)
+                          handleSubmit()
+                        }}
                       />
                       {isLoading && (
                         <Button

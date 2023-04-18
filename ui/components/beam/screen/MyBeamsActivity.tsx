@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import { HStack, Link } from "@chakra-ui/react"
 
@@ -15,14 +15,16 @@ import { BeamMainActionButtons } from "../BeamMainActionButtons"
 import { StandardSpinner } from "../../StandardSpinner"
 import { ExternalLinkIcon } from "@chakra-ui/icons"
 import { checkUserAuthPrincipalId } from "../../auth/checkUserAuth"
+import { AuthProviderContext } from "../../../context/AuthProviderContext"
 
 export const MyBeamsActivity = ({
   setBeamReadModel,
   setBeamEscrowContract
 }) => {
-  const initLoading = 1
   const [escrows, setEscrows] = useState([])
   const [beamMap, setBeamMap] = useState({})
+
+  const authProvider = useContext(AuthProviderContext)
 
   const [myPrincipalId, setMyPrincipalId] = useState(null)
   const [isLoading, setLoading] = useState(true)
@@ -31,7 +33,7 @@ export const MyBeamsActivity = ({
     loadMyBeams()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initLoading])
+  }, [authProvider])
 
   const loadMyBeams = async () => {
     try {

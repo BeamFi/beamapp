@@ -68,7 +68,7 @@ export const BeamMainActionButtons = ({ isShrink = false, ...rest }) => {
             w="23px"
             h="23px"
             color="black_5"
-            ml={isShrink ? "76px" : "0px"}
+            ml={isShrink ? "94px" : "0px"}
             mb="4px"
           />
         }

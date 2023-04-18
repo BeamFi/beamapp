@@ -28,7 +28,11 @@ const ActionButton = ({ children, ...others }) => {
   )
 }
 
-export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
+export const BeamConnetWallet = ({
+  setAuthProvider,
+  setBgColor,
+  setHashtags
+}) => {
   const initLoading = 1
   const toast = useToast()
 
@@ -55,7 +59,7 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
     onSelectAuthClose()
   }
 
-  const handleAuthUpdate = identity => {
+  const handleAuthUpdate = (identity, authProvider) => {
     if (identity == null) {
       showToast(
         toast,
@@ -72,6 +76,8 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
       "Your Wallet is connected successfully.",
       "success"
     )
+
+    setAuthProvider(authProvider)
     navigateToMyBeams()
   }
 

@@ -3,12 +3,12 @@ import React from "react"
 import { Center } from "@chakra-ui/react"
 
 // Components
-import { BeamLoginButton } from "./BeamLoginButton"
+import { MyWalletMenu } from "./MyWalletMenu"
 
-export const BeamTopRightButtons = ({ ...rest }) => {
+export const BeamTopRightButtons = ({ setAuthProvider, ...rest }) => {
   return (
     <Center {...rest}>
-      <BeamLoginButton>Logout</BeamLoginButton>
+      <MyWalletMenu setAuthProvider={setAuthProvider} />
     </Center>
   )
 }

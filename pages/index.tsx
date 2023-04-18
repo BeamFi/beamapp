@@ -12,6 +12,7 @@ import { MyBeamsLayout } from "../ui/components/beam/screen/MyBeamsLayout"
 import { MyBeamsActivity } from "../ui/components/beam/screen/MyBeamsActivity"
 import { BeamDetail } from "../ui/components/beam/screen/BeamDetail"
 import { clientProxy } from "../ui/components/auth/clientProxy"
+import { AuthProviderContext } from "../ui/context/AuthProviderContext"
 
 export const BeamApp = props => {
   const [bgColor, setBgColor] = useState("beam_blue")
@@ -23,67 +24,117 @@ export const BeamApp = props => {
   const routeUpdateProps = { setBgColor, setHashtags }
   const routeProps = { bgColor, hashtags }
 
+  const [authProvider, setAuthProvider] = useState(null)
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<BeamSkeleton {...routeProps} {...props} />}>
-          <Route path="/" element={<BeamHome {...routeUpdateProps} />} />
+    <AuthProviderContext.Provider value={authProvider}>
+      <BrowserRouter>
+        <Routes>
           <Route
-            path="/index.html"
-            element={<BeamHome {...routeUpdateProps} />}
-          />
-          <Route path="/beamout" element={<BeamOut {...routeUpdateProps} />}>
-            <Route path=":beamOutId" element={<BeamOut />} />
-          </Route>
-          <Route path="/meeting" element={<BeamOut {...routeUpdateProps} />}>
-            <Route path=":beamOutId" element={<BeamOut />} />
-          </Route>
-          <Route
-            path="/getpaid"
-            element={<BeamGetPaid {...routeUpdateProps} />}
-          />
-          <Route
-            path="/newmeeting"
-            element={<BeamNewMeeting {...routeUpdateProps} />}
-          />
-          <Route
-            path="/connect"
-            element={<BeamConnetWallet {...routeUpdateProps} />}
-          />
-          <Route
-            path="/mybeams"
-            element={<MyBeamsLayout {...routeUpdateProps} />}
-          >
-            <Route
-              index
-              element={
-                <MyBeamsActivity
-                  setBeamEscrowContract={setBeamEscrowContract}
-                  setBeamReadModel={setBeamReadModel}
-                />
-              }
-            />
-            <Route
-              path=":escrowId"
-              element={
-                <BeamDetail
-                  beamEscrowContract={beamEscrowContract}
-                  beamReadModel={beamReadModel}
-                />
-              }
-            />
-          </Route>
-          <Route
-            path="*"
+            path="/"
             element={
-              <main style={{ padding: "1rem" }}>
-                <p>Nothing here!</p>
-              </main>
+              <BeamSkeleton
+                setAuthProvider={setAuthProvider}
+                {...routeProps}
+                {...props}
+              />
             }
-          />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          >
+            <Route path="/" element={<BeamHome {...routeUpdateProps} />} />
+            <Route
+              path="/index.html"
+              element={<BeamHome {...routeUpdateProps} />}
+            />
+            <Route
+              path="/beamout"
+              element={
+                <BeamOut
+                  setAuthProvider={setAuthProvider}
+                  {...routeUpdateProps}
+                />
+              }
+            >
+              <Route
+                path=":beamOutId"
+                element={<BeamOut setAuthProvider={setAuthProvider} />}
+              />
+            </Route>
+            <Route
+              path="/meeting"
+              element={
+                <BeamOut
+                  setAuthProvider={setAuthProvider}
+                  {...routeUpdateProps}
+                />
+              }
+            >
+              <Route
+                path=":beamOutId"
+                element={<BeamOut setAuthProvider={setAuthProvider} />}
+              />
+            </Route>
+            <Route
+              path="/getpaid"
+              element={
+                <BeamGetPaid
+                  setAuthProvider={setAuthProvider}
+                  {...routeUpdateProps}
+                />
+              }
+            />
+            <Route
+              path="/newmeeting"
+              element={
+                <BeamNewMeeting
+                  setAuthProvider={setAuthProvider}
+                  {...routeUpdateProps}
+                />
+              }
+            />
+            <Route
+              path="/connect"
+              element={
+                <BeamConnetWallet
+                  setAuthProvider={setAuthProvider}
+                  {...routeUpdateProps}
+                />
+              }
+            />
+            <Route
+              path="/mybeams"
+              element={<MyBeamsLayout {...routeUpdateProps} />}
+            >
+              <Route
+                index
+                element={
+                  <MyBeamsActivity
+                    setBeamEscrowContract={setBeamEscrowContract}
+                    setBeamReadModel={setBeamReadModel}
+                  />
+                }
+              />
+              <Route
+                path=":escrowId"
+                element={
+                  <BeamDetail
+                    beamEscrowContract={beamEscrowContract}
+                    beamReadModel={beamReadModel}
+                  />
+                }
+              />
+            </Route>
+            <Route
+              path="*"
+              element={
+                <main style={{ padding: "1rem" }}>
+                  <p>Nothing here!</p>
+                </main>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProviderContext.Provider>
   )
 }
 

@@ -152,7 +152,11 @@ const HeadlineStack = ({ hashtags }: Props) => {
   )
 }
 
-export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
+export const BeamNewMeeting = ({
+  setAuthProvider,
+  setBgColor,
+  setHashtags
+}) => {
   const initLoading = 1
   const toast = useToast()
 
@@ -314,10 +318,15 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
     onClose: onSelectAuthClose
   } = useDisclosure()
 
-  const handleAuthUpdate = async (identity: Identity, setFieldValue) => {
+  const handleAuthUpdate = async (
+    identity: Identity,
+    authProvider,
+    setFieldValue
+  ) => {
     const principal = await identity.getPrincipal()
     const principalString = principal.toString()
     setFieldValue("recipient", principalString)
+    setAuthProvider(authProvider)
   }
 
   return (
@@ -417,8 +426,12 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         <BeamSelectWalletModal
                           isOpen={isSelectAuthOpen}
                           onClose={onSelectAuthClose}
-                          handleAuthUpdate={identity =>
-                            handleAuthUpdate(identity, setFieldValue)
+                          handleAuthUpdate={(identity, authProvider) =>
+                            handleAuthUpdate(
+                              identity,
+                              authProvider,
+                              setFieldValue
+                            )
                           }
                         />
                       </FormInput>
