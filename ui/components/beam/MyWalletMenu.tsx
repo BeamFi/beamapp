@@ -7,7 +7,7 @@ import {
   useDisclosure,
   useToast
 } from "@chakra-ui/react"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { AuthProviderContext } from "../../context/AuthProviderContext"
 import { PlugConnectIcon, WalletIcon } from "../../icon"
@@ -16,12 +16,25 @@ import { BeamSelectWalletModal } from "./auth/BeamSelectWalletModal"
 
 import { AuthProvider } from "../../config"
 import Image from "next/image"
+import { checkUserAuthProvider } from "../auth/checkUserAuth"
 
 export const MyWalletMenu = ({ setAuthProvider }) => {
   const navigate = useNavigate()
   const authProvider = useContext(AuthProviderContext)
 
   const { Plug, InternetIdentity } = AuthProvider
+  const initUpdate = 1
+
+  useEffect(() => {
+    const loadInitAuthProvider = async () => {
+      const authProvider = await checkUserAuthProvider()
+      setAuthProvider(authProvider)
+    }
+
+    loadInitAuthProvider()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initUpdate])
 
   const gotToMyBeams = async () => {
     if (authProvider != null) {
