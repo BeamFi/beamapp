@@ -1,4 +1,5 @@
 // Util
+import { Identity } from "@dfinity/agent"
 import { PlugConfig } from "../../../config/beamconfig"
 import { humanToE8s } from "../../../utils/e8s"
 import log from "../../../utils/log"
@@ -61,7 +62,10 @@ export const hasSession = async () => {
   return window.ic?.plug?.sessionManager?.sessionData != null
 }
 
-export const checkPlugUserAuth = async (options, whiteList) => {
+export const checkPlugUserAuth = async (
+  options,
+  whiteList
+): Promise<Identity> => {
   const isConnected = await window.ic?.plug?.isConnected()
 
   if (!isConnected) {

@@ -520,8 +520,6 @@ export const BeamOut = ({
         return
       }
 
-      log.info(result)
-
       throw new Error(result.err)
     } catch (error) {
       log.error(error)

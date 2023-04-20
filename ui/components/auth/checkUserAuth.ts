@@ -1,4 +1,6 @@
+import { Identity } from "@dfinity/agent"
 import { AuthProvider } from "../../config"
+import { principalToAccountIdentifier } from "../../utils/account-identifier"
 import { checkIIUserAuth } from "./provider/internet-identity"
 import { checkPlugUserAuth } from "./provider/plug"
 
@@ -31,7 +33,31 @@ export const checkUserAuthPrincipalId = async (): Promise<string> => {
     { isCreateAgent: false },
     CANISTERS_WHITE_LIST
   )
+
+  if (identity == null) {
+    throw new Error("Cannot get principal id")
+  }
+
   return window?.ic?.plug?.sessionManager?.sessionData?.principalId
+}
+
+export const checkUserAuthAccountId = async (): Promise<string> => {
+  let identity: Identity = await checkIIUserAuth()
+  if (identity != null) {
+    const principal = identity.getPrincipal()
+    return principalToAccountIdentifier(principal)
+  }
+
+  identity = await checkPlugUserAuth(
+    { isCreateAgent: false },
+    CANISTERS_WHITE_LIST
+  )
+
+  if (identity == null) {
+    throw new Error("Cannot get account id")
+  }
+
+  return window?.ic?.plug?.sessionManager?.sessionData?.accountId
 }
 
 export const checkUserAuthProvider = async (): Promise<AuthProvider> => {
@@ -44,5 +70,10 @@ export const checkUserAuthProvider = async (): Promise<AuthProvider> => {
     { isCreateAgent: false },
     CANISTERS_WHITE_LIST
   )
+
+  if (identity == null) {
+    throw new Error("Cannot get auth provider")
+  }
+
   return Plug
 }

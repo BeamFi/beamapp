@@ -42,8 +42,6 @@ export const MyBeamsActivity = ({
       const principalId = await checkUserAuthPrincipalId()
       setMyPrincipalId(principalId)
 
-      log.info(`loadMyBeams: principalId=${principalId}`)
-
       const escrowService = await makeEscrowPaymentActor()
       const myEscrows = await escrowService.queryMyBeams()
 

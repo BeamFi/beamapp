@@ -91,8 +91,6 @@ export async function transferICP(to: string, amount: number): Promise<number> {
     }
   )
 
-  log.info(result)
-
   switch (result.status) {
     case "SUCCESS":
       return result.height
