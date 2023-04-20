@@ -18,6 +18,7 @@ import { StandardSpinner } from "../../StandardSpinner"
 import { makeBeamActor } from "../../../service/actor/actor-locator"
 import { EscrowContractClass } from "../../../model/class/EscrowContractClass"
 import { useEscrow } from "../useEscrow"
+import { checkUserAuthPrincipalId } from "../../auth/checkUserAuth"
 
 export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
   const { escrowId } = useParams()
@@ -25,9 +26,7 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
   const [isLoading, setLoading] = useState(false)
   const [escrow, setEscrow] = useState(beamEscrowContract)
   const [beam, setBeam] = useState(beamReadModel)
-
-  const myPrincipalId =
-    window?.ic?.plug?.sessionManager?.sessionData?.principalId
+  const [myPrincipalId, setMyPrincipalId] = useState(null)
 
   const navigate = useNavigate()
 
@@ -35,6 +34,13 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
 
   useEffect(() => {
     setEscrow(escrowContract)
+
+    const loadPrincipal = async () => {
+      const principalId = await checkUserAuthPrincipalId()
+      setMyPrincipalId(principalId)
+    }
+
+    loadPrincipal()
   }, [escrowContract])
 
   useEffect(() => {
@@ -98,7 +104,7 @@ export const BeamDetail = ({ beamEscrowContract, beamReadModel }) => {
       </HStack>
 
       {isLoading && <StandardSpinner />}
-      {escrow != null && (
+      {escrow != null && myPrincipalId != null && (
         <>
           <HStack w="100%">
             {isBeamRecipient && (

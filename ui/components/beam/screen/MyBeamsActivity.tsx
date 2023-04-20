@@ -93,6 +93,7 @@ export const MyBeamsActivity = ({
         {isLoading && <StandardSpinner />}
         {beamMap != null &&
           escrows != null &&
+          myPrincipalId != null &&
           escrows.map((escrow, index) => {
             const beamReadModel = beamMap[escrow.id]
 
