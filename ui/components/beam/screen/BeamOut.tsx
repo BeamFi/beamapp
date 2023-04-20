@@ -423,11 +423,6 @@ export const BeamOut = ({
     const { amount, recipient } = values
 
     try {
-      const isValid = await validateAndConfirm(values)
-      if (!isValid) {
-        return
-      }
-
       actions.setSubmitting(true)
 
       // Health check
@@ -686,7 +681,13 @@ export const BeamOut = ({
                         fontWeight="semibold"
                         fontSize="21px"
                         bg="beam_pink"
-                        onClick={onSelectAuthOpen}
+                        onClick={async () => {
+                          const isValid = await validateAndConfirm(values)
+                          if (!isValid) {
+                            return
+                          }
+                          onSelectAuthOpen()
+                        }}
                       >
                         Create Beam
                       </BeamActionButton>
@@ -697,6 +698,9 @@ export const BeamOut = ({
                           setAuthProvider(authProvider)
                           handleSubmit()
                         }}
+                        defaultAuthProviders={
+                          tokenType == xtc ? [Plug] : [InternetIdentity, Plug]
+                        }
                       />
                       {isLoading && (
                         <Button

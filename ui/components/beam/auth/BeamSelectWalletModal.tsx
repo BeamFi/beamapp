@@ -28,18 +28,19 @@ import { showToast } from "../../../utils/toast"
 import { createIILogin } from "../../auth/provider/internet-identity"
 import { createPlugLogin } from "../../auth/provider/plug"
 
+const { Plug, InternetIdentity } = AuthProvider
+
 export const BeamSelectWalletModal = ({
   isOpen,
   onClose,
-  handleAuthUpdate
+  handleAuthUpdate,
+  defaultAuthProviders = [Plug, InternetIdentity]
 }) => {
   const {
     isOpen: isPlugModalOpen,
     onOpen: onPlugModalOpen,
     onClose: onPlugModalClose
   } = useDisclosure()
-
-  const { Plug, InternetIdentity } = AuthProvider
 
   const toast = useToast()
 
@@ -104,6 +105,24 @@ export const BeamSelectWalletModal = ({
     }
   }
 
+  const authProviderButtons = {}
+  authProviderButtons[InternetIdentity] = (
+    <BlackOutlineButton onClick={() => onClickSelectAuth(InternetIdentity)}>
+      <Image
+        src="/nfid-logo-dark.png"
+        width="85"
+        height="40"
+        alt="Connect NFID"
+      />
+    </BlackOutlineButton>
+  )
+  authProviderButtons[Plug] = (
+    <BlackOutlineButton onClick={() => onClickSelectAuth(Plug)}>
+      <PlugConnectIcon h="40px" mr="18px" />
+      Plug Wallet
+    </BlackOutlineButton>
+  )
+
   return (
     <>
       <Modal onClose={onClose} size="lg" isOpen={isOpen}>
@@ -113,21 +132,9 @@ export const BeamSelectWalletModal = ({
           <ModalCloseButton />
           <ModalBody py="18px">
             <VStack>
-              <BlackOutlineButton
-                onClick={() => onClickSelectAuth(InternetIdentity)}
-              >
-                <Image
-                  src="/nfid-logo-dark.png"
-                  width="85"
-                  height="40"
-                  alt="Connect NFID"
-                />
-              </BlackOutlineButton>
-              <BlackOutlineButton onClick={() => onClickSelectAuth(Plug)}>
-                <PlugConnectIcon h="40px" mr="18px" />
-                Plug Wallet
-              </BlackOutlineButton>
-
+              {defaultAuthProviders.map(
+                authProvider => authProviderButtons[authProvider]
+              )}
               <Text align="center" fontWeight="medium" pt="12px">
                 Don&apos;t have NFID or Plug Wallet?
               </Text>
