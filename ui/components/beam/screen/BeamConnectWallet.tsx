@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 
 import Head from "next/head"
 
@@ -20,9 +20,6 @@ import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
 
 import { showToast } from "../../../utils/toast"
 
-import { createPlugLogin } from "../../auth/provider/plug"
-import { PlugConfig } from "../../../config/beamconfig"
-
 const ActionButton = ({ children, ...others }) => {
   return (
     <BeamActionButton w={{ base: "200px", md: "223px" }} h="52px" {...others}>
@@ -31,7 +28,11 @@ const ActionButton = ({ children, ...others }) => {
   )
 }
 
-export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
+export const BeamConnetWallet = ({
+  setAuthProvider,
+  setBgColor,
+  setHashtags
+}) => {
   const initLoading = 1
   const toast = useToast()
 
@@ -53,13 +54,12 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
     onOpen: onSelectAuthOpen,
     onClose: onSelectAuthClose
   } = useDisclosure()
-  const [isLoading, setLoading] = useState(false)
 
   const cancelLogin = () => {
-    setLoading(false)
+    onSelectAuthClose()
   }
 
-  const handleAuthUpdate = identity => {
+  const handleAuthUpdate = (identity, authProvider) => {
     if (identity == null) {
       showToast(
         toast,
@@ -76,27 +76,9 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
       "Your Wallet is connected successfully.",
       "success"
     )
+
+    setAuthProvider(authProvider)
     navigateToMyBeams()
-  }
-
-  const selectAuth = async authProvider => {
-    onSelectAuthClose()
-
-    const authLogin = createPlugLogin(
-      handleAuthUpdate,
-      authProvider,
-      PlugConfig.whitelist
-    )
-
-    showToast(
-      toast,
-      "Login with Plug",
-      "Please make sure your have unlocked your Plug Wallet.",
-      "info"
-    )
-
-    setLoading(true)
-    await authLogin()
   }
 
   return (
@@ -138,9 +120,9 @@ export const BeamConnetWallet = ({ setBgColor, setHashtags }) => {
         <BeamSelectWalletModal
           isOpen={isSelectAuthOpen}
           onClose={onSelectAuthClose}
-          selectAuth={selectAuth}
+          handleAuthUpdate={handleAuthUpdate}
         />
-        {isLoading && (
+        {isSelectAuthOpen && (
           <Button
             w="110px"
             h="38px"

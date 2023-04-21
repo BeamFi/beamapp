@@ -8,9 +8,6 @@ import { BeamActionButton } from "../../common/BeamActionButton"
 import { makeEscrowPaymentActor } from "../../../../service/actor/actor-locator"
 import { accountIdentifierHexToBlob } from "../../../../utils/account-identifier"
 
-import { connectPlugForToken, hasSession } from "../../../auth/provider/plug"
-import { AuthProvider } from "../../../../config"
-
 import { showToast } from "../../../../utils/toast"
 import log from "../../../../utils/log"
 import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
@@ -18,6 +15,10 @@ import { AccountIdentifier } from "../../../../declarations/beamescrow/beamescro
 
 import { BeamSupportedTokenType } from "../../../../config/beamconfig"
 import { Principal } from "@dfinity/principal"
+import {
+  checkUserAuthAccountId,
+  checkUserAuthPrincipalId
+} from "../../../auth/checkUserAuth"
 
 type Props = {
   escrowObject: EscrowContractClass
@@ -39,47 +40,28 @@ export const ClaimButton = ({
   const claimFunds = async () => {
     setLoading(true)
 
-    // Check if Plug is available, else show popup mesg
-    let isConnected = await hasSession()
-    if (!isConnected || window.ic?.plug?.accountId == null) {
-      isConnected = await connectPlugForToken({
-        showToast,
-        toast,
-        title: "Claim Funds"
-      })
-
-      if (!isConnected) {
-        setLoading(false)
-        return
-      }
-    }
-
-    const plugAccountId =
-      window.ic?.plug?.sessionManager?.sessionData?.accountId
-    if (plugAccountId == null) {
-      showToast(
-        toast,
-        "Claim Funds",
-        "We have problem getting your Plug Account ID. Please install or unlock your Wallet first. If you switched to a new Plug Account or just installed Plug, reload this page.",
-        "warning"
-      )
-      setLoading(false)
-      return
-    }
-
     try {
-      const escrowService = await makeEscrowPaymentActor(
-        null,
-        AuthProvider.Plug
-      )
+      const escrowService = await makeEscrowPaymentActor()
 
       const tokenType = escrowObject.tokenType()
 
       let result: { ok: any; err: any }
       switch (tokenType) {
         case icp: {
+          const accountId = await checkUserAuthAccountId()
+          if (accountId == null) {
+            showToast(
+              toast,
+              "Claim Funds",
+              "We have problem connecting your Wallet. Please install or unlock your Wallet first. If you switched to a new Plug Account or just installed Plug, reload this page.",
+              "warning"
+            )
+            setLoading(false)
+            return
+          }
+
           const accountIdBlob: AccountIdentifier =
-            accountIdentifierHexToBlob(plugAccountId)
+            accountIdentifierHexToBlob(accountId)
           result = await escrowService.creatorClaimByAccountId(
             escrowObject.id(),
             escrowObject.tokenTypeRaw(),
@@ -88,9 +70,19 @@ export const ClaimButton = ({
           break
         }
         case xtc: {
-          const myPrincipalId =
-            window?.ic?.plug?.sessionManager?.sessionData?.principalId
-          const creatorPrincipal = Principal.fromText(myPrincipalId)
+          const principalId = await checkUserAuthPrincipalId()
+          if (principalId == null) {
+            showToast(
+              toast,
+              "Claim Funds",
+              "We have problem connecting your Wallet. Please install or unlock your Wallet first. If you switched to a new Plug Account or just installed Plug, reload this page.",
+              "warning"
+            )
+            setLoading(false)
+            return
+          }
+
+          const creatorPrincipal = Principal.fromText(principalId)
           result = await escrowService.creatorClaimByPrincipal(
             escrowObject.id(),
             escrowObject.tokenTypeRaw(),

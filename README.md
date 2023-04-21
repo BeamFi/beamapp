@@ -136,6 +136,12 @@ We intend to provide an alternative option with better security by deploying it 
 https://wiki.internetcomputer.org/wiki/HTTP_asset_certification
 https://github.com/dfinity/icfront
 
+## Troubleshooting
+
+### How to fix "Expression produces a union type that is too complex to represent. ts(2590)"?
+
+https://stackoverflow.com/questions/74847053/how-to-fix-expression-produces-a-union-type-that-is-too-complex-to-represent-t
+
 ## Author
 
 Henry Chan, henry@beamfi.app

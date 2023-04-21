@@ -7,7 +7,7 @@ export const BeamHeading = ({ children, ...rest }) => {
     <Text
       color="black_5"
       fontWeight="semibold"
-      fontSize={{ base: "18px", md: "26px", lg: "28px" }}
+      fontSize={{ base: "14px", md: "20px" }}
       {...rest}
     >
       {children}

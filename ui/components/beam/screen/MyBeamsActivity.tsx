@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import { HStack, Link } from "@chakra-ui/react"
 
-import { verifyBeamPlugConnection } from "../../auth/provider/plug"
 import {
   makeBeamActor,
   makeEscrowPaymentActor
 } from "../../../service/actor/actor-locator"
-
-import { AuthProvider } from "../../../config"
 
 import log from "../../../utils/log"
 import { BeamVStack } from "../common/BeamVStack"
@@ -17,14 +14,17 @@ import { BeamCard } from "./mybeams/BeamCard"
 import { BeamMainActionButtons } from "../BeamMainActionButtons"
 import { StandardSpinner } from "../../StandardSpinner"
 import { ExternalLinkIcon } from "@chakra-ui/icons"
+import { checkUserAuthPrincipalId } from "../../auth/checkUserAuth"
+import { AuthProviderContext } from "../../../context/AuthProviderContext"
 
 export const MyBeamsActivity = ({
   setBeamReadModel,
   setBeamEscrowContract
 }) => {
-  const initLoading = 1
   const [escrows, setEscrows] = useState([])
   const [beamMap, setBeamMap] = useState({})
+
+  const authProvider = useContext(AuthProviderContext)
 
   const [myPrincipalId, setMyPrincipalId] = useState(null)
   const [isLoading, setLoading] = useState(true)
@@ -33,29 +33,24 @@ export const MyBeamsActivity = ({
     loadMyBeams()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initLoading])
+  }, [authProvider])
 
   const loadMyBeams = async () => {
     try {
       setLoading(true)
-      await verifyBeamPlugConnection()
 
-      const principalId =
-        window?.ic?.plug?.sessionManager?.sessionData?.principalId
+      const principalId = await checkUserAuthPrincipalId()
       setMyPrincipalId(principalId)
 
-      const escrowService = await makeEscrowPaymentActor(
-        null,
-        AuthProvider.Plug
-      )
-
+      const escrowService = await makeEscrowPaymentActor()
       const myEscrows = await escrowService.queryMyBeams()
+
       setEscrows(myEscrows)
 
       // Early stop of loading spinner so user can see the main info asap
       setLoading(false)
 
-      const beamService = await makeBeamActor(null, AuthProvider.Plug)
+      const beamService = await makeBeamActor()
       const escrowIds = myEscrows.map(escrow => escrow.id)
       const myBeamReadModels = await beamService.queryBeamByEscrowIds(escrowIds)
 
@@ -98,6 +93,7 @@ export const MyBeamsActivity = ({
         {isLoading && <StandardSpinner />}
         {beamMap != null &&
           escrows != null &&
+          myPrincipalId != null &&
           escrows.map((escrow, index) => {
             const beamReadModel = beamMap[escrow.id]
 

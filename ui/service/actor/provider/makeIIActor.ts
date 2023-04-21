@@ -17,7 +17,8 @@ const lazyCreateAuthClient = async () => {
 
   cachedAuthClient = await AuthClient.create({
     idleOptions: {
-      disableIdle: true
+      disableIdle: true,
+      disableDefaultIdleCallback: true
     }
   })
   return cachedAuthClient

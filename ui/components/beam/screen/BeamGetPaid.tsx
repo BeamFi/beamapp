@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 
 import {
   Box,
+  Button,
   HStack,
   Link,
   ListItem,
@@ -48,6 +49,8 @@ import { BeamVStack } from "../common/BeamVStack"
 import { TokenTypeData } from "../../../config"
 import { TokenRadioGroup } from "../common/TokenRadioGroup"
 import { sanitizeJSURL } from "../../../utils/security"
+import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
+import { Identity } from "@dfinity/agent"
 
 const HeadlineStack = () => {
   return (
@@ -74,7 +77,7 @@ const HeadlineStack = () => {
   )
 }
 
-export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
+export const BeamGetPaid = ({ setAuthProvider, setBgColor, setHashtags }) => {
   const initLoading = 1
   const toast = useToast()
 
@@ -223,6 +226,23 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
     setTokenType(tokenType)
   }
 
+  const {
+    isOpen: isSelectAuthOpen,
+    onOpen: onSelectAuthOpen,
+    onClose: onSelectAuthClose
+  } = useDisclosure()
+
+  const handleAuthUpdate = async (
+    identity: Identity,
+    authProvider,
+    setFieldValue
+  ) => {
+    const principal = await identity.getPrincipal()
+    const principalString = principal.toString()
+    setFieldValue("recipient", principalString)
+    setAuthProvider(authProvider)
+  }
+
   return (
     <Box h="100vh">
       <Stack
@@ -236,7 +256,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
         px={{ base: "14px", md: "38px" }}
       >
         <Head>
-          <title>Get Paid - Beam</title>
+          <title>New Beam - BeamFi</title>
         </Head>
         <HeadlineStack />
         <BeamVStack>
@@ -282,7 +302,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         themeColor="black_5"
                         trackColor="black_gray"
                       >
-                        <BeamHeading>{tokenName} Amount:</BeamHeading>
+                        <BeamHeading>{tokenName} Amount</BeamHeading>
                       </FormNumberInput>
                     )}
                   </Field>
@@ -301,7 +321,30 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.recipient}
                       >
-                        <BeamHeading>Your Plug Wallet:</BeamHeading>
+                        <BeamHeading>
+                          <HStack>
+                            <Box>Your Wallet</Box>
+                            <Spacer />
+                            <Button
+                              variant="solid"
+                              colorScheme="purple_scheme"
+                              onClick={onSelectAuthOpen}
+                            >
+                              Connect
+                            </Button>
+                          </HStack>
+                        </BeamHeading>
+                        <BeamSelectWalletModal
+                          isOpen={isSelectAuthOpen}
+                          onClose={onSelectAuthClose}
+                          handleAuthUpdate={(identity, authProvider) =>
+                            handleAuthUpdate(
+                              identity,
+                              authProvider,
+                              setFieldValue
+                            )
+                          }
+                        />
                       </FormInput>
                     )}
                   </Field>
@@ -311,7 +354,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                     w={{ base: "95%", md: "80%" }}
                     spacing="12px"
                   >
-                    <BeamHeading textAlign="left">Duration:</BeamHeading>
+                    <BeamHeading textAlign="left">Duration</BeamHeading>
 
                     <HStack w="100%">
                       <Text
@@ -362,9 +405,7 @@ export const BeamGetPaid = ({ setBgColor, setHashtags }) => {
                     )}
                     <BeamGradientActionButton
                       title={
-                        beamOutId != null
-                          ? "Copy Link"
-                          : "Create Unique Beam Link"
+                        beamOutId != null ? "Copy Link" : "Create Beam Link"
                       }
                       textSize={{ base: "15px", md: "20px" }}
                       textWeight="semibold"

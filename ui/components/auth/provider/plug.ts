@@ -1,5 +1,7 @@
 // Util
+import { Identity } from "@dfinity/agent"
 import { PlugConfig } from "../../../config/beamconfig"
+import { humanToE8s } from "../../../utils/e8s"
 import log from "../../../utils/log"
 
 const host = process.env.NEXT_PUBLIC_IC_HOST
@@ -7,12 +9,21 @@ const host = process.env.NEXT_PUBLIC_IC_HOST
 export const createPlugLogin = (
   handleAuthenticated,
   authProvider,
-  whiteList
+  whiteList,
+  showLoginMesg
 ) => {
   return async () => {
     try {
-      const isConnected = await connectPlug(whiteList)
+      const isCreated = await isAgentCreated()
+      if (isCreated) {
+        const identity = window.ic.plug.agent
+        await handleAuthenticated(identity, authProvider)
+        return
+      }
 
+      showLoginMesg()
+
+      const isConnected = await connectPlug(whiteList)
       if (!isConnected) {
         log.info("createPlugLogin - Plug wallet connection was refused")
         await handleAuthenticated(null, authProvider)
@@ -51,7 +62,10 @@ export const hasSession = async () => {
   return window.ic?.plug?.sessionManager?.sessionData != null
 }
 
-export const checkPlugUserAuth = async (options, whiteList) => {
+export const checkPlugUserAuth = async (
+  options,
+  whiteList
+): Promise<Identity> => {
   const isConnected = await window.ic?.plug?.isConnected()
 
   if (!isConnected) {
@@ -150,4 +164,25 @@ export const verifyBeamPlugConnection = async (): Promise<void> => {
       log.info("Plug agent has been created")
     }
   }
+}
+
+type PlugTransferParams = {
+  to: string
+  amount: number
+}
+
+export const transferICP = async (
+  to: string,
+  amount: number
+): Promise<number> => {
+  const escrowAmount: number = Number(humanToE8s(amount))
+
+  const params: PlugTransferParams = {
+    to,
+    amount: escrowAmount
+  }
+
+  // Request transfer from Plug
+  const result = await window.ic.plug.requestTransfer(params)
+  return result.height
 }

@@ -24,9 +24,9 @@ export { SessionExpiredError } from "./provider/makeIIActor"
 import { AuthProvider } from "../../config"
 const { InternetIdentity, Plug } = AuthProvider
 
-import { type Identity } from "@dfinity/agent"
+import { AuthClient } from "@dfinity/auth-client"
 
-import log from "../../utils/log"
+import { type Identity } from "@dfinity/agent"
 
 // Cache
 let actorCache = {}
@@ -40,34 +40,40 @@ export const clearCache = () => {
   actorCache = {}
 }
 
-const makeActor = async (
-  canisterId,
-  idlFactory,
-  createActor,
-  identity,
-  authProvider = InternetIdentity,
-  actorKey
-) => {
+const makeActor = async (canisterId, idlFactory, createActor, actorKey) => {
   const cache = actorCache[actorKey]
-  let principalId = ""
+  let principalId = null
 
-  switch (authProvider) {
-    case InternetIdentity: {
-      principalId = identity?.getPrincipal()?.toString()
-      break
+  // Check NFID II first
+  const authClient = await AuthClient.create({
+    idleOptions: {
+      disableIdle: true,
+      disableDefaultIdleCallback: true
     }
-    case Plug: {
-      const agent = window?.ic?.plug?.agent
-      if (agent != null) {
-        const principal = await agent.getPrincipal()
-        if (principal != null) {
-          principalId = principal.toString()
-        }
+  })
+
+  let authProvider = InternetIdentity
+  let identity = null
+
+  const isIIAuthenticated = await authClient.isAuthenticated()
+
+  if (isIIAuthenticated) {
+    identity = (await authClient.getIdentity()) as unknown as Identity
+    principalId = identity?.getPrincipal()?.toString()
+  }
+
+  if (principalId != null) {
+    authProvider = InternetIdentity
+  } else {
+    // Check Plug
+    const agent = window?.ic?.plug?.agent
+    if (agent != null) {
+      const principal = await agent.getPrincipal()
+      if (principal != null) {
+        principalId = principal.toString()
       }
-      break
     }
-    default:
-      log.info("Unknown auth provider")
+    authProvider = Plug
   }
 
   const subKey = `${authProvider}#${canisterId}#${principalId}`
@@ -110,44 +116,29 @@ export const makeLogout = authProvider => {
   }
 }
 
-export const makeBeamActor = async (
-  identity?: Identity,
-  authProvider?: AuthProvider
-) => {
+export const makeBeamActor = async () => {
   return await makeActor(
     beamCanisterId,
     beamIdlFactory,
     createBeamActor,
-    identity,
-    authProvider,
     ActorCacheKey.Beam
   )
 }
 
-export const makeBeamOutActor = async (
-  identity?: Identity,
-  authProvider?: AuthProvider
-) => {
+export const makeBeamOutActor = async () => {
   return await makeActor(
     beamOutCanisterId,
     beamOutIdlFactory,
     createBeamOutActor,
-    identity,
-    authProvider,
     ActorCacheKey.BeamOut
   )
 }
 
-export const makeEscrowPaymentActor = async (
-  identity?: Identity,
-  authProvider?: AuthProvider
-) => {
+export const makeEscrowPaymentActor = async () => {
   return await makeActor(
     escrowPaymentCanisterId,
     escrowPaymentIdlFactory,
     createEscrowPaymentActor,
-    identity,
-    authProvider,
     ActorCacheKey.EscrowPayment
   )
 }

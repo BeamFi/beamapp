@@ -8,7 +8,12 @@ import { BeamFooter } from "../BeamFooter"
 import { BeamTopRightButtons } from "../BeamTopRightButtons"
 import { BeamTopLeftButtons } from "../BeamTopLeftButtons"
 
-export default function BeamSkeleton({ bgColor, hashtags, ...rest }) {
+export default function BeamSkeleton({
+  setAuthProvider,
+  bgColor,
+  hashtags,
+  ...rest
+}) {
   const outBoxStyle = {
     minHeight: { base: "950px", md: "900px" }
   }
@@ -25,7 +30,7 @@ export default function BeamSkeleton({ bgColor, hashtags, ...rest }) {
           <BeamTopLeftButtons />
         </Box>
         <Box pos="absolute" right="0px" top="10px">
-          <BeamTopRightButtons />
+          <BeamTopRightButtons setAuthProvider={setAuthProvider} />
         </Box>
 
         <Outlet />

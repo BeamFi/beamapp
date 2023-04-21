@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 
 import {
   Box,
+  Button,
   HStack,
   Link,
   ListItem,
@@ -52,6 +53,8 @@ import { TokenRadioGroup } from "../common/TokenRadioGroup"
 import { TokenTypeData } from "../../../config"
 import { GradientHeading } from "../common/GradientHeading"
 import Image from "next/image"
+import { BeamSelectWalletModal } from "../auth/BeamSelectWalletModal"
+import { Identity } from "@dfinity/agent"
 
 const FormTitle = ({ children, ...rest }) => {
   return (
@@ -149,7 +152,11 @@ const HeadlineStack = ({ hashtags }: Props) => {
   )
 }
 
-export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
+export const BeamNewMeeting = ({
+  setAuthProvider,
+  setBgColor,
+  setHashtags
+}) => {
   const initLoading = 1
   const toast = useToast()
 
@@ -305,6 +312,23 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
     setTokenType(tokenType)
   }
 
+  const {
+    isOpen: isSelectAuthOpen,
+    onOpen: onSelectAuthOpen,
+    onClose: onSelectAuthClose
+  } = useDisclosure()
+
+  const handleAuthUpdate = async (
+    identity: Identity,
+    authProvider,
+    setFieldValue
+  ) => {
+    const principal = await identity.getPrincipal()
+    const principalString = principal.toString()
+    setFieldValue("recipient", principalString)
+    setAuthProvider(authProvider)
+  }
+
   return (
     <Box h="100vh">
       <Stack
@@ -318,7 +342,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
         px={{ base: "14px", md: "38px" }}
       >
         <Head>
-          <title>Get Paid - Beam</title>
+          <title>New Meeting - BeamFi</title>
         </Head>
         <HeadlineStack hashtags={hashtags} />
         <BeamVStack>
@@ -385,7 +409,31 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                         }
                         errorMesg={form.errors.recipient}
                       >
-                        <FormTitle>Your Plug Wallet</FormTitle>
+                        <FormTitle>
+                          <HStack>
+                            <Box>Your Wallet</Box>
+                            <Spacer />
+                            <Button
+                              variant="solid"
+                              colorScheme="purple_scheme"
+                              onClick={onSelectAuthOpen}
+                            >
+                              Connect
+                            </Button>
+                          </HStack>
+                        </FormTitle>
+
+                        <BeamSelectWalletModal
+                          isOpen={isSelectAuthOpen}
+                          onClose={onSelectAuthClose}
+                          handleAuthUpdate={(identity, authProvider) =>
+                            handleAuthUpdate(
+                              identity,
+                              authProvider,
+                              setFieldValue
+                            )
+                          }
+                        />
                       </FormInput>
                     )}
                   </Field>
@@ -464,6 +512,7 @@ export const BeamNewMeeting = ({ setBgColor, setHashtags }) => {
                       <FormInput
                         id="meetingPassword"
                         field={field}
+                        type="password"
                         inputFontSize={{ base: "sm", md: "md" }}
                         themeColor="black_5"
                         placeholder="Zoom Meeting Password"
