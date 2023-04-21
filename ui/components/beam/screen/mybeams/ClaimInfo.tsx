@@ -3,7 +3,7 @@ import React from "react"
 import { Box, HStack, Text, VStack } from "@chakra-ui/react"
 import { ClaimButton } from "./ClaimButton"
 
-import { truncFloatDecimals } from "../../../../utils/number"
+import { humanReadableNumberString } from "../../../../utils/number"
 import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
 
 export const ClaimInfo = ({ beamEscrowContract, ...rest }) => {
@@ -58,10 +58,11 @@ export const ClaimInfo = ({ beamEscrowContract, ...rest }) => {
               fontWeight="medium"
               pt="12px"
             >
-              {truncFloatDecimals(numCreatorClaimedTokens, 6)} {tokenTypeName}
+              {humanReadableNumberString(numCreatorClaimedTokens, 6)}{" "}
+              {tokenTypeName}
             </Text>
             <Text fontSize={{ base: "16px", md: "20px" }} fontWeight="light">
-              /{truncFloatDecimals(totalTokens, 6)} {tokenTypeName} Total
+              /{humanReadableNumberString(totalTokens, 6)} {tokenTypeName} Total
             </Text>
           </VStack>
         </Box>
@@ -81,7 +82,8 @@ export const ClaimInfo = ({ beamEscrowContract, ...rest }) => {
             fontWeight="medium"
             color="white"
           >
-            {truncFloatDecimals(numCreatorClaimableTokens, 6)} {tokenTypeName}
+            {humanReadableNumberString(numCreatorClaimableTokens, 6)}{" "}
+            {tokenTypeName}
           </Text>
           <ClaimButton
             escrowObject={escrowObject}
