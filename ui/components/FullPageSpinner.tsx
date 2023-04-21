@@ -26,7 +26,7 @@ export const FullPageSpinner = () => {
         {showReload && (
           <>
             <Heading color="black_2">
-              Please make sure your Plug Wallet is unlocked.
+              Please make sure your Wallet is unlocked.
             </Heading>
             <Button
               variant="link"
