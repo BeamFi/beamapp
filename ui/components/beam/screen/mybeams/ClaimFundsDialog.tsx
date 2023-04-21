@@ -14,7 +14,8 @@ import {
   StatNumber,
   Tag,
   StatHelpText,
-  VStack
+  VStack,
+  HStack
 } from "@chakra-ui/react"
 
 import { PlugConnectIcon } from "../../../../icon"
@@ -23,6 +24,7 @@ import ExternalLink from "../../../ExternalLink"
 import { BeamActionButton } from "../../common/BeamActionButton"
 import { EscrowContractClass } from "../../../../model/class/EscrowContractClass"
 import { esToHuman, tokenIcon } from "../../../../utils/token"
+import Image from "next/image"
 
 type Props = {
   isOpen: boolean
@@ -78,17 +80,29 @@ export const ClaimFundsDialog = ({
 
           <AlertDialogBody>
             <VStack spacing="18px">
-              <Text color="black" fontSize="16px">
-                You will need &nbsp;
+              <HStack>
+                <Text color="black" fontSize="16px">
+                  You will need &nbsp;
+                </Text>
+
                 <ExternalLink
                   href="https://plugwallet.ooo/"
                   textDecoration="none"
                 >
                   <PlugConnectIcon h="40px" mr="10px" />
                   Plug Wallet
-                </ExternalLink>{" "}
-                to claim funds.
-              </Text>
+                </ExternalLink>
+                <Text>{" or "}</Text>
+                <ExternalLink href="https://nfid.one" textDecoration="none">
+                  <Image
+                    src="/nfid-logo-dark.png"
+                    width="63"
+                    height="30"
+                    alt="Connect NFID"
+                  />
+                </ExternalLink>
+              </HStack>
+              <Text>to claim funds.</Text>
 
               <Stat pt="6px" textAlign="center">
                 <StatLabel
