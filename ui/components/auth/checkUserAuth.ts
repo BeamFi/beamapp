@@ -77,3 +77,22 @@ export const checkUserAuthProvider = async (): Promise<AuthProvider> => {
 
   return Plug
 }
+
+export const checkUserAuthProviderNullable =
+  async (): Promise<AuthProvider | null> => {
+    let identity = await checkIIUserAuth()
+    if (identity != null) {
+      return InternetIdentity
+    }
+
+    identity = await checkPlugUserAuth(
+      { isCreateAgent: false },
+      CANISTERS_WHITE_LIST
+    )
+
+    if (identity != null) {
+      return Plug
+    }
+
+    return null
+  }

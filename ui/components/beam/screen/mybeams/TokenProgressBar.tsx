@@ -37,7 +37,7 @@ export const TokenProgressBar = ({
       size="lg"
       min={0}
       max={100}
-      value={truncValue}
+      value={Number(truncValue)}
       {...others}
       isReadOnly={true}
       cursor="auto"

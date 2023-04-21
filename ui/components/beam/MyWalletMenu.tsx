@@ -16,7 +16,7 @@ import { BeamSelectWalletModal } from "./auth/BeamSelectWalletModal"
 
 import { AuthProvider } from "../../config"
 import Image from "next/image"
-import { checkUserAuthProvider } from "../auth/checkUserAuth"
+import { checkUserAuthProviderNullable } from "../auth/checkUserAuth"
 
 export const MyWalletMenu = ({ setAuthProvider }) => {
   const navigate = useNavigate()
@@ -27,7 +27,7 @@ export const MyWalletMenu = ({ setAuthProvider }) => {
 
   useEffect(() => {
     const loadInitAuthProvider = async () => {
-      const authProvider = await checkUserAuthProvider()
+      const authProvider = await checkUserAuthProviderNullable()
       setAuthProvider(authProvider)
     }
 
