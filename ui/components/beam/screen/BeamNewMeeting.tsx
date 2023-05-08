@@ -106,13 +106,19 @@ const HeadlineStack = ({ hashtags }: Props) => {
         </ListItem>
         <ListItem>
           <Link
-            href="https://zoom.us/oauth/authorize?response_type=code&client_id=Vy82pQwsRVCMXQEz6BaWDQ&redirect_uri=https://beamfi.app"
+            href="https://marketplace.zoom.us/apps/sjH1I9WvT4O7Si2R61bbSg"
             isExternal
           >
-            Add BeamFi Meeting app to your Zoom account
+            Add BeamFi Meeting app
           </Link>{" "}
-          or click on ADD TO ZOOM button below so that we can pay you in real
-          time when the meeting starts
+          to your Zoom account or click on ADD TO ZOOM button below so that we
+          can pay you in real time when the meeting starts.{" "}
+          <Link
+            href="https://marketplace.zoom.us/apps/sjH1I9WvT4O7Si2R61bbSg"
+            isExternal
+          >
+            Visit app in Zoom Marketplace
+          </Link>
         </ListItem>
         <ListItem>
           After your participants have joined the meeting, you will get
