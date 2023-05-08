@@ -3,13 +3,16 @@
 See [BeamFi Pitch Deck](https://pitch.com/public/24972b6a-11d1-4690-8215-a2b44767d68a) for its vision.  
 See [BeamFi Payment Protocol](https://devpost.com/software/beam-payment-protocol-by-content-fly) in Supernova Hackathorn 2022. Top 7 submissions in DeFi.
 
+The following Quick Start guide is created from the perspective of Beam App.  
+We have a new [Web Frontend - BeamFi App](https://developer.beamfi.app/docs/frontend/beamfiapp) developer guide created from the perspective of BeamFi Protocol.
+
 ## Quick Start
 
 Switch to dev Git branch if you haven't.
 
 ### Dev Environment Setup
 
-- Install NodeJS 16.13 or if you have NVM:
+- Install NodeJS 16.19 or if you have NVM:
 
 ```
 nvm use
@@ -32,14 +35,14 @@ The default configuration is set to use BeamFi dev canisters for ease of fronten
 
 You will need Plug Wallet chrome extension https://plugwallet.ooo/ to create Beam in "Beam Out" and some ICP tokens.
 You can get ICP tokens from exchanges like Binance AU or speak to Henry (henry@beamfi.app) to get some ICP for your testing.
-(Note they are real ICP with value so your testing is as close to real world as possible).
+(Note they are real ICP with true value so your testing is as close to the real world as possible).
 
 # Dev Process
 
 ## Git Branches
 
 dev - all development code will first merge to dev first, any push to dev will trigger deployment to https://dev.beamfi.app  
-main - this is where the productuction stable code is, it require manual trigger in Github Action to deploy to https://beamfi.app
+main - this is where the production stable code is, it requires a manual trigger in Github Action to deploy to https://beamfi.app
 
 ## Pull Request & Review
 
@@ -47,7 +50,7 @@ main - this is where the productuction stable code is, it require manual trigger
 - When it is ready for testing or review, submit a Pull Request to dev branch.
 - The main contributor will review and give feedback.
 - When the review is complete, the PR will be merged to dev for testers to try it in frontend
-- When it passed the manual human tests, new changes will be merged to main branch and manager can trigger Github Action to deploy to production.
+- When it passed the manual human tests, new changes will be merged to main branch and the manager can trigger Github Action to deploy to production.
 
 ## Folder Structures
 
@@ -62,10 +65,10 @@ scripts - CI / CD scripts for use with Github Actions
 ## Tech Stacks
 
 Frontend UI is a SPA (Singel Page Application) developed with NextJS, React and Chakra UI.
-Since the webapp is intended to run as static page deployed to IC assets canisters, only the client side features of NextJS is used.
-All server side features like dynamic routing or server side rendering will not work.
+Since the webapp is intended to run as static page deployed to IC assets canisters, only the client-side features of NextJS are used.
+All server-side features like dynamic routing or server-side rendering will not work.
 
-React Router is used for client side routing. See /pages/index.js and /ui/components/beam/screen
+React Router is used for client-side routing. See /pages/index.js and /ui/components/beam/screen
 
 ## Wiring of Canister ID to frontend
 
@@ -92,22 +95,22 @@ Open index.js to delete:
 createActor(canisterId)
 ```
 
-since it has conflicts with NextJS server side rendering
+since it has conflicts with NextJS server-side rendering
 
 Notes: You can deleted unused files like \*.wasm
 
 ## Continuous Delivery
 
-Two Github workflows are used for deploying to dev (https://dev.beamfi.app) and prod (https://beamfi.app)
+Two GitHub workflows are used for deploying to dev (https://dev.beamfi.app) and prod (https://beamfi.app)
 
 The main difference between them is the canister ids they connect to but all of the canisters run on IC mainnet canisters.
-There is no IC testnet. Treat the dev environment like staging environment. Your local IC replicas is your own testnet.
+There is no IC testnet. Treat the dev environment like a staging environment. Your local IC replicas is your testnet.
 
 ## Connect to BeamFi local canisters
 
 When you have BeamFi canister setup in local IC replicas, you can connect to it by:
 
-- From BeamFi backend Git project, copy canisters_id.json to .dfx/local/canisters_id.json
+- From [BeamFi Protocol](https://github.com/BeamFi/BeamFiProtocol) Git project, copy canisters_id.json to .dfx/local/canisters_id.json
 - copy env.iclocal to env.development and env.production (note env.production is only required if you run next export)
 - run NextJS server
 
@@ -120,7 +123,7 @@ When you have BeamFi canister setup in local IC replicas, you can connect to it 
 
 You don't want to do this most of the time but in case you need to debug production issues.
 
-Copy canisters_id_prod.json to canisters_id.json and start nextjs server
+Copy canisters_id_prod.json to canisters_id.json and start NextJS server
 
 ```
 > cp canisters_id_prod.json canisters_ids.json
@@ -149,7 +152,7 @@ Twitter: @kinwo
 
 ## Contributing
 
-Pleaes feel free to raise issue or submit a pull request.
+Please feel free to raise issues or submit a pull request.
 
 ## License
 
