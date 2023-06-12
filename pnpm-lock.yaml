@@ -9,19 +9,19 @@ dependencies:
     version: 2.5.1(@emotion/react@11.10.6)(@emotion/styled@11.10.6)(@types/react@18.0.28)(framer-motion@10.2.5)(react-dom@18.2.0)(react@18.2.0)
   '@dfinity/agent':
     specifier: ^0.15.4
-    version: 0.15.4(@dfinity/candid@0.15.4)(@dfinity/principal@0.15.4)(@types/node@18.15.3)(typescript@4.9.5)
+    version: 0.15.4(@dfinity/candid@0.15.4)(@dfinity/principal@0.15.4)(@types/node@20.3.0)(typescript@4.9.5)
   '@dfinity/auth-client':
     specifier: ^0.15.4
     version: 0.15.4(@dfinity/agent@0.15.4)(@dfinity/identity@0.15.4)(@dfinity/principal@0.15.4)
   '@dfinity/candid':
     specifier: ^0.15.4
-    version: 0.15.4(@types/node@18.15.3)(typescript@4.9.5)
+    version: 0.15.4(@types/node@20.3.0)(typescript@4.9.5)
   '@dfinity/identity':
     specifier: ^0.15.4
     version: 0.15.4(@dfinity/agent@0.15.4)(@dfinity/principal@0.15.4)(@peculiar/webcrypto@1.4.3)
   '@dfinity/principal':
     specifier: ^0.15.4
-    version: 0.15.4(@types/node@18.15.3)(typescript@4.9.5)
+    version: 0.15.4(@types/node@20.3.0)(typescript@4.9.5)
   '@emotion/react':
     specifier: ^11.10.6
     version: 11.10.6(@types/react@18.0.28)(react@18.2.0)
@@ -145,8 +145,8 @@ devDependencies:
     specifier: ^7.21.0
     version: 7.21.0(@babel/core@7.21.0)
   '@types/node':
-    specifier: ^18.15.3
-    version: 18.15.3
+    specifier: ^20.3.0
+    version: 20.3.0
   '@types/react':
     specifier: ^18.0.28
     version: 18.0.28
@@ -2497,20 +2497,20 @@ packages:
       '@jridgewell/trace-mapping': 0.3.9
     dev: false
 
-  /@dfinity/agent@0.15.4(@dfinity/candid@0.15.4)(@dfinity/principal@0.15.4)(@types/node@18.15.3)(typescript@4.9.5):
+  /@dfinity/agent@0.15.4(@dfinity/candid@0.15.4)(@dfinity/principal@0.15.4)(@types/node@20.3.0)(typescript@4.9.5):
     resolution: {integrity: sha512-JuWaLUUtdGJx2DwHgnGrtTNwF5bC6a+izMbcHeN2M0RSaukeVNkRdYz4Bfxg7yTwdFxQRfQWcXcwvKF8/R2IEg==}
     peerDependencies:
       '@dfinity/candid': ^0.15.4
       '@dfinity/principal': ^0.15.4
     dependencies:
-      '@dfinity/candid': 0.15.4(@types/node@18.15.3)(typescript@4.9.5)
-      '@dfinity/principal': 0.15.4(@types/node@18.15.3)(typescript@4.9.5)
+      '@dfinity/candid': 0.15.4(@types/node@20.3.0)(typescript@4.9.5)
+      '@dfinity/principal': 0.15.4(@types/node@20.3.0)(typescript@4.9.5)
       base64-arraybuffer: 0.2.0
       bignumber.js: 9.1.1
       borc: 2.1.2
       js-sha256: 0.9.0
       simple-cbor: 0.4.1
-      ts-node: 10.9.1(@types/node@18.15.3)(typescript@4.9.5)
+      ts-node: 10.9.1(@types/node@20.3.0)(typescript@4.9.5)
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -2525,16 +2525,16 @@ packages:
       '@dfinity/identity': ^0.15.4
       '@dfinity/principal': ^0.15.4
     dependencies:
-      '@dfinity/agent': 0.15.4(@dfinity/candid@0.15.4)(@dfinity/principal@0.15.4)(@types/node@18.15.3)(typescript@4.9.5)
+      '@dfinity/agent': 0.15.4(@dfinity/candid@0.15.4)(@dfinity/principal@0.15.4)(@types/node@20.3.0)(typescript@4.9.5)
       '@dfinity/identity': 0.15.4(@dfinity/agent@0.15.4)(@dfinity/principal@0.15.4)(@peculiar/webcrypto@1.4.3)
-      '@dfinity/principal': 0.15.4(@types/node@18.15.3)(typescript@4.9.5)
+      '@dfinity/principal': 0.15.4(@types/node@20.3.0)(typescript@4.9.5)
       idb: 7.1.1
     dev: false
 
-  /@dfinity/candid@0.15.4(@types/node@18.15.3)(typescript@4.9.5):
+  /@dfinity/candid@0.15.4(@types/node@20.3.0)(typescript@4.9.5):
     resolution: {integrity: sha512-ImoZ18i95DDstn+EXm/Y1ms7RqF1KVS7+KqZLNvpHFTlcOgfAQc5Bq8W6l1nfkOqeh7wcehDYdjFJwLxBoeTlw==}
     dependencies:
-      ts-node: 10.9.1(@types/node@18.15.3)(typescript@4.9.5)
+      ts-node: 10.9.1(@types/node@20.3.0)(typescript@4.9.5)
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -2549,19 +2549,19 @@ packages:
       '@dfinity/principal': ^0.15.4
       '@peculiar/webcrypto': ^1.4.0
     dependencies:
-      '@dfinity/agent': 0.15.4(@dfinity/candid@0.15.4)(@dfinity/principal@0.15.4)(@types/node@18.15.3)(typescript@4.9.5)
-      '@dfinity/principal': 0.15.4(@types/node@18.15.3)(typescript@4.9.5)
+      '@dfinity/agent': 0.15.4(@dfinity/candid@0.15.4)(@dfinity/principal@0.15.4)(@types/node@20.3.0)(typescript@4.9.5)
+      '@dfinity/principal': 0.15.4(@types/node@20.3.0)(typescript@4.9.5)
       '@peculiar/webcrypto': 1.4.3
       borc: 2.1.2
       js-sha256: 0.9.0
       tweetnacl: 1.0.3
     dev: false
 
-  /@dfinity/principal@0.15.4(@types/node@18.15.3)(typescript@4.9.5):
+  /@dfinity/principal@0.15.4(@types/node@20.3.0)(typescript@4.9.5):
     resolution: {integrity: sha512-ZH0InIXaIQqXfUDgkSa0S+9VlkAduhu2JJ984KtRs3BSHUyxG32OGnRcvxfJDdm6GHXWndTWoQUraHPoA3RplQ==}
     dependencies:
       js-sha256: 0.9.0
-      ts-node: 10.9.1(@types/node@18.15.3)(typescript@4.9.5)
+      ts-node: 10.9.1(@types/node@20.3.0)(typescript@4.9.5)
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -3052,8 +3052,8 @@ packages:
     resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
     dev: false
 
-  /@types/node@18.15.3:
-    resolution: {integrity: sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==}
+  /@types/node@20.3.0:
+    resolution: {integrity: sha512-cumHmIAf6On83X7yP+LrsEyUOf/YlociZelmpRYaGFydoaPdxdt80MAbu6vWerQT2COCp2nPvHdsbD7tHn/YlQ==}
 
   /@types/parse-json@4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -5952,7 +5952,7 @@ packages:
     resolution: {integrity: sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==}
     dev: false
 
-  /ts-node@10.9.1(@types/node@18.15.3)(typescript@4.9.5):
+  /ts-node@10.9.1(@types/node@20.3.0)(typescript@4.9.5):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -5971,7 +5971,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 18.15.3
+      '@types/node': 20.3.0
       acorn: 8.8.2
       acorn-walk: 8.2.0
       arg: 4.1.3
