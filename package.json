@@ -69,7 +69,7 @@
     "mobx-state-tree": "^5.1.8",
     "mobx-store-provider": "^2.1.2",
     "moment": "^2.29.4",
-    "next": "^13.2.4",
+    "next": "^13.5.4",
     "next-share": "^0.19.0",
     "node-esapi": "^0.0.1",
     "nprogress": "^0.2.0",
