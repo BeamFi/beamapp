@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
-    "@chakra-ui/react": "^2.5.1",
+    "@chakra-ui/react": "^2.9.0",
     "@dfinity/agent": "^0.15.4",
     "@dfinity/auth-client": "^0.15.4",
     "@dfinity/candid": "^0.15.4",
